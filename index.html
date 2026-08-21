@@ -1,4 +1,10 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17365d"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="OKEO Gestão"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.png"><title>OKEO Gestão</title><style>*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f4f6f8;color:#17202a}header{position:sticky;top:0;z-index:20;background:#17365d;color:white;padding:14px 16px;font-weight:700;font-size:20px}main{max-width:760px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 5px #0002}label{font-size:12px;font-weight:700;display:block;margin:7px 0}select,input,button{width:100%;font-size:17px;padding:12px;border:1px solid #c9d2dc;border-radius:9px}button{font-weight:700;border:0;background:#17365d;color:#fff;margin-top:8px}button:disabled{opacity:.55}.green{background:#26734d}.red{background:#a61c2a}.gray{background:#5b6570}.amber{background:#b06d00}.row,.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.status{font-size:13px;margin-top:8px}.big{font-size:28px;font-weight:700}.item{border-top:1px solid #e5e9ed;padding:10px 0}.item b{display:block}.qty{display:flex;gap:6px;align-items:center}.qty button{width:46px;margin:0;padding:7px}.qty span{min-width:35px;text-align:center;font-weight:700}.qtyinput{width:76px!important;min-width:76px;padding:7px!important;text-align:center;font-weight:700;font-size:18px!important;margin:0;border:1px solid #c9d2dc;border-radius:8px}small,.muted{color:#5d6d7e}.warn{background:#fff3cd;padding:9px;border-radius:8px}.ok{background:#e8f5e9;padding:9px;border-radius:8px}#readerWrap{display:none;margin-top:10px}video{width:100%;border-radius:10px;background:#111;max-height:360px}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#e9eef4;color:#17365d;font-size:12px}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:100}.modal.open{display:flex}.sheet{background:#fff;width:100%;max-width:760px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px}.sheet h3{margin:0 0 8px}.expiry-list{margin-top:10px}.expiry-row{display:grid;grid-template-columns:1.2fr .8fr auto;gap:7px;align-items:center;padding:8px 0;border-top:1px solid #e5e9ed}.expiry-row input{font-size:15px;padding:8px}.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.badge{font-size:12px;padding:4px 7px;border-radius:999px;background:#eef2f6}.badge.danger{background:#f8d7da}.badge.soon{background:#fff3cd}.badge.good{background:#d1e7dd}.expbtn{width:auto!important;padding:7px 10px!important;margin:6px 0 0!important;font-size:14px!important}#ocrVideo{width:100%;border-radius:10px;background:#111;max-height:300px}#ocrCanvas{display:none}.ocrbox{display:none;margin-top:8px}.ocrbox.open{display:block}.appTab{display:block}.stockrow{display:grid;grid-template-columns:1fr auto;gap:8px;padding:9px 0;border-top:1px solid #e5e9ed}textarea{font-family:Arial,sans-serif;font-size:14px}.dreRow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #e5e9ed}.dreRow.total{font-size:18px;border-top:2px solid #17365d}.monthrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:9px 0;border-top:1px solid #e5e9ed}.negative{color:#a61c2a}.positive{color:#26734d}.abcrow{display:grid;grid-template-columns:1.6fr .55fr .55fr .45fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;align-items:center}.abcA{background:#e8f5e9}.abcB{background:#fff3cd}.abcC{background:#fdeaea}.abcClass{font-weight:700;text-align:center}.replgroup{margin-top:14px;border:1px solid #dde4ea;border-radius:10px;overflow:hidden}.replhead{padding:9px 10px;background:#eef2f6;font-weight:700}.replrow{display:grid;grid-template-columns:1.8fr .55fr .55fr .55fr .6fr;gap:6px;padding:9px 8px;border-top:1px solid #e5e9ed;align-items:center;font-size:13px}.replrow.alert{background:#fff3cd}.replrow.critical{background:#fdeaea}.replnum{text-align:right}.supplierrow{display:grid;grid-template-columns:1.6fr 1fr;gap:8px;padding:9px 0;border-top:1px solid #e5e9ed}.groupitem{display:grid;grid-template-columns:1.7fr 1fr;gap:8px;padding:8px 0;border-top:1px solid #e5e9ed}.groupbox{border:1px solid #dde4ea;border-radius:10px;padding:10px;margin-top:10px}.timerow{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 0;border-top:1px solid #e5e9ed}.heatwrap{overflow:auto}.heattable{border-collapse:collapse;min-width:720px;width:100%;font-size:12px}.heattable th,.heattable td{border:1px solid #dde4ea;padding:6px;text-align:center}.heat0{background:#fff}.heat1{background:#edf6ed}.heat2{background:#d5ebd5}.heat3{background:#b9ddb9}.heat4{background:#8cc88c}.heat5{background:#5aab5a;color:white}.tagbtn{width:auto!important;padding:5px 8px!important;margin:3px!important;font-size:12px!important}.monthrow2{display:grid;grid-template-columns:.8fr 1fr .8fr 1fr 1fr 1fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;font-size:13px}.payrow{display:grid;grid-template-columns:.8fr 1.3fr .8fr .8fr .9fr .9fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;font-size:13px}@media(max-width:640px){.monthrow2,.payrow{grid-template-columns:1fr 1fr}}.fiscalrow{display:grid;grid-template-columns:1.8fr .75fr .75fr .9fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;font-size:13px}.fiscalrow.pending{background:#fff3cd}.fiscalrow.valid{background:#e8f5e9}.fiscalrow.review{background:#fdeaea}.statuspill{display:inline-block;font-size:11px;padding:3px 6px;border-radius:999px;background:#eef2f6}
+<!doctype html><html lang="pt-BR"><head>
+<script>
+/* OKEO Operação: autenticação obrigatória em cada nova abertura. */
+localStorage.removeItem('okeo_auth_token_v39');
+localStorage.removeItem('okeo_auth_user_v434');
+localStorage.removeItem('okeo_session_confirmed_v435');
+</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#17365d"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="OKEO Gestão"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.png"><title>OKEO Gestão</title><style>*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:#f4f6f8;color:#17202a}header{position:sticky;top:0;z-index:20;background:#17365d;color:white;padding:14px 16px;font-weight:700;font-size:20px}main{max-width:760px;margin:auto;padding:12px}.card{background:#fff;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:0 1px 5px #0002}label{font-size:12px;font-weight:700;display:block;margin:7px 0}select,input,button{width:100%;font-size:17px;padding:12px;border:1px solid #c9d2dc;border-radius:9px}button{font-weight:700;border:0;background:#17365d;color:#fff;margin-top:8px}button:disabled{opacity:.55}.green{background:#26734d}.red{background:#a61c2a}.gray{background:#5b6570}.amber{background:#b06d00}.row,.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.status{font-size:13px;margin-top:8px}.big{font-size:28px;font-weight:700}.item{border-top:1px solid #e5e9ed;padding:10px 0}.item b{display:block}.qty{display:flex;gap:6px;align-items:center}.qty button{width:46px;margin:0;padding:7px}.qty span{min-width:35px;text-align:center;font-weight:700}.qtyinput{width:76px!important;min-width:76px;padding:7px!important;text-align:center;font-weight:700;font-size:18px!important;margin:0;border:1px solid #c9d2dc;border-radius:8px}small,.muted{color:#5d6d7e}.warn{background:#fff3cd;padding:9px;border-radius:8px}.ok{background:#e8f5e9;padding:9px;border-radius:8px}#readerWrap{display:none;margin-top:10px}video{width:100%;border-radius:10px;background:#111;max-height:360px}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#e9eef4;color:#17365d;font-size:12px}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:100}.modal.open{display:flex}.sheet{background:#fff;width:100%;max-width:760px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:16px}.sheet h3{margin:0 0 8px}.expiry-list{margin-top:10px}.expiry-row{display:grid;grid-template-columns:1.2fr .8fr auto;gap:7px;align-items:center;padding:8px 0;border-top:1px solid #e5e9ed}.expiry-row input{font-size:15px;padding:8px}.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.badge{font-size:12px;padding:4px 7px;border-radius:999px;background:#eef2f6}.badge.danger{background:#f8d7da}.badge.soon{background:#fff3cd}.badge.good{background:#d1e7dd}.expbtn{width:auto!important;padding:7px 10px!important;margin:6px 0 0!important;font-size:14px!important}#ocrVideo{width:100%;border-radius:10px;background:#111;max-height:300px}#ocrCanvas{display:none}.ocrbox{display:none;margin-top:8px}.ocrbox.open{display:block}.appTab{display:block}.stockrow{display:grid;grid-template-columns:1fr auto;gap:8px;padding:9px 0;border-top:1px solid #e5e9ed}textarea{font-family:Arial,sans-serif;font-size:14px}.dreRow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid #e5e9ed}.dreRow.total{font-size:18px;border-top:2px solid #17365d}.monthrow{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:9px 0;border-top:1px solid #e5e9ed}.negative{color:#a61c2a}.positive{color:#26734d}.abcrow{display:grid;grid-template-columns:1.6fr .55fr .55fr .45fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;align-items:center}.abcA{background:#e8f5e9}.abcB{background:#fff3cd}.abcC{background:#fdeaea}.abcClass{font-weight:700;text-align:center}.replgroup{margin-top:14px;border:1px solid #dde4ea;border-radius:10px;overflow:hidden}.replhead{padding:9px 10px;background:#eef2f6;font-weight:700}.replrow{display:grid;grid-template-columns:1.8fr .55fr .55fr .55fr .6fr;gap:6px;padding:9px 8px;border-top:1px solid #e5e9ed;align-items:center;font-size:13px}.replrow.alert{background:#fff3cd}.replrow.critical{background:#fdeaea}.replnum{text-align:right}.supplierrow{display:grid;grid-template-columns:1.6fr 1fr;gap:8px;padding:9px 0;border-top:1px solid #e5e9ed}.groupitem{display:grid;grid-template-columns:1.7fr 1fr;gap:8px;padding:8px 0;border-top:1px solid #e5e9ed}.groupbox{border:1px solid #dde4ea;border-radius:10px;padding:10px;margin-top:10px}.timerow{display:grid;grid-template-columns:1fr auto;gap:8px;padding:8px 0;border-top:1px solid #e5e9ed}.heatwrap{overflow:auto}.heattable{border-collapse:collapse;min-width:720px;width:100%;font-size:12px}.heattable th,.heattable td{border:1px solid #dde4ea;padding:6px;text-align:center}.heat0{background:#fff}.heat1{background:#edf6ed}.heat2{background:#d5ebd5}.heat3{background:#b9ddb9}.heat4{background:#8cc88c}.heat5{background:#5aab5a;color:white}.tagbtn{width:auto!important;padding:5px 8px!important;margin:3px!important;font-size:12px!important}.monthrow2{display:grid;grid-template-columns:.8fr 1fr .8fr 1fr 1fr 1fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;font-size:13px}.payrow{display:grid;grid-template-columns:.8fr 1.3fr .8fr .8fr .9fr .9fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;font-size:13px}@media(max-width:640px){.monthrow2,.payrow{grid-template-columns:1fr 1fr}}.fiscalrow{display:grid;grid-template-columns:1.8fr .75fr .75fr .9fr;gap:7px;padding:9px 0;border-top:1px solid #e5e9ed;font-size:13px}.fiscalrow.pending{background:#fff3cd}.fiscalrow.valid{background:#e8f5e9}.fiscalrow.review{background:#fdeaea}.statuspill{display:inline-block;font-size:11px;padding:3px 6px;border-radius:999px;background:#eef2f6}
 .brandWrap{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .brandLogoSlot{width:74px;height:42px;border-radius:10px;background:#17365d;color:white;display:flex;align-items:center;justify-content:center;font-weight:700}
 .headerBrand{display:inline-flex;align-items:center;gap:8px}.brandLogoMini{display:inline-flex;align-items:center;justify-content:center;width:42px;height:24px;border-radius:6px;background:white;color:#17365d;font-size:10px}
@@ -135,7 +141,29 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .moduleAsyncStatus{padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800;background:#eaf3ff;color:#2a5f91}
 .appTab{contain:layout style;content-visibility:auto;contain-intrinsic-size:700px}
 .moduleCard{transform:translateZ(0);will-change:auto}
-#moduleLoading{pointer-events:none!important}.appTab{transition:none!important}.moduleCard{touch-action:manipulation}</style>
+#moduleLoading{pointer-events:none!important}.appTab{transition:none!important}.moduleCard{touch-action:manipulation}
+/* OKEO Operação V2 — escopo físico de interface */
+#tab-diagnostico{display:none!important}
+#tab-inteligencia{display:none!important}
+#tab-gestao{display:none!important}
+#tab-dados{display:none!important}
+#tab-dashboard{display:none!important}
+#tab-financeiro{display:none!important}
+#tab-dre{display:none!important}
+#tab-faturamento{display:none!important}
+#tab-produtos{display:none!important}
+#tab-reposicao{display:none!important}
+#tab-fornecedores{display:none!important}
+#tab-grupos{display:none!important}
+#tab-horarios{display:none!important}
+#tab-mensal{display:none!important}
+#tab-cashback{display:none!important}
+#tab-fiscal{display:none!important}
+#tab-integracao{display:none!important}
+#tab-acessos{display:none!important}
+.operationIntro,.operationRules{max-width:100%}
+#dashboardHome,.storagePolicy{display:none!important}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.4/dist/jspdf.plugin.autotable.min.js"></script>
@@ -146,7 +174,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
     <div class="muted">Acesso ao sistema</div>
     <label>Usuário</label><input id="loginUser" autocomplete="username">
     <label>Senha</label><input id="loginPass" type="password" autocomplete="current-password">
-    <button class="green" id="loginBtn" type="button" onclick="return okeoDirectLogin(event)">Entrar</button><div class="loginHealth"><span id="loginJsStatus">JavaScript: iniciando...</span><span id="loginBackendStatus">Base Central: verificando...</span></div><div class="loginVersion">OKEO Operação V1</div>
+    <button class="green" id="loginBtn" type="button" onclick="return okeoDirectLogin(event)">Entrar</button><div class="loginHealth"><span id="loginJsStatus">JavaScript: iniciando...</span><span id="loginBackendStatus">Base Central: verificando...</span></div><div class="loginVersion">OKEO Operação V2</div>
     <div id="loginMsg" class="status"></div>
   </div>
 </div>
@@ -164,90 +192,49 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 </div>
 
 <div id="moduleLoading" class="moduleLoading" style="display:none"><span class="loadingDot"></span> Atualizando informações...</div>
+
 <div id="homeTop" class="homeHero card">
   <div class="heroLogo"><img src="okeo-logo.png" alt="OKEO"></div>
   <div>
-    <h2 style="margin:0">OKEO Gestão</h2>
-    <div class="muted">Gestão integrada de estoque, vendas, financeiro e reposição</div><div class="architectureBadge">V4.3 • relatórios sob demanda</div><span id="historyBackgroundStatus" class="historyBgStatus" style="display:none"></span>
+    <h2 style="margin:0">OKEO Operação</h2>
+    <div class="muted">Estoque, inventário, validade, entradas e movimentações.</div>
+    <div class="architectureBadge">Módulo operacional independente</div>
   </div>
 </div>
+
 <div id="roleAccessBanner" class="roleAccessBanner" style="display:none">
-  Perfil Operacional: acesso permitido somente a Inventário e Entrada por NF.
-</div>
-<div class="storagePolicy card">
-  <b>Arquitetura de Dados</b>
-  <div class="storageGrid">
-    <div><strong>Últimos 90 dias</strong><small>ABC, reposição, demanda e horários em maior detalhe.</small></div>
-    <div><strong>Histórico antigo</strong><small>Resumos mensais/trimestrais para manter anos de dados leves.</small></div>
-    <div><strong>DRE / Faturamento</strong><small>Histórico completo em agregados mensais.</small></div>
-    <div><strong>Estoque</strong><small>Saldo atual + movimentos recentes; histórico antigo consolidado.</small></div>
-  </div>
-</div>
-<div id="dashboardHome" class="dashboardHome">
-  <div class="kpiGrid">
-    <div class="kpiCard"><div class="kpiIcon">📈</div><div><small>Faturamento (Mês)</small><div class="kpiValue" id="homeRevenue">R$ 0,00</div></div></div>
-    <div class="kpiCard"><div class="kpiIcon">🛒</div><div><small>Ticket Médio</small><div class="kpiValue" id="homeTicket">R$ 0,00</div></div></div>
-    <div class="kpiCard"><div class="kpiIcon">🛍️</div><div><small>Itens Vendidos</small><div class="kpiValue" id="homeUnitsSold">0</div></div></div>
-    <div class="kpiCard"><div class="kpiIcon">%</div><div><small>Margem (Mês)</small><div class="kpiValue" id="homeMargin">0,0%</div></div></div>
-  </div>
-
-  <h3 class="sectionTitle">Módulos principais</h3><div class="muted moduleHint">Selecione um módulo abaixo para acessar.</div>
-  <div class="moduleGrid" id="moduleGrid">
-    <button class="moduleCard" data-module="novoproduto" data-min-role="ADMIN" onclick="showTab('novoproduto')"><span class="moduleIcon blue">🛒</span><span><b>Novo Produto</b><small>Cadastrar produtos</small></span></button>
-    <button class="moduleCard" data-module="inventario" data-min-role="OPERATIONAL" onclick="showTab('inventario')"><span class="moduleIcon green">📦</span><span><b>Inventário</b><small>Contagem de estoque</small></span></button>
-    <button class="moduleCard" data-module="nf" data-min-role="OPERATIONAL" onclick="showTab('nf')"><span class="moduleIcon purple">📄</span><span><b>Entrada por NF</b><small>Lançar entradas</small></span></button>
-    <button class="moduleCard" data-module="movimentos" data-min-role="ADMIN" onclick="showTab('movimentos')"><span class="moduleIcon orange">↗</span><span><b>Saídas / Ajustes</b><small>Perdas, furtos e ajustes</small></span></button>
-    <button class="moduleCard" data-module="movimentos" data-min-role="ADMIN" onclick="showTab('movimentos')"><span class="moduleIcon teal">↔</span><span><b>Transferências</b><small>CD ↔ Condomínios</small></span></button>
-    <button class="moduleCard" data-module="faturamento" data-min-role="ADMIN" onclick="showTab('faturamento')"><span class="moduleIcon red">⇩</span><span><b>Importar Vendas</b><small>Processar relatórios</small></span></button>
-    <button class="moduleCard" data-module="mensal" data-min-role="ADMIN" onclick="showTab('mensal')"><span class="moduleIcon amber">📅</span><span><b>Fechamento Mensal</b><small>Apurar resultados</small></span></button>
-    <button class="moduleCard" data-module="cashback" data-min-role="ADMIN" onclick="showTab('cashback')"><span class="moduleIcon pink">⚡</span><span><b>Cashback / Energia</b><small>Lançar valores</small></span></button>
-    <button class="moduleCard" data-module="fornecedores" data-min-role="ADMIN" onclick="showTab('fornecedores')"><span class="moduleIcon indigo">🏢</span><span><b>Fornecedores</b><small>Gerenciar cadastro</small></span></button>
-    <button class="moduleCard" data-module="grupos" data-min-role="ADMIN" onclick="showTab('grupos')"><span class="moduleIcon brown">📦</span><span><b>Grupos de Demanda</b><small>Gerenciar grupos</small></span></button>
-    <button class="moduleCard" data-module="dashboard" data-min-role="ADMIN" onclick="showTab('dashboard')"><span class="moduleIcon cyan">📋</span><span><b>Relatórios</b><small>Análises e curvas</small></span></button>
-    <button class="moduleCard" data-module="integracao" data-min-role="ADMIN" onclick="showTab('integracao')"><span class="moduleIcon slate">⚙</span><span><b>Integração / API</b><small>Configurar integração</small></span></button>
-  
-    <button class="moduleCard" data-module="financeiro" data-min-role="ADMIN" onclick="showTab('financeiro')"><span class="moduleIcon navy">💰</span><span><b>Fluxo de Caixa</b><small>Entradas, saídas e extratos</small></span></button>
-    <button class="moduleCard" data-module="dre" data-min-role="ADMIN" onclick="showTab('dre')"><span class="moduleIcon emerald">📊</span><span><b>DRE</b><small>Resultado e margens</small></span></button>
-    <button class="moduleCard" data-module="produtos" data-min-role="ADMIN" onclick="showTab('produtos')"><span class="moduleIcon violet">ABC</span><span><b>Produtos / Curva ABC</b><small>Pareto, mix e baixo giro</small></span></button>
-    <button class="moduleCard" data-module="reposicao" data-min-role="ADMIN" onclick="showTab('reposicao')"><span class="moduleIcon lime">🔄</span><span><b>Reposição Inteligente</b><div class="muted">Reposição usa os últimos 90 dias para refletir demanda recente e evitar que vendas antigas distorçam o estoque ideal.</div><span class="perfBadge">base otimizada</span><small>Estoque ideal e compras</small></span></button>
-    <button class="moduleCard" data-module="horarios" data-min-role="ADMIN" onclick="showTab('horarios')"><span class="moduleIcon sky">🕒</span><span><b>Dias / Horários</b><small>Picos de demanda</small></span></button>
-    <button class="moduleCard" data-module="fiscal" data-min-role="ADMIN" onclick="showTab('fiscal')"><span class="moduleIcon gold">🧾</span><span><b>Cadastro Fiscal SC</b><small>NCM, CEST e validação</small></span></button>
-    <button class="moduleCard" data-module="acessos" data-min-role="ADMIN" onclick="showTab('acessos')"><span class="moduleIcon graphite">👤</span><span><b>Controle de Acesso</b><small>Usuários e permissões</small></span></button>
-
-    <button class="moduleCard" data-module="diagnostico" data-min-role="ADMIN" onclick="showTab('diagnostico')">
-      <span class="moduleIcon healthIcon">🩺</span>
-      <span><b>Saúde do Sistema</b><small id="healthCardStatus">Monitoramento e diagnóstico</small></span>
-    </button>
-
-    <button class="moduleCard" data-module="inteligencia" data-min-role="ADMIN" onclick="showTab('inteligencia')">
-      <span class="moduleIcon intelligenceIcon">🧠</span>
-      <span><b>Inteligência de Estoque</b><small>ABC-XYZ, giro, segurança e auditoria</small></span>
-    </button>
-
-    <button class="moduleCard" data-module="gestao" data-min-role="ADMIN" onclick="showTab('gestao')">
-      <span class="moduleIcon managementIcon">📈</span>
-      <span><b>Gestão Executiva</b><small>KPIs, exceções e tendências</small></span>
-    </button>
-    <button class="moduleCard" data-module="dados" data-min-role="ADMIN" onclick="showTab('dados')">
-      <span class="moduleIcon dataIcon">🗄️</span>
-      <span><b>Política de Dados</b><small>Retenção, arquivos e limpeza</small></span>
-    </button>
+  Perfil Operacional: acesso permitido a Inventário e Entrada por NF.
 </div>
 
-  <div class="consolidatedCard">
-    <div class="consolidatedTitle"><span class="moduleIcon green">🏢</span><div><small>UNIDADE CONSOLIDADA</small><b>OKEO Consolidado</b><div class="pillLite">CD + Condomínios</div></div></div>
-    <div class="consolidatedMetrics">
-      <div><small>ESTOQUE</small><b id="homeStock">0</b><span>itens em estoque</span></div>
-      <div><small>FATURAMENTO (MÊS)</small><b id="homeConsolRevenue">R$ 0,00</b><span>Só condomínios</span></div>
-      <div><small>ITENS VENDIDOS</small><b id="homeConsolSold">0</b><span>Só condomínios</span></div>
-      <div><small>TICKET MÉDIO</small><b id="homeConsolTicket">R$ 0,00</b><span>Só condomínios</span></div>
-      <div><small>MARGEM (MÊS)</small><b id="homeConsolMargin">0,0%</b><span>Só condomínios</span></div>
-    </div>
-    <div class="consolidatedNote">Estoque consolidado: CD + todos os condomínios • Vendas, faturamento, ticket, CMV, DRE e Curva ABC: somente condomínios.</div>
-  </div>
+<div class="card operationIntro">
+  <b>Operação</b>
+  <div class="muted">Este sistema não carrega vendas, Curva ABC, DRE, reposição ou relatórios gerenciais.</div>
 </div>
 
+<h3 class="sectionTitle">Funções operacionais</h3>
+<div class="muted moduleHint">Selecione somente a atividade que deseja executar.</div>
+<div class="moduleGrid" id="moduleGrid">
+  <button class="moduleCard opAdmin" data-module="novoproduto" data-min-role="ADMIN" onclick="showTab('novoproduto')">
+    <span class="moduleIcon blue">🛒</span><span><b>Novo Produto</b><small>Cadastrar produto</small></span>
+  </button>
+  <button class="moduleCard" data-module="inventario" data-min-role="OPERATIONAL" onclick="showTab('inventario')">
+    <span class="moduleIcon green">📦</span><span><b>Inventário e Validades</b><small>Câmera, EAN, quantidade e validade</small></span>
+  </button>
+  <button class="moduleCard" data-module="nf" data-min-role="OPERATIONAL" onclick="showTab('nf')">
+    <span class="moduleIcon purple">📄</span><span><b>Entrada por NF</b><small>Fotografar e lançar mercadorias</small></span>
+  </button>
+  <button class="moduleCard opAdmin" data-module="movimentos" data-min-role="ADMIN" onclick="showTab('movimentos')">
+    <span class="moduleIcon orange">↗</span><span><b>Saídas / Ajustes</b><small>Perdas, furtos, quebra e ajustes</small></span>
+  </button>
+  <button class="moduleCard opAdmin" data-module="movimentos" data-min-role="ADMIN" onclick="showTab('movimentos')">
+    <span class="moduleIcon teal">↔</span><span><b>Transferências / Estoque</b><small>CD ↔ Condomínios e posição atual</small></span>
+  </button>
+</div>
 
+<div class="card operationRules">
+  <b>Integração</b>
+  <div class="muted">Tudo que for lançado aqui permanece na Base Central e poderá alimentar Reposição, Inteligência, Financeiro e Gestão nos sistemas separados.</div>
+</div>
 <div id="tab-diagnostico" class="appTab" style="display:none">
   <div class="card">
     <div class="healthTitleRow">
@@ -901,7 +888,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   </div>
   <div class="card"><b>Usuários</b><button class="gray" id="refreshUsersBtn">Atualizar</button><div id="usersList"></div></div>
 </div>
-<div id="expiryModal" class="modal"><div class="sheet"><h3>Registrar validade</h3><div id="expiryProduct" class="ok"></div><label>Data de validade</label><input id="expiryDate" type="date"><label>Quantidade deste lote</label><input id="expiryQty" type="number" min="0" step="1" inputmode="numeric" value="1"><div class="actions"><button id="saveExpiry" class="green">Salvar validade</button><button id="closeExpiry" class="gray">Fechar</button></div><button id="ocrBtn" class="amber">📷 Ler validade com câmera</button><div id="ocrBox" class="ocrbox"><video id="ocrVideo" playsinline muted></video><canvas id="ocrCanvas"></canvas><div class="actions"><button id="captureExpiry" class="green">Capturar data</button><button id="stopOcr" class="gray">Parar câmera</button></div><div id="ocrMsg" class="status"></div></div><div class="expiry-list"><b>Lotes cadastrados</b><div id="expiryLots"></div></div></div></div></main><script src="./app.js?v=mod1" defer></script>
+<div id="expiryModal" class="modal"><div class="sheet"><h3>Registrar validade</h3><div id="expiryProduct" class="ok"></div><label>Data de validade</label><input id="expiryDate" type="date"><label>Quantidade deste lote</label><input id="expiryQty" type="number" min="0" step="1" inputmode="numeric" value="1"><div class="actions"><button id="saveExpiry" class="green">Salvar validade</button><button id="closeExpiry" class="gray">Fechar</button></div><button id="ocrBtn" class="amber">📷 Ler validade com câmera</button><div id="ocrBox" class="ocrbox"><video id="ocrVideo" playsinline muted></video><canvas id="ocrCanvas"></canvas><div class="actions"><button id="captureExpiry" class="green">Capturar data</button><button id="stopOcr" class="gray">Parar câmera</button></div><div id="ocrMsg" class="status"></div></div><div class="expiry-list"><b>Lotes cadastrados</b><div id="expiryLots"></div></div></div></div></main><script src="./app-operacao.js?v=op2" defer></script>
 <script id="okeo-direct-login-v434">
 (function(){
   const BACKEND='https://script.google.com/macros/s/AKfycbxFBV9P3t0t4FAX4y83yPhQpQnDmLJzNsp4afqoD6NKXMBROOO6Zm-00fuWgqjrcvgq/exec';
@@ -1040,4 +1027,4 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
   }
 })();
 </script>
-<div id="suiteHomeBadge" style="position:fixed;right:12px;bottom:12px;z-index:9999"></div></body></html>
+</body></html>

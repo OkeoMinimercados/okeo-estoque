@@ -1,0 +1,28 @@
+OKEO OPERAÇÃO V2 — CORRIGIDO
+
+CORREÇÕES
+- Login é obrigatório em toda nova abertura do site.
+- Não existe painel de Gestão na tela inicial.
+- Só aparecem funções operacionais.
+- Vendas, ABC, DRE, Reposição, Gestão e relatórios gerenciais não são carregados/exibidos.
+- Perfil ADMIN: Novo Produto, Inventário/Validades, Entrada NF, Saídas/Ajustes, Transferências/Estoque.
+- Perfil OPERACIONAL: Inventário/Validades e Entrada NF.
+
+INVENTÁRIO PRESERVADO
+- câmera para código de barras;
+- digitação/bipagem de EAN;
+- soma +1;
+- alteração direta de quantidade;
+- botões +/- na lista;
+- controle de validade por lotes;
+- vencidos / 7 / 15 / 30 / 60 dias;
+- CSV e backup local.
+
+INTEGRAÇÃO
+- Continua usando a mesma Base Central.
+- Estoque e movimentos lançados aqui poderão ser usados pelos módulos separados.
+
+INSTALAÇÃO
+Substitua os arquivos do repositório okeo-operacao pelos arquivos deste ZIP.
+Não altere GitHub Pages nem Base Central V5.
+Abra em janela anônima no primeiro teste.
