@@ -1,0 +1,10 @@
+OKEO GESTÃO V4.1.8
+
+CORREÇÃO DE AUTENTICAÇÃO/PWA
+- Service worker não intercepta nem armazena chamadas à Base Central.
+- Google Apps Script e qualquer API externa usam rede direta.
+- login_challenge e login_verify recebem parâmetro único por tentativa para impedir cache HTTP.
+- Mensagens identificam se eventual falha ocorre em CHALLENGE ou VERIFY.
+- Navegação HTML prioriza rede para tornar atualizações do GitHub Pages mais rápidas.
+
+Não requer mudança na Base Central/Apps Script.

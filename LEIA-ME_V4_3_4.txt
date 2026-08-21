@@ -1,0 +1,12 @@
+OKEO GESTÃO V4.3.4 — LOGIN DIRETO
+
+- Botão Entrar usa onclick direto no HTML.
+- Não depende de listeners do restante do aplicativo.
+- Não depende de inicialização dos relatórios.
+- Fluxo login_challenge/login_verify isolado.
+- Tela mostra:
+  JavaScript: ativo
+  Base Central: acessível/falha
+- Se o app principal ainda não estiver pronto, a sessão é salva e a página recarrega automaticamente.
+- V4.3.4 aparece na tela para confirmar atualização/cache.
+- Nenhum dado histórico é carregado antes do login.

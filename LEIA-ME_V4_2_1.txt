@@ -1,0 +1,12 @@
+OKEO GESTÃO V4.2.1
+
+CORREÇÃO DE PERFIS
+- ADMIN: todos os módulos.
+- OPERATIONAL: somente Inventário e Entrada por NF.
+- Cards do painel moderno são ocultados imediatamente após login.
+- Controle reaplicado ao abrir qualquer módulo.
+- Banner identifica quando o usuário está no perfil Operacional.
+- Backend continua sendo a segunda camada de bloqueio.
+
+Não requer atualização do Apps Script.
+Atualizar somente arquivos no GitHub.

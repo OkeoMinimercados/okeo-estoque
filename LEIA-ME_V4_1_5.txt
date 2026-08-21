@@ -1,0 +1,5 @@
+OKEO GESTÃO V4.1.5
+
+- Remove o alerta 'Seu perfil não possui acesso a este módulo' antes do login.
+- Mantém o login por desafio SHA-256.
+- O backend correto precisa estar publicado com login_challenge e login_verify antes de requireAuth_.

@@ -1,0 +1,9 @@
+OKEO GESTÃO V4.2.9 — LOGIN MAIS RÁPIDO
+
+- Login não espera mais o carregamento das bases históricas.
+- Após autenticar, o painel é liberado imediatamente.
+- Histórico de vendas e bases otimizadas carregam em segundo plano.
+- Relatórios pesados carregam a base necessária apenas na primeira abertura.
+- Depois da primeira abertura, os dados permanecem em cache.
+- Pequeno status informa quando o histórico está carregando/pronto.
+- Nenhuma alteração no Apps Script/Base Central.

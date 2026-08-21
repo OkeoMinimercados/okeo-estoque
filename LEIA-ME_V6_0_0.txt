@@ -1,0 +1,55 @@
+OKEO GESTÃO V6.0.0 — CONSOLIDAÇÃO E ESCALA
+
+DESEMPENHO
+- Curva ABC, Reposição, ABC-XYZ e Inteligência permanecem no Worker.
+- Novos cálculos de KPIs e Exceções Gerenciais também usam Worker.
+- Code splitting, IndexedDB e cache sob demanda permanecem ativos.
+- Backend passa a usar VISÕES MATERIALIZADAS em planilhas próprias:
+  Analytics_Mensal
+  Analytics_Semanal
+  Analytics_Produto_Mensal
+  Analytics_Horarios
+
+GESTÃO EXECUTIVA
+- Faturamento
+- Margem bruta
+- Ticket médio
+- Giro de estoque
+- GMROI
+- Weeks of Supply
+- Sell-through
+- Risco de ruptura
+- Exceções automáticas:
+  produto A em risco de ruptura
+  estoque sem giro
+  excesso de cobertura
+  GMROI baixo
+  queda relevante de faturamento
+- Tendência mensal
+
+POLÍTICA DE DADOS
+Administrador define:
+- retenção de vendas detalhadas
+- retenção de movimentações
+- retenção de diagnósticos
+- histórico mensal ou trimestral
+
+Antes de excluir:
+1. Sistema simula quantidade de registros.
+2. Visões materializadas são reconstruídas.
+3. Só depois os dados brutos antigos são removidos.
+4. Histórico financeiro/gerencial continua disponível pelos agregados.
+
+BACKEND V3.0
+- Materialized views.
+- analytics_rebuild.
+- data_policy_get / data_policy_set.
+- data_retention_preview.
+- data_retention_apply.
+- setupAnalyticsV3() cria/reconstrói as bases.
+
+ATIVAÇÃO
+1. Atualizar Apps Script com GoogleAppsScript_OKEO_Base_Central_V3_0_MATERIALIZED.gs.
+2. Executar setupAnalyticsV3 uma vez no editor do Apps Script.
+3. Criar nova versão da implantação existente.
+4. Atualizar GitHub com OKEO Gestão V6.0.0.

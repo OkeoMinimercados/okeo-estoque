@@ -1,0 +1,24 @@
+OKEO ESTOQUE V3.4
+
+CURVA ABC — PARETO
+Os produtos são ordenados do maior para o menor faturamento.
+A = produtos necessários para formar os primeiros 80% do faturamento acumulado.
+B = produtos seguintes, de 80% até 95%.
+C = produtos restantes, de 95% até 100%.
+
+Importante: se um produto fizer o acumulado ultrapassar exatamente o limite de 80%,
+ele permanece em A, pois foi necessário para completar o bloco dos primeiros 80%.
+A mesma lógica vale para B até 95%.
+
+PRODUTOS MENOS VENDIDOS / SEM GIRO
+- Compara todos os produtos da Base Mestre com o histórico de vendas.
+- Mostra produtos sem nenhuma venda no período.
+- Mostra produtos de baixo giro.
+- Critérios:
+  * menor quantidade vendida;
+  * menor faturamento;
+  * mais dias sem venda.
+- Produtos sem venda aparecem separados dos que vendem pouco.
+- Filtros seguem período e condomínio da análise de produtos.
+
+Essa visão ajuda a identificar produtos ocupando capital e espaço de estoque sem giro.

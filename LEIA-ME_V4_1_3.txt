@@ -1,0 +1,11 @@
+OKEO GESTÃO V4.1.3
+
+CORREÇÃO DE AUTENTICAÇÃO
+- Login não usa mais POST cross-domain para obter a sessão.
+- Novo fluxo GET challenge-response com SHA-256.
+- A senha não é enviada na URL.
+- O backend entrega um nonce temporário e o navegador envia apenas uma prova criptográfica.
+- Timeout de 12 segundos evita tela presa em Entrando.
+- Cadastro de usuários também envia apenas hash+salt, não a senha em texto pela URL.
+
+ATENÇÃO: atualizar também o Apps Script e publicar NOVA VERSÃO da implantação existente.

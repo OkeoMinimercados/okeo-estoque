@@ -1,0 +1,18 @@
+OKEO GESTÃO V6.1.0
+
+RELATÓRIO VENDAS
+- Filtros inspirados no VM Pay.
+- Datas sem limite de duração: pode pesquisar dias, meses, anos ou todo histórico.
+- Cliente, Local, Local interno, Máquina, Tipo/Modelo, CD, Fabricante, Categoria, Produto, Rota, Tags.
+- Avançado: EAN/código, canaleta, valor mín./máx., quantidade mínima e busca livre.
+- Agrupamento: dia, semana, mês, cliente, local, máquina, categoria, produto e rota.
+- Paginação 50/100/200/500 para não travar o navegador.
+- Exportação do resultado.
+- Consulta primeiro Base Central/API e usa dados locais como fallback.
+- Estrutura já pronta para receber os mesmos campos da API VM Pay.
+
+INSTALAÇÃO
+1. Apps Script: substituir pelo arquivo V3.1.
+2. Executar setupSalesFiltersV31 uma vez.
+3. Criar nova versão da implantação existente.
+4. Atualizar GitHub com V6.1.0.

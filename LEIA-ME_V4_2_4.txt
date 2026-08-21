@@ -1,0 +1,18 @@
+OKEO GESTÃO V4.2.4
+
+CURVA ABC
+- Filtros De/Até recalculam automaticamente ao mudar.
+- Botões rápidos: Abr, Mai, Jun, Jul e Abr-Jul.
+- Atualizar análise utiliza sempre o período selecionado.
+- Regra Pareto: o produto que completa a faixa fica na classe necessária para atingir 80%/95%.
+- Resumo A/B/C mostra:
+  * quantidade de produtos;
+  * % de produtos sobre o mix;
+  * faturamento da classe;
+  * % do faturamento da classe sobre o total.
+
+DRE
+- Mesmos botões rápidos de período.
+- Mudança de datas recalcula a DRE.
+
+Não requer alteração no Apps Script/Base Central.

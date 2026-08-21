@@ -1,0 +1,26 @@
+OKEO GESTÃO V4.2.6 — REPOSIÇÃO INTELIGENTE
+
+RELATÓRIO COMPLETO
+- Exibe todos os produtos, não somente alertas.
+- Produto e EAN.
+- Grupo de demanda.
+- Venda média semanal.
+- Pico mensurado.
+- Estoque mínimo.
+- Estoque atual.
+- Estoque ideal.
+- Cobertura em semanas.
+- Quantidade sugerida para reposição.
+- Status: REPOR, ATENÇÃO, OK ou SEM GIRO.
+- Filtros por unidade, fornecedor, status e pesquisa.
+
+AGRUPAMENTOS
+- Produtos similares são analisados como um único conjunto para fins de demanda.
+- Estoque atual do grupo = soma dos estoques de todos os membros.
+- Estoque mínimo/ideal do grupo é calculado sobre a demanda agregada.
+- Se o saldo total do grupo for suficiente, nenhum SKU é comprado apenas por estar individualmente baixo.
+- Se o grupo precisar de reposição, a necessidade total é distribuída entre os SKUs conforme participação histórica.
+- O relatório mostra também estoque total, ideal, pico e status do grupo.
+
+BASE
+- Reposição usa analysisSalesRows(), incluindo histórico Abr-Jul/2026 e vendas novas.

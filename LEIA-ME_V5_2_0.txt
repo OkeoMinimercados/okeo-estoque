@@ -1,0 +1,17 @@
+OKEO GESTÃO V5.2.0 — 4 GRANDES OTIMIZAÇÕES
+
+1. CODE SPLITTING
+index.html leve + js/app-core.js + js/modules/intelligence.js sob demanda + Worker separado.
+
+2. WEB WORKERS
+Curva ABC, Reposição agrupada e Inteligência de Estoque calculadas fora da thread principal.
+
+3. INDEXEDDB
+Fonte principal local para estoque, movimentos, vendas locais, caixa, DRE, grupos, fornecedores,
+fechamentos, cashback/energia, fiscal e fila de sincronização. Migração automática do localStorage.
+
+4. BACKEND ANALYTICS
+Novo Apps Script V2.0 com analytics_monthly, analytics_abc, analytics_weekly,
+analytics_time e analytics_stock_snapshot. Frontend usa servidor primeiro, cache IndexedDB e fallback local.
+
+Para ativar o item 4, atualizar também o Apps Script e criar NOVA VERSÃO da implantação existente.

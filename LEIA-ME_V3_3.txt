@@ -1,0 +1,28 @@
+OKEO ESTOQUE V3.3 — REPOSIÇÃO INTELIGENTE
+
+NOVO MÓDULO
+- Venda média semanal por produto e condomínio.
+- Pico semanal de vendas.
+- Estoque mínimo configurável por semanas de cobertura.
+- Estoque máximo baseado no pico semanal com margem configurável.
+- Estoque atual vindo do estoque por unidade.
+- Alerta quando Estoque Atual <= Estoque Mínimo.
+- Quantidade sugerida = Estoque Máximo - Estoque Atual.
+- Relatório agrupado por Fornecedor e Condomínio.
+- Exportação do relatório de reposição em CSV.
+- Cadastro e importação de fornecedor por EAN.
+
+REGRA PADRÃO
+Histórico: 8 semanas.
+Estoque mínimo: 1 semana da venda média.
+Estoque máximo: 120% do pico semanal.
+Reposição só é sugerida quando o estoque atual atingir ou ficar abaixo do mínimo.
+
+FORNECEDOR
+Fornecedor é um campo próprio, separado do fabricante.
+Produtos sem cadastro aparecem como SEM FORNECEDOR.
+
+OBSERVAÇÃO
+Para recomendações realmente confiáveis, mantenha o estoque atual sincronizado e
+importe vendas regularmente. Produtos sem vendas no período não recebem sugestão
+automática até existir histórico ou uma regra manual.

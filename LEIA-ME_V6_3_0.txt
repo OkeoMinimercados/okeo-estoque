@@ -1,0 +1,21 @@
+OKEO GESTÃO V6.3.0 — CORREÇÃO DO TRAVAMENTO OBSERVADO NO VÍDEO
+
+CAUSA:
+Depois do login havia múltiplas cargas de histórico/dashboard em paralelo.
+Além disso, ao trocar de relatório, cálculos anteriores continuavam rodando.
+
+CORREÇÕES:
+- zero pré-carregamento analítico após login;
+- interface do módulo aparece ANTES de qualquer consulta;
+- duas pinturas de tela antes de iniciar trabalho pesado;
+- Worker anterior é cancelado ao mudar de módulo;
+- consultas idênticas à Base Central são deduplicadas;
+- timeout de 7s nas consultas analíticas;
+- cache antigo pode aparecer imediatamente enquanto atualização roda ao fundo;
+- IndexedDB carregado em paralelo;
+- Vendas carrega filtros e resultado em paralelo;
+- armazenamento não fica preso em "verificando";
+- overlay de loading não captura cliques.
+
+Apps Script:
+manter Base Central V3.2 Performance; não há mudança de backend nesta versão.

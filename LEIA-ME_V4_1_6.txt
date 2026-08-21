@@ -1,0 +1,8 @@
+OKEO GESTÃO V4.1.6
+
+- Backend padrão atualizado para a nova implantação ativa OKEO Base Central V2.
+- Login por desafio SHA-256 confirmado.
+- Nova URL:
+  https://script.google.com/macros/s/AKfycbxFBV9P3t0t4FAX4y83yPhQpQnDmLJzNsp4afqoD6NKXMBROOO6Zm-00fuWgqjrcvgq/exec
+- Não é necessário recriar usuário admin.
+- Não é necessário alterar a planilha.

@@ -1,0 +1,8 @@
+OKEO GESTÃO V4.1.9
+
+- Menu antigo removido.
+- Cartões modernos são o único menu principal.
+- Todos os módulos permanecem disponíveis.
+- Adicionados cartões modernos para Fluxo de Caixa, DRE, Curva ABC, Reposição,
+  Dias/Horários, Fiscal e Controle de Acesso.
+- Login e Base Central V2 não foram alterados.

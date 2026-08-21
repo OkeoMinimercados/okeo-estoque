@@ -1,0 +1,18 @@
+OKEO GESTÃO V4.3.5 — CORREÇÃO LOGIN/LOGOUT EM LOOP
+
+Causa corrigida:
+- Login era concluído corretamente.
+- Uma validação de sessão iniciada antes ou paralelamente ao login podia terminar depois
+  e reabrir a tela de login/remover a sessão.
+
+Correções:
+- Login confirmado passa a ter prioridade sobre validações antigas.
+- Nenhuma resposta de validação iniciada antes do login pode deslogar a sessão recém-criada.
+- Removido reload automático após login.
+- Adicionado marcador de sessão confirmada.
+- Adicionado Session Guard: enquanto a sessão confirmada estiver ativa, nenhum módulo
+  pode reabrir a tela de login por engano.
+- Logout real continua limpando a sessão.
+- Login permanece isolado dos relatórios.
+
+Não requer mudança no Apps Script/Base Central.

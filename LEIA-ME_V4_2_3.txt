@@ -1,0 +1,7 @@
+OKEO Gestão V4.2.3
+- Corrige eventos dos botões de análises.
+- Histórico Abr-Jul carregado em memória, sem estourar localStorage.
+- Histórico Mensal calculado diretamente das vendas.
+- OKEO Consolidado é opção real/padrão dos relatórios.
+- DRE editável nas linhas solicitadas.
+- Pesquisa inteligente em Grupos de Demanda.

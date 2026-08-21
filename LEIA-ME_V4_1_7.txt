@@ -1,0 +1,6 @@
+V4.1.7
+- força migração para a Base Central V2 ativa;
+- ignora URL antiga salva no navegador;
+- remove sessão antiga uma única vez;
+- login_challenge/login_verify são chamados sem token antigo;
+- elimina alerta de módulo antes da autenticação.

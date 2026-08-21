@@ -1,0 +1,15 @@
+OKEO ESTOQUE V3.8 — MANUAL AGORA / API DEPOIS
+
+Esta versão mantém todo o funcionamento por importação manual e adiciona uma camada
+de integração para API futura.
+
+MODOS:
+- MANUAL: comportamento atual.
+- HÍBRIDO: API + importações/ajustes manuais.
+- API: backend passa a alimentar produtos, vendas, unidades e estoque.
+
+A lógica dos módulos não muda quando a API for ativada.
+Curva ABC, DRE, reposição, horários, cashback, energia, fiscal, estoque e demais
+análises usam o mesmo modelo interno de dados.
+
+Nunca salve token/API key no GitHub.

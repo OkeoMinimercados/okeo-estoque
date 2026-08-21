@@ -1,0 +1,88 @@
+{
+  "periodo": "2026-04-01 a 2026-07-31",
+  "registros": 67759,
+  "arquivos": [
+    {
+      "file": "vends - 2026-08-20T133728.666.xlsx",
+      "rows": 3571,
+      "start": "2026-04-01",
+      "end": "2026-04-30"
+    },
+    {
+      "file": "vends - 2026-08-20T133756.412.xlsx",
+      "rows": 3641,
+      "start": "2026-05-01",
+      "end": "2026-05-31"
+    },
+    {
+      "file": "vends - 2026-08-20T133835.834.xlsx",
+      "rows": 3914,
+      "start": "2026-06-01",
+      "end": "2026-06-30"
+    },
+    {
+      "file": "vends - 2026-08-20T133922.359.xlsx",
+      "rows": 4116,
+      "start": "2026-07-01",
+      "end": "2026-07-31"
+    },
+    {
+      "file": "vends - 2026-08-20T134102.146.xlsx",
+      "rows": 6466,
+      "start": "2026-04-01",
+      "end": "2026-04-30"
+    },
+    {
+      "file": "vends - 2026-08-20T134131.370.xlsx",
+      "rows": 6149,
+      "start": "2026-05-01",
+      "end": "2026-05-31"
+    },
+    {
+      "file": "vends - 2026-08-20T134209.768.xlsx",
+      "rows": 5997,
+      "start": "2026-06-01",
+      "end": "2026-06-30"
+    },
+    {
+      "file": "vends - 2026-08-20T134251.285.xlsx",
+      "rows": 6150,
+      "start": "2026-07-01",
+      "end": "2026-07-31"
+    },
+    {
+      "file": "vends - 2026-08-20T134420.040.xlsx",
+      "rows": 6714,
+      "start": "2026-04-01",
+      "end": "2026-04-30"
+    },
+    {
+      "file": "vends - 2026-08-20T134508.317.xlsx",
+      "rows": 6846,
+      "start": "2026-05-01",
+      "end": "2026-05-31"
+    },
+    {
+      "file": "vends - 2026-08-20T134557.565.xlsx",
+      "rows": 7119,
+      "start": "2026-06-01",
+      "end": "2026-06-30"
+    },
+    {
+      "file": "vends - 2026-08-20T134632.919.xlsx",
+      "rows": 7076,
+      "start": "2026-07-01",
+      "end": "2026-07-31"
+    }
+  ],
+  "unidades": [
+    "Condomínio Jomar",
+    "Condomínio Ville de Leon",
+    "Dom Vicente",
+    "Life Residence",
+    "Luna Bella",
+    "Luna Itaipava",
+    "Riviera Business & Mall"
+  ],
+  "faturamento": 566645.81
+}

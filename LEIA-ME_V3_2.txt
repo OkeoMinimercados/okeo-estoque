@@ -1,0 +1,18 @@
+OKEO ESTOQUE V3.2
+
+Incluído:
+- Fluxo de Caixa: lançamentos manuais + importação CSV/OFX.
+- DRE Gerencial.
+- Histórico de Faturamento.
+- Ticket médio: mesma data/hora dentro do mesmo condomínio = 1 ticket.
+- Análise de Produtos: Venda R$, Venda %, CMV R$, CMV %, margem, quantidade e mix.
+- Curva ABC por faturamento acumulado:
+  A = até 80%
+  B = de 80% a 95%
+  C = acima de 95%
+- Filtros por período e unidade.
+- Estoque valorizado pelo custo médio.
+
+IMPORTANTE:
+A V3.2 importa vendas via CSV. Se o relatório vier em XLSX, exporte como CSV para o app.
+Quando a base central Google Sheets estiver conectada, a planilha poderá receber o XLSX diretamente.

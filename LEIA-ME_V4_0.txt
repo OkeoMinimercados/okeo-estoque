@@ -1,0 +1,19 @@
+OKEO GESTÃO V4.0
+
+ALTERAÇÕES:
+- Nome do sistema alterado de OKEO Estoque para OKEO Gestão.
+- Tela de login e cabeçalho preparados para receber a logo oficial.
+- Grupos de Demanda agora permitem:
+  * pesquisar por produto, fabricante, categoria ou EAN;
+  * filtrar produtos agrupados ou sem grupo;
+  * selecionar produtos com checkbox;
+  * selecionar todos os produtos visíveis;
+  * criar um grupo com vários produtos de uma vez;
+  * adicionar produtos selecionados a grupo existente;
+  * remover produtos individualmente de um grupo;
+  * excluir grupo completo.
+
+LOGO:
+Envie o arquivo oficial da logo OKEO em PNG/JPG/SVG.
+Depois substituímos o marcador textual OKEO pela imagem real no cabeçalho,
+tela de login e ícone PWA.

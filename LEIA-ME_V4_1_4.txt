@@ -1,0 +1,7 @@
+OKEO GESTÃO V4.1.4
+
+CORREÇÃO CRÍTICA DE LOGIN
+- Corrigida a ordem de inicialização de OKEO Consolidado.
+- TOTAL_UNIT agora é definido antes de os filtros DRE/Produtos/Reposição serem inicializados.
+- O erro anterior interrompia todo o JavaScript antes de o botão Entrar receber seu evento.
+- Nenhuma alteração necessária no Apps Script/Base Central.

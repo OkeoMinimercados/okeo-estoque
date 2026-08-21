@@ -1,0 +1,31 @@
+OKEO GESTÃO V4.3.3 — MONITOR DE SAÚDE
+
+NOVO MÓDULO ADMIN: SAÚDE DO SISTEMA
+- Captura erros JavaScript globais.
+- Captura Promises rejeitadas.
+- Identifica qual módulo estava sendo executado.
+- Registra data/hora e versão do aplicativo.
+- Mantém no máximo 100 erros locais.
+- Não registra senha.
+- Mascara token/authorization no diagnóstico.
+
+STATUS DE MÓDULOS
+- OK
+- Falha
+- Não testado
+
+EXPORTAÇÃO
+- Botão "Baixar diagnóstico" cria JSON com:
+  versão do app;
+  navegador;
+  status online;
+  saúde dos módulos;
+  erros recentes.
+- Esse arquivo pode ser enviado ao ChatGPT para localizar rapidamente a falha.
+
+ISOLAMENTO
+- Uma falha em um relatório é registrada e não deve derrubar a tela de login.
+- O usuário recebe indicação para consultar Saúde do Sistema.
+
+PERMISSÃO
+- Módulo visível somente para ADMIN.

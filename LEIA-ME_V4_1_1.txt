@@ -1,0 +1,9 @@
+OKEO GESTÃO V4.1.1
+
+CORREÇÃO:
+- Corrigido o JavaScript do botão Entrar.
+- O painel visual da V4.1 havia sido inserido acidentalmente dentro do evento de login.
+- Login voltou a chamar corretamente a Base Central.
+- Mensagem de erro de login agora é mais clara.
+- Enter no campo Senha também executa o login.
+- Nenhuma alteração necessária no usuário administrador ou na planilha.

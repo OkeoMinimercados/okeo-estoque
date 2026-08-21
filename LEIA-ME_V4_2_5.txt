@@ -1,0 +1,11 @@
+OKEO GESTÃO V4.2.5 — OTIMIZAÇÃO DE VELOCIDADE
+
+- Módulo abre visualmente antes de executar cálculos pesados.
+- Métricas de vendas são reutilizadas em cache por período/unidade.
+- União da base histórica com vendas novas é calculada uma vez e reutilizada.
+- Curva ABC, DRE, reposição, horários e histórico mensal evitam recálculos ao voltar para a mesma tela.
+- Cache é invalidado ao importar vendas, carregar histórico ou alterar movimentações.
+- Pequeno indicador 'Atualizando informações...' aparece enquanto um cálculo novo é necessário.
+- Transições visuais mais rápidas.
+
+Não requer alteração no Apps Script/Base Central.

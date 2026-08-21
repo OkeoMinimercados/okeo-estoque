@@ -1,0 +1,32 @@
+OKEO GESTÃO V4.3.0 — ARQUITETURA PARA ANOS DE DADOS
+
+LOGIN
+- Não carrega histórico.
+- Não calcula dashboard.
+- Não faz JSON.parse de vendas antigas antes de abrir o sistema.
+- Após autenticação, abre Inventário imediatamente.
+- Resumo leve do dashboard é preparado depois.
+
+RELATÓRIOS SOB DEMANDA
+- Curva ABC carrega somente o agregado necessário para ABC.
+- Reposição carrega somente histórico semanal.
+- Dias/Horários carrega somente agregado de horários.
+- Histórico/Faturamento/DRE usam agregado por unidade/dia.
+- Nenhum relatório precisa carregar toda a base bruta apenas para abrir.
+
+LOCALSTORAGE
+- Base histórica de versões antigas é removida do armazenamento local.
+- Apenas vendas novas/manuais permanecem no navegador.
+- Isso evita que 1 ou 2 anos de histórico congelem a abertura do app.
+
+SERVICE WORKER
+- Pré-cache somente da interface principal.
+- Arquivos de relatório não são baixados durante login/instalação.
+- Cada base de análise é carregada apenas quando necessária.
+
+FUTURO COM API
+- Vendas brutas devem permanecer na Base Central/API.
+- O app deve receber agregados por período/unidade.
+- A quantidade de anos armazenados deixa de afetar diretamente o tempo de login.
+
+Não requer alteração do Apps Script para os dados atuais.

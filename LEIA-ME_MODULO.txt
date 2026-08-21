@@ -1,0 +1,5 @@
+OKEO Operação V1
+
+Inventário, validade, entrada por NF e movimentações.
+
+Integração: mesma Base Central OKEO; futura VM Pay acessada somente via backend.

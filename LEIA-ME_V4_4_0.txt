@@ -1,0 +1,50 @@
+OKEO GESTÃO V4.4.0 — ROBUSTEZ E ESCALA
+
+IMPLEMENTADO APÓS REVISÃO DE BOAS PRÁTICAS PWA
+
+1. LOGIN
+- Continua isolado dos relatórios.
+- Nenhum dado pesado é carregado antes da autenticação.
+
+2. MODO SEGURO
+- Detecta falhas repetidas de inicialização.
+- Após 3 falhas próximas, ativa Modo Seguro.
+- Evita pré-carregar relatórios pesados.
+- Administrador pode sair do modo seguro manualmente.
+
+3. SAÚDE DO SISTEMA
+- Autoteste de JavaScript, Base Central, armazenamento, Cache API,
+  Service Worker e criptografia.
+- Monitor de tarefas longas (>250ms).
+- Monitor de armazenamento do navegador.
+- Alertas quando armazenamento passa de 70% / 85%.
+
+4. RELATÓRIOS
+- "Latest wins": se o usuário muda filtro rapidamente, resultados antigos
+  deixam de ter prioridade.
+- Evita cálculos concorrentes desnecessários.
+- Mantém carregamento sob demanda e cache por relatório.
+
+5. SERVICE WORKER
+- HTML: network-first.
+- JSON de analytics: stale-while-revalidate.
+- Shell: cache-first com atualização em segundo plano.
+- APIs externas nunca são cacheadas/interceptadas.
+- Caches de versões antigas são removidos automaticamente.
+
+6. INICIALIZAÇÃO
+- Service worker registrado apenas após load/idle.
+- Tarefas não essenciais usam requestIdleCallback quando disponível.
+- Reduz competição por CPU/rede no primeiro acesso.
+
+7. ARMAZENAMENTO
+- Monitor de quota.
+- localStorage mantido apenas para dados pequenos/operacionais legados.
+- Próxima etapa recomendada quando o volume local crescer: migrar grandes
+  estruturas operacionais para IndexedDB.
+
+8. MIGRAÇÃO DE VERSÃO
+- Limpa apenas marcadores/cache efêmeros.
+- Nunca apaga estoque, produtos, movimentos ou cadastros.
+
+Base Central / Apps Script não precisa ser alterada.

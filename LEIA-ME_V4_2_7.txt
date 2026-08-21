@@ -1,0 +1,21 @@
+OKEO GESTÃO V4.2.7
+
+CURVA ABC
+- Resumo visível para A, B e C:
+  quantidade de produtos;
+  percentual do mix;
+  faturamento da classe;
+  percentual do faturamento total.
+- Regra Pareto 80% / 95% mantida.
+- Tabela detalhada mostra 100 produtos inicialmente.
+- Botões 'Mostrar mais' e 'Mostrar todos'.
+- Os cálculos de A/B/C sempre consideram todos os 1066 produtos históricos, mesmo que a tela mostre apenas 100 linhas inicialmente.
+
+PERFORMANCE
+- Histórico de Curva ABC pré-agregado por dia, condomínio e produto.
+- Registros brutos históricos: 67,759.
+- Registros agregados usados na ABC: 39,609.
+- Isso evita percorrer todas as transações individuais em cada troca de período/unidade.
+- Renderização inicial limitada a 100 linhas, reduzindo bastante o custo do navegador.
+
+Não requer alteração no Apps Script/Base Central.

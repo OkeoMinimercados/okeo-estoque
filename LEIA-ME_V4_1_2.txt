@@ -1,0 +1,12 @@
+OKEO GESTÃO V4.1.2
+
+CORREÇÃO DE LOGIN:
+- A Base Central agora possui URL padrão embutida no app.
+- O login não depende mais de a URL ter ficado salva no navegador.
+- Funciona após reinstalação, limpeza de cache ou em um aparelho novo.
+- A URL padrão é:
+  https://script.google.com/macros/s/AKfycbxbwxWz0fFkpqnJn-p1tvb9I7qMoG8bbg48misXMxYp91KJdbSHAMA0I6jZ7cMUfH1Z/exec
+
+IMPORTANTE:
+A URL /exec não é senha nem token.
+Credenciais e futuras chaves do VMPay continuam fora do GitHub.

@@ -1,0 +1,26 @@
+OKEO ESTOQUE V3
+
+Incluído:
+- CD / Estoque Central.
+- Cadastro dinâmico de unidades e produtos via Google Sheets.
+- Entrada de compra.
+- Transferência entre unidades.
+- Ajuste positivo e negativo.
+- Perda, quebra, furto e vencimento.
+- Estoque atual por unidade.
+- Custo médio móvel.
+- Entrada por NF com câmera/OCR assistido e confirmação humana.
+- Indicadores de quantidade, valor de estoque, custo médio e perdas.
+- Estrutura para CMV, venda média e ticket médio após integração das vendas.
+
+ARQUIVOS DE BASE
+- Produtos_Iniciais.csv: importar na aba Produtos.
+- Unidades_Iniciais.csv: importar na aba Unidades.
+- GoogleAppsScript_OKEO_V3.gs: backend para a planilha Google.
+
+IMPORTANTE
+A NF por foto não lança nada automaticamente sem conferência. OCR pode interpretar
+quantidades e valores incorretamente. Confirme EAN, quantidade e custo antes de lançar.
+
+A URL do Apps Script será configurada na próxima etapa, depois que a planilha central
+e o Web App forem publicados.

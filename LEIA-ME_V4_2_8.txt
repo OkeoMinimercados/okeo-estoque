@@ -1,0 +1,44 @@
+OKEO GESTÃO V4.2.8 — PERFORMANCE GLOBAL
+
+BASE HISTÓRICA ORIGINAL
+- 67,759 registros.
+
+BASES OTIMIZADAS
+- Produto/dia/unidade: 39,609 registros.
+- Unidade/dia: 852 registros.
+- Produto/semana/unidade: 18,615 registros.
+- Demanda por horário: 28,407 registros.
+
+RELATÓRIOS OTIMIZADOS
+- Curva ABC.
+- Reposição Inteligente.
+- Faturamento / Ticket.
+- Histórico Mensal.
+- Dias / Horários.
+- DRE reutiliza métricas em cache.
+- Resultados continuam em cache enquanto filtros/dados não mudam.
+
+REPOSIÇÃO INTELIGENTE — VERIFICAÇÃO DAS MELHORIAS PEDIDAS
+[OK] Todos os produtos aparecem.
+[OK] Nome do produto.
+[OK] EAN.
+[OK] Grupo de demanda.
+[OK] Venda média semanal.
+[OK] Pico mensurado.
+[OK] Estoque mínimo.
+[OK] Estoque atual.
+[OK] Estoque ideal.
+[OK] Cobertura em semanas.
+[OK] Status REPOR / ATENÇÃO / OK / SEM GIRO.
+[OK] Quantidade sugerida para reposição.
+[OK] Filtro por unidade.
+[OK] Filtro por fornecedor.
+[OK] Filtro por status.
+[OK] Pesquisa produto/EAN/grupo.
+[OK] Produtos similares agrupados usam demanda total do grupo.
+[OK] Estoque atual do grupo é somado antes de sugerir compra.
+[OK] Se o grupo tem estoque suficiente, não gera compra apenas porque um SKU individual está baixo.
+[OK] Quando o grupo precisa comprar, a necessidade é distribuída entre SKUs pela participação histórica.
+[OK] Relatório mostra estoque, ideal, pico e status do grupo.
+
+Não requer alteração do Apps Script/Base Central.

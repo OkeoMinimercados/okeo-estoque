@@ -1,0 +1,12 @@
+OKEO GESTÃO V4.3.2 — CORREÇÃO DO LOGIN
+
+- Login agora funciona em um bloco JavaScript isolado do restante do sistema.
+- Mesmo que um relatório tenha erro de inicialização, o botão Entrar continua operacional.
+- Autenticação usa diretamente a Base Central V2 e o desafio SHA-256.
+- Após login, a sessão é entregue ao aplicativo principal.
+- Se o app principal ainda não tiver terminado de inicializar, a sessão é salva e a página recarrega uma vez.
+- Eventos opcionais de módulos passam a ser protegidos para não interromper todo o JavaScript.
+- Tela de login mostra V4.3.2 para confirmar que o GitHub/cache foi atualizado.
+- Nenhum histórico é carregado antes do login.
+
+Não requer alteração no Apps Script/Base Central.

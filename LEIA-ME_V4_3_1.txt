@@ -1,0 +1,34 @@
+OKEO GESTÃO V4.3.1 — POLÍTICA DE DADOS ESCALÁVEL
+
+REGRA DE RETENÇÃO / PERFORMANCE
+1. RELATÓRIOS PESADOS — JANELA MÓVEL DE 90 DIAS
+   - Curva ABC
+   - Reposição Inteligente
+   - Demanda por produto
+   - Dias/Horários
+   Guardam detalhe somente dos últimos 90 dias para operação diária.
+
+2. HISTÓRICO ANTIGO
+   - Produtos/vendas antigos ficam resumidos por trimestre.
+   - Serve para comparativos de tendência sem carregar vendas individuais.
+
+3. DRE / FATURAMENTO / TICKET
+   - Mantêm todo o histórico, mas por mês/unidade.
+   - Anos de dados viram poucas centenas de linhas, não centenas de milhares.
+
+4. ESTOQUE
+   - O app trabalha com saldo atual.
+   - Movimentos recentes podem ficar detalhados.
+   - Movimentos antigos devem ser consolidados em snapshots mensais/trimestrais.
+   - Não é necessário reconstruir o estoque atual desde o primeiro movimento.
+
+DADOS ATUAIS
+- ABC quente (90 dias): 29,804 linhas agregadas.
+- Reposição 90 dias: 13,442 linhas semanais.
+- Horários: 28,407 linhas agregadas.
+- Histórico mensal DRE/Faturamento: 28 linhas.
+- Histórico trimestral por produto: 4,454 linhas.
+
+ESCALA
+Com 100 mil, 300 mil ou milhões de vendas, o navegador não precisa carregar os registros brutos.
+A Base Central/API deverá manter os brutos e gerar os agregados automaticamente.

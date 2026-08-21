@@ -1,0 +1,43 @@
+OKEO GESTÃO V5.0.0 — INTELIGÊNCIA + ARQUITETURA
+
+IMPLEMENTAÇÕES TÉCNICAS
+- Analytics Worker: cálculos pesados fora da thread principal.
+- IndexedDB: cache assíncrono de resultados analíticos.
+- Offline fallback dedicado.
+- Reenvio da fila de sincronização ao recuperar conexão.
+- Deep links por módulo via hash.
+- Foco/teclado melhorados.
+- Service Worker mantém APIs externas fora do cache.
+- Saúde do Sistema, modo seguro, quota e tarefas longas permanecem ativos.
+
+NOVO MÓDULO: INTELIGÊNCIA DE ESTOQUE
+- ABC-XYZ:
+  ABC = contribuição financeira.
+  XYZ = variabilidade da demanda.
+- Estoque de segurança.
+- Ponto de reposição.
+- Estoque preferencial.
+- Lead time configurável.
+- Nível de serviço configurável.
+- Cobertura de estoque em semanas.
+- Sell-through.
+- Giro estimado.
+- GMROI estimado quando houver custo.
+- Risco de ruptura.
+- Produtos sem giro.
+- Matriz A/X até C/Z.
+- Contagem cíclica recomendada:
+  A semanal, B mensal, C trimestral.
+- Qualidade de dados:
+  produtos sem fornecedor, custo, NCM, CEST e EANs duplicados.
+
+ARQUITETURA PARA CRESCIMENTO
+- Cálculos operacionais recentes continuam usando agregados.
+- Resultados analíticos podem ficar em IndexedDB.
+- O navegador não precisa processar vendas brutas para gerar inteligência.
+- Quando a API estiver disponível, a mesma interface poderá consumir agregados diretamente do servidor.
+
+OBSERVAÇÃO
+- Métricas como GMROI e giro dependem da qualidade do custo médio/CMV disponível.
+- Supplier fill-rate, entrega pontual e lead-time real passarão a ser calculados automaticamente quando
+  compras/pedidos e recebimentos estiverem totalmente estruturados via Base Central/API.

@@ -1,0 +1,17 @@
+OKEO GESTÃO V4.1
+
+VISUAL
+- Logo oficial OKEO aplicada.
+- Nome OKEO Gestão.
+- Painel inicial com KPIs.
+- Módulos em cartões com ícones maiores e cores distintas.
+- Destaque para OKEO Consolidado.
+- Interface responsiva para computador e celular.
+
+LOGO
+Arquivo okeo-logo.png incluído no pacote.
+Ícone PWA atualizado com a logo fornecida.
+
+OBSERVAÇÃO
+Os ícones dos módulos usam símbolos vetoriais/emoji do navegador para manter leveza
+e compatibilidade PWA. O visual foi organizado para se aproximar do modelo aprovado.

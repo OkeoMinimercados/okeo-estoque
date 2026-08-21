@@ -1,0 +1,22 @@
+OKEO GESTÃO V5.1.0 — PERFORMANCE MÁXIMA (CLIENTE)
+
+NOVAS MELHORIAS
+- Telemetria local de desempenho:
+  LCP, CLS, tarefas longas e tempo por módulo.
+- Diagnóstico identifica regressões de velocidade.
+- Reposição Inteligente renderiza em blocos de 80 linhas.
+- Grandes tabelas usam content-visibility/contain para reduzir custo de layout e pintura.
+- Estado operacional passa a ser espelhado gradualmente no IndexedDB:
+  estoque, últimos movimentos e vendas locais.
+- IndexedDB schema V2 preparado para migração definitiva futura.
+- Mantido Web Worker para inteligência de estoque.
+- Cache/service worker permanece sob demanda.
+
+AINDA NÃO IMPLEMENTADO NESTA ETAPA, POR EXIGIR REESTRUTURAÇÃO MAIOR:
+- Code splitting real do index.html em vários módulos JS.
+- Todos os relatórios pesados executados integralmente em Workers.
+- Banco principal totalmente migrado de localStorage para IndexedDB.
+- Agregação diretamente no backend/API.
+
+Esses quatro pontos são as últimas grandes alavancas de performance e serão mais importantes
+quando a API e o histórico de anos estiverem ativos.

@@ -1,0 +1,17 @@
+OKEO ESTOQUE V3.7
+
+Consolidado:
+- Importação incremental e fechamento mensal de vendas.
+- Histórico mensal preservado.
+- Cashback e energia por condomínio.
+- Grupos de demanda configuráveis.
+- Análise de vendas por dia/horário.
+- Reposição inteligente por fornecedor/condomínio com CSV/PDF.
+- Curva ABC Pareto e baixo giro.
+- Novo Produto.
+- Cadastro Fiscal SC com NCM/CEST, fonte, status e revisão.
+
+Fiscal:
+- NCM e CEST não são inventados quando não houver fonte confiável.
+- A busca automática reaproveita Base Mestre/NF e pode consultar o backend central.
+- A aplicabilidade para Santa Catarina fica separada como status de validação.

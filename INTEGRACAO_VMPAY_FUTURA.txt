@@ -1,0 +1,36 @@
+OKEO V3.8 — ESTRUTURA API-READY
+
+O APP NÃO CHAMA O VMPAY DIRETAMENTE.
+O GitHub Pages é público e não deve conter token/API key.
+
+ARQUITETURA FUTURA:
+VMPay API -> Backend seguro -> Formato interno OKEO -> App OKEO
+
+O backend deverá normalizar a API externa para:
+1. sync_master
+   Retorna products[] e units[].
+2. sync_sales
+   Retorna sales[] no formato interno do OKEO.
+3. sync_stock
+   Retorna stock[].
+4. status
+   Retorna {"ok": true}.
+
+MODO MANUAL
+Permanece funcionando exatamente como hoje:
+- importação XLSX/CSV de vendas;
+- inventário;
+- NF;
+- fluxo financeiro;
+- cadastro de produto/fornecedor;
+- demais módulos.
+
+MODO HÍBRIDO
+Permite usar API e continuar fazendo ajustes/importações manuais.
+
+MODO API
+A API passa a ser a principal fonte de produtos, vendas, unidades e estoque.
+
+SEGURANÇA
+Nunca colocar token do VMPay no index.html, manifest, service worker ou GitHub.
+O token deve existir apenas no backend seguro.

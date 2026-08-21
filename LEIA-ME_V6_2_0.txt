@@ -1,0 +1,26 @@
+OKEO GESTÃO V6.2.0 — NAVEGAÇÃO E RELATÓRIOS MAIS RÁPIDOS
+
+PRINCIPAIS MUDANÇAS
+- Clique em módulo troca a tela imediatamente.
+- Relatórios frescos não são recalculados ao reabrir.
+- Cache por módulo + assinatura dos filtros.
+- Dados comuns são pré-carregados em segundo plano após login.
+- Base mensal, semanal, opções de filtro e Worker são aquecidos sem bloquear a interface.
+- Analytics usa stale-while-revalidate no IndexedDB:
+  mostra cache imediatamente e atualiza em segundo plano.
+- JSON local persistido no IndexedDB.
+- Opções do relatório de vendas são carregadas uma única vez.
+- Alterações de estoque/vendas invalidam somente os relatórios dependentes.
+- Consulta de armazenamento tem timeout, evitando "verificando..." permanente.
+
+BACKEND V3.2
+- CacheService para Analytics Mensal e Semanal.
+- Cache de opções de filtro ampliado para 30 minutos.
+- Visões materializadas continuam sendo a fonte.
+- Rebuild invalida caches.
+
+INSTALAÇÃO
+1. GitHub: V6.2.0.
+2. Apps Script: V3.2 Performance.
+3. Salvar e criar nova versão da implantação existente.
+Não é necessário rodar novo setup se V3.1 já foi configurada.

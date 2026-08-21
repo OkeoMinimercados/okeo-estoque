@@ -1,0 +1,28 @@
+OKEO GESTÃO V4,2
+
+1, GRUPOS DE DEMANDA
+- Pesquisa instantânea por palavra. produto, marca, categoria e EAN,
+- Pesquisa ignora acentos e combina múltiplas palavras,
+- Os resultados são ordenados por relevância,
+- A lista de produtos deixa de mostrar todo o cadastro antes da pesquisa,
+- Checkboxes continuam permitindo selecionar vários produtos,
+
+2, OKEO CONSOLIDADO
+- Opção explícita nos filtros dos relatórios de gestão,
+- Vendas/faturamento/CMV/ticket/ABC/demanda: somente condomínios,
+- CD não participa de vendas,
+- Estoque consolidado: CD + condomínios,
+- Ticket médio consolidado = faturamento total dos condomínios / total de tickets,
+
+3, BASE HISTÓRICA AUTOMÁTICA
+- Abril a julho de 2026,
+- 67,759 registros de vendas,
+- Faturamento histórico: R$ 566,645,81,
+- Coluna Operador ignorada,
+- A base é carregada automaticamente uma única vez e mesclada sem duplicar dados,
+- Utilizada em faturamento, ticket, Curva ABC, baixo giro, demanda, dias/horários,
+  fechamento mensal e reposição/estoque ideal,
+
+4, MAPEAMENTO DE PRODUTO
+- Vendas passam a localizar o produto tanto pelo EAN quanto pelo código interno,
+- Quando necessário, usa descrição exata como fallback,

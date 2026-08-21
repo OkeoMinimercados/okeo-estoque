@@ -1,0 +1,19 @@
+OKEO V3.9
+
+NOVO:
+1) Perfis de acesso:
+- ADMIN: acesso total.
+- OPERATIONAL: apenas Inventário e Entrada por NF.
+
+2) Unidade totalizadora "OKEO Consolidado":
+- Estoque: soma CD + todos os condomínios.
+- Faturamento/vendas/CMV/ticket/DRE/Curva ABC: soma somente condomínios.
+- CD nunca entra em métricas de vendas.
+
+3) Backend com autenticação:
+- Crie o primeiro administrador executando no Apps Script:
+  bootstrapAdmin("admin","Administrador OKEO","SUA_SENHA_FORTE")
+- Depois crie o funcionário em Controle de Acesso.
+
+4) Após trocar o Apps Script, publique NOVA VERSÃO da implantação Web App.
+A URL /exec pode permanecer a mesma.

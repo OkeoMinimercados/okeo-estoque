@@ -1,0 +1,46 @@
+{
+  "status": {
+    "ok": true
+  },
+  "sync_master": {
+    "products": [
+      {
+        "ean": "7890000000000",
+        "codigo": "123",
+        "produto": "PRODUTO EXEMPLO",
+        "fabricante": "FABRICANTE",
+        "categoria": "CATEGORIA",
+        "fornecedor": "FORNECEDOR",
+        "ncm": "",
+        "cest": ""
+      }
+    ],
+    "units": [
+      "CD - Estoque Central",
+      "Condomínio Exemplo"
+    ]
+  },
+  "sync_sales": {
+    "sales": [
+      {
+        "datetime": "2026-08-20 14:30:00",
+        "unit": "Condomínio Exemplo",
+        "machine": "Máquina 1",
+        "code": "123",
+        "product": "PRODUTO EXEMPLO",
+        "qty": 1,
+        "value": 10.0
+      }
+    ]
+  },
+  "sync_stock": {
+    "stock": [
+      {
+        "unit": "Condomínio Exemplo",
+        "ean": "7890000000000",
+        "qty": 5,
+        "avgCost": 6.0
+      }
+    ]
+  }
+}
