@@ -1,5 +1,5 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OKEO Estoque</title><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css"></head><body>
-<header><b>OKEO Estoque</b><span>V1 limpa</span><button id="logout" class="hidden">Sair</button></header>
+<header><b>OKEO Estoque</b><span>V1.1 • Base Central</span><span id="syncState" class="syncstate">Local</span><button id="logout" class="hidden">Sair</button></header>
 <main>
 <section id="login" class="card"><h2>Acesso</h2><input id="user" value="admin" placeholder="Usuário"><input id="pass" type="password" value="admin123" placeholder="Senha"><button id="enter">Entrar</button><p id="loginMsg"></p></section>
 <section id="app" class="hidden">
@@ -15,5 +15,12 @@
 <section id="groups" class="view card hidden"><h2>Grupos de Demanda</h2><p>A demanda só libera após classificar todos os produtos como Grupo ou Individual.</p><input id="gname" placeholder="Novo grupo"><input id="gdesc" placeholder="Descrição"><button id="gsave">Criar grupo</button><div id="glist"></div><div id="gproducts"></div></section>
 <section id="sales" class="view card hidden"><h2>Importar vendas para demanda</h2><input id="salesfile" type="file" accept=".csv"><button id="salesimport">Processar CSV</button><p id="salesmsg"></p><div id="saleshist"></div></section>
 <section id="demand" class="view card hidden"><h2>Demanda Inteligente</h2><div id="dgate"></div><select id="dunit"></select><select id="dweeks"><option>4</option><option>8</option><option selected>12</option><option>16</option></select><input id="dmin" type="number" step=".1" value="1"><input id="dideal" type="number" step=".1" value="2"><button id="dcalc">Calcular</button><div id="dlist"></div></section>
-<section id="settings" class="view card hidden"><h2>Configurações</h2><input id="backend" placeholder="URL Base Central /exec"><button id="backsave">Salvar URL</button><p>VM Pay: preparada para conexão via backend. Credenciais não ficam no GitHub.</p><button id="backup">Exportar backup</button></section>
+<section id="settings" class="view card hidden"><h2>Configurações</h2><input id="backend" placeholder="URL Base Central /exec"><button id="backsave">Salvar URL</button>
+<div class="syncpanel">
+  <button id="testBackend">Testar Base Central</button>
+  <button id="syncNow">Sincronizar agora</button>
+  <p id="syncMsg" class="muted"></p>
+</div>
+<p><b>VM Pay:</b> preparada para conexão via backend. Credenciais não ficam no GitHub.</p>
+<button id="backup">Exportar backup</button></section>
 </section></main><script src="db.js"></script><script src="app.js"></script></body></html>
