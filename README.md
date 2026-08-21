@@ -1,17 +1,11 @@
-# OKEO Estoque V1.1 — Sincronização
+# OKEO Estoque V1.2 — Turbo Sync
 
-Esta versão mantém IndexedDB local para operação rápida/offline e sincroniza com a Base Central quando houver conexão.
+Otimização principal:
+- Sincronização em lote: 1 chamada ao Apps Script para enviar a fila e receber todos os dados.
+- Substitui várias requisições sequenciais da V1.1.
+- Mantém fila offline e IndexedDB local.
+- Sincronização automática limitada para não recarregar a Base Central a cada abertura.
+- Tela mostra o tempo gasto no Sync.
 
-Sincronizados:
-- Produtos
-- Condomínios/CD
-- Estoque
-- Validades (metadados; foto permanece local nesta versão)
-- Movimentações
-- Grupos de demanda
-- Resumos semanais de vendas
-- Histórico de importações
-
-A fila local garante que uma indisponibilidade da Base Central não bloqueie a operação.
-
-VM Pay permanece preparada no Apps Script e desativada até a documentação/credenciais.
+Escopo permanece: estoque, validades, movimentações, grupos e demanda inteligente.
+VM Pay continua preparada no backend e desativada até a API estar disponível.

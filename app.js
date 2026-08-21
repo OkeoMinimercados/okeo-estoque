@@ -19,7 +19,7 @@ function bind(){
   $("#backsave").onclick=saveBackend;$("#testBackend").onclick=testBackend;$("#syncNow").onclick=syncAll;$("#backup").onclick=backup;
 }
 function showLogin(){$("#login").classList.remove("hidden");$("#app").classList.add("hidden");$("#logout").classList.add("hidden")}
-function showApp(){$("#login").classList.add("hidden");$("#app").classList.remove("hidden");$("#logout").classList.remove("hidden");selectors();view("home");updateSyncState();setTimeout(()=>{if(getBackendUrl())syncAll(false)},300)}
+function showApp(){$("#login").classList.add("hidden");$("#app").classList.remove("hidden");$("#logout").classList.remove("hidden");selectors();view("home");updateSyncState();setTimeout(async()=>{if(!getBackendUrl())return;const q=await all("syncQueue");const last=Number(localStorage.getItem("okeo_last_sync")||0);if(q.length||Date.now()-last>300000){await syncAll(false);localStorage.setItem("okeo_last_sync",Date.now())}},500)}
 function login(){if($("#user").value==="admin"&&$("#pass").value==="admin123"){sessionStorage.setItem("okeo","1");showApp()}else $("#loginMsg").textContent="Usuário ou senha inválidos"}
 function view(v){$$(".view").forEach(x=>x.classList.add("hidden"));$("#"+v).classList.remove("hidden");({home,products:renderProducts,units:renderUnits,inventory:renderStock,expiry:renderExpiry,moves:renderMoves,groups:renderGroups,sales:renderSales,demand:gate,settings:renderSettings}[v]||(()=>{}))()}
 const esc=s=>String(s??"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
@@ -36,7 +36,14 @@ async function apiGet(action,params={}){
 async function apiPost(action,params={}){
   const base=getBackendUrl();if(!base)throw new Error("Base Central não configurada.");
   const body=new URLSearchParams({action,...Object.fromEntries(Object.entries(params).map(([k,v])=>[k,String(v)]))});
-  const r=await fetch(base,{method:"POST",body,redirect:"follow"});if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();if(!j.ok)throw new Error(j.error||"Erro da Base Central");return j;
+  const r=await fetch(base,{method:"POST",body,redirect:"follow",cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();if(!j.ok)throw new Error(j.error||"Erro da Base Central");return j;
+}
+async function apiBatch(payload){
+  const base=getBackendUrl();if(!base)throw new Error("Base Central não configurada.");
+  const body=new URLSearchParams({action:"batch_sync",payload:JSON.stringify(payload)});
+  const r=await fetch(base,{method:"POST",body,redirect:"follow",cache:"no-store"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const j=await r.json();if(!j.ok)throw new Error(j.error||"Erro da Base Central");return j;
 }
 async function queue(store,op,rowOrId){
   if(!SYNC_STORES.includes(store))return;
@@ -50,22 +57,13 @@ function sanitize(store,row){const o=JSON.parse(JSON.stringify(row));if(store===
 async function localPut(store,row,doQueue=true){await put(store,row);if(doQueue)await queue(store,"upsert",row);return row}
 async function localDel(store,rowId,doQueue=true){await del(store,rowId);if(doQueue)await queue(store,"delete",rowId)}
 async function processQueue(){
-  if(syncBusy||!getBackendUrl()||!navigator.onLine)return;syncBusy=true;
-  try{
-    const qs=(await all("syncQueue")).sort((a,b)=>a.at.localeCompare(b.at));
-    for(const q of qs){
-      try{
-        if(q.op==="delete")await apiPost("delete",{store:q.store,id:q.rowId});
-        else await apiPost("upsert",{store:q.store,payload:JSON.stringify(q.row)});
-        await del("syncQueue",q.id);
-      }catch(e){break}
-    }
-  }finally{syncBusy=false;updateSyncState()}
+  if(syncBusy||!getBackendUrl()||!navigator.onLine)return;
+  return syncAll(false);
 }
-async function pullStore(store){
-  const j=await apiGet("list",{store,includeDeleted:1});
-  for(const item of j.rows||[]){
-    if(item._deleted)await del(store,item.id);else{
+async function applyRemoteStore(store,rows){
+  for(const item of rows||[]){
+    if(item._deleted)await del(store,item.id);
+    else{
       const local=await get(store,item.id);
       if(store==="expiries"&&local?.photo&&!item.photo)item.photo=local.photo;
       await put(store,item);
@@ -75,16 +73,28 @@ async function pullStore(store){
 async function syncAll(show=true){
   if(!getBackendUrl()){if(show)alert("Configure a URL da Base Central.");return}
   if(syncBusy)return;
+  syncBusy=true;
+  const started=performance.now();
   if(show&&$("#syncMsg"))$("#syncMsg").textContent="Sincronizando...";
   setSyncState("Sincronizando","warn");
   try{
-    await processQueue();
-    for(const s of SYNC_STORES)await pullStore(s);
+    const queueRows=(await all("syncQueue")).sort((a,b)=>a.at.localeCompare(b.at));
+    const payload={
+      ops:queueRows.map(q=>({store:q.store,op:q.op,row:q.row,rowId:q.rowId,qid:q.id})),
+      stores:SYNC_STORES
+    };
+    const resp=await apiBatch(payload);
+    for(const qid of (resp.applied||[]))await del("syncQueue",qid);
+    for(const store of SYNC_STORES)await applyRemoteStore(store,(resp.data||{})[store]||[]);
     await selectors();
+    const ms=Math.round(performance.now()-started);
     await updateSyncState();
-    if(show&&$("#syncMsg"))$("#syncMsg").textContent="Sincronização concluída.";
+    localStorage.setItem("okeo_last_sync",Date.now());if(show&&$("#syncMsg"))$("#syncMsg").textContent=`Sincronização concluída em ${(ms/1000).toFixed(1)}s.`;
     const visible=$$(".view").find(v=>!v.classList.contains("hidden"));if(visible)view(visible.id);
-  }catch(e){setSyncState("Offline","warn");if(show&&$("#syncMsg"))$("#syncMsg").textContent="Falha: "+e.message}
+  }catch(e){
+    setSyncState("Offline","warn");
+    if(show&&$("#syncMsg"))$("#syncMsg").textContent="Falha: "+e.message;
+  }finally{syncBusy=false}
 }
 async function testBackend(){const m=$("#syncMsg");m.textContent="Testando...";try{const j=await apiGet("status");m.textContent=`OK • ${j.app} • versão ${j.version}`;setSyncState("Conectado","ok")}catch(e){m.textContent="Falha: "+e.message;setSyncState("Falha","warn")}}
 window.addEventListener("online",()=>processQueue());
