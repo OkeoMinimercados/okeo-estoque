@@ -1,5 +1,5 @@
 <!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OKEO Estoque</title><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css"></head><body>
-<header><b>OKEO Estoque</b><span>V1.2 • Turbo Sync</span><span id="syncState" class="syncstate">Local</span><button id="logout" class="hidden">Sair</button></header>
+<header><b>OKEO Estoque</b><span>V1.3 • Inventário Rápido</span><span id="syncState" class="syncstate">Local</span><button id="logout" class="hidden">Sair</button></header>
 <main>
 <section id="login" class="card"><h2>Acesso</h2><input id="user" value="admin" placeholder="Usuário"><input id="pass" type="password" value="admin123" placeholder="Senha"><button id="enter">Entrar</button><p id="loginMsg"></p></section>
 <section id="app" class="hidden">
@@ -9,7 +9,14 @@
 <section id="home" class="view card"></section>
 <section id="products" class="view card hidden"><h2>Produtos</h2><input id="pean" placeholder="EAN"><input id="pname" placeholder="Produto"><input id="pcat" placeholder="Categoria"><input id="psup" placeholder="Fornecedor"><button id="psave">Adicionar</button><input id="psearch" placeholder="Pesquisar"><div id="plist"></div></section>
 <section id="units" class="view card hidden"><h2>Condomínios / CD</h2><input id="uname" placeholder="Nome"><select id="utype"><option>CONDOMINIO</option><option>CD</option></select><button id="usave">Adicionar</button><div id="ulist"></div></section>
-<section id="inventory" class="view card hidden"><h2>Inventário</h2><select id="iunit"></select><input id="iean" placeholder="EAN / leitor"><button id="scan">📷 Câmera</button><div id="scanbox" class="hidden"><video id="video" playsinline></video><button id="stopscan">Fechar câmera</button></div><p id="iprod"></p><input id="iqty" type="number" value="0"><button id="iminus">−</button><button id="iplus">+</button><button id="isave">Salvar contagem</button><div id="stocklist"></div></section>
+<section id="inventory" class="view card hidden"><h2>Inventário</h2>
+<div class="invtop"><label>Condomínio / CD<select id="iunit"></select></label><span class="muted">Salvamento local imediato</span></div>
+<div class="scanline"><input id="iean" inputmode="numeric" autocomplete="off" placeholder="EAN / leitor físico"><button id="scan">📷 Ler código</button></div>
+<div id="scanbox" class="hidden"><video id="video" playsinline></video><button id="stopscan">Fechar câmera</button></div>
+<div id="iprod" class="productbox">Digite ou leia um EAN</div>
+<div class="qtybox"><button id="iminus" class="qtybtn">−</button><input id="iqty" type="number" min="0" step="1" value="0"><button id="iplus" class="qtybtn">+</button></div>
+<button id="isave" class="primarywide">Salvar contagem e próximo</button><p id="invmsg" class="muted"></p>
+<input id="istocksearch" placeholder="Pesquisar no estoque desta unidade"><div id="stocklist"></div></section>
 <section id="expiry" class="view card hidden"><h2>Validades</h2><select id="eunit"></select><input id="eean" placeholder="EAN"><input id="edate" type="date"><input id="eqty" type="number" value="1"><input id="ephoto" type="file" accept="image/*" capture="environment"><button id="esave">Salvar validade</button><div id="elist"></div></section>
 <section id="moves" class="view card hidden"><h2>Movimentações</h2><select id="mtype"><option>ENTRADA</option><option>SAIDA</option><option>PERDA</option><option>FURTO</option><option>QUEBRA</option><option>VENCIMENTO</option><option>TRANSFERENCIA</option></select><input id="mean" placeholder="EAN"><select id="mfrom"></select><select id="mto"></select><input id="mqty" type="number" value="1"><input id="mnote" placeholder="Observação"><button id="msave">Registrar</button><div id="mlist"></div></section>
 <section id="groups" class="view card hidden"><h2>Grupos de Demanda</h2><p>A demanda só libera após classificar todos os produtos como Grupo ou Individual.</p><input id="gname" placeholder="Novo grupo"><input id="gdesc" placeholder="Descrição"><button id="gsave">Criar grupo</button><div id="glist"></div><div id="gproducts"></div></section>

@@ -2,3 +2,5 @@
 .syncstate{margin-left:auto;padding:5px 9px;border-radius:999px;background:#eef1f3;font-size:12px}
 .syncstate.ok{background:#ddf2e6;color:#17613e}.syncstate.warn{background:#fff0c7;color:#795900}
 .syncpanel{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.syncpanel p{width:100%;margin:2px 0}
+
+.invtop{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}.scanline{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.scanline input{margin:5px 0}.productbox{border:1px solid #dde3e7;border-radius:10px;padding:14px;margin:10px 0;background:#f8fafb;min-height:58px}.qtybox{display:grid;grid-template-columns:64px 1fr 64px;gap:8px;align-items:center;margin:10px 0}.qtybox input{text-align:center;font-size:22px;font-weight:700;margin:0;height:50px}.qtybtn{font-size:25px;height:50px}.primarywide{width:100%;font-size:16px;margin-bottom:6px}@media(max-width:600px){.invtop{grid-template-columns:1fr}.scanline{grid-template-columns:1fr}.qtybox{grid-template-columns:58px 1fr 58px}}
