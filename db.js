@@ -1,11 +1,13 @@
-const STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents","demandBase","replenishments","controlPoints","controlPointItems","purchases","lots","auditLog","supplierOffers","suppliers","meta","settings","syncQueue"];
+const STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents","demandBase","demandCurrent","replenishments","controlPoints","controlPointItems","purchases","lots","auditLog","supplierOffers","suppliers","meta","settings","syncQueue"];
 const INDEXES={
   products:[["ean","ean",{unique:false}],["active","active",{unique:false}],["supplierId","supplierId",{unique:false}],["groupId","groupId",{unique:false}]],
   units:[["type","type",{unique:false}],["active","active",{unique:false}],["normalizedName","normalizedName",{unique:false}]],
   stock:[["unitId","unitId",{unique:false}],["ean","ean",{unique:false}]],
   lots:[["unitId","unitId",{unique:false}],["ean","ean",{unique:false}],["expiry","expiry",{unique:false}]],
   moves:[["at","at",{unique:false}],["from","from",{unique:false}],["to","to",{unique:false}],["ean","ean",{unique:false}]],
+  salesWeekly:[["unitId","unitId",{unique:false}],["week","week",{unique:false}],["ean","ean",{unique:false}]],
   demandBase:[["unitId","unitId",{unique:false}],["ean","ean",{unique:false}]],
+  demandCurrent:[["unitId","unitId",{unique:false}],["key","key",{unique:false}],["groupId","groupId",{unique:false}]],
   replenishments:[["status","status",{unique:false}],["routeDate","routeDate",{unique:false}],["createdAt","createdAt",{unique:false}]],
   purchases:[["date","date",{unique:false}],["supplierId","supplierId",{unique:false}],["at","at",{unique:false}]],
   suppliers:[["normalizedName","normalizedName",{unique:false}],["active","active",{unique:false}]],
@@ -16,7 +18,7 @@ let dbp;
 function op(){
   if(dbp)return dbp;
   dbp=new Promise((ok,no)=>{
-    const r=indexedDB.open("okeo-estoque-v1",10);
+    const r=indexedDB.open("okeo-estoque-v1",12);
     r.onupgradeneeded=()=>{
       const db=r.result,tx=r.transaction;
       for(const name of STORES){

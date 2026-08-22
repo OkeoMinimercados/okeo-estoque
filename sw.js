@@ -1,23 +1,5 @@
-const CACHE="okeo-core-v3-3-5-auth-rebuilt";
-const ASSETS=["./","index.html","styles.css","db.js","app-v3.3.5.js","manifest.webmanifest","okeo-logo.png"];
-self.addEventListener("install",event=>{
-  self.skipWaiting();
-  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)))
-});
-self.addEventListener("activate",event=>{
-  event.waitUntil(
-    caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())
-  )
-});
-self.addEventListener("fetch",event=>{
-  if(event.request.method!=="GET")return;
-  event.respondWith(
-    fetch(event.request,{cache:"no-store"})
-      .then(response=>{
-        const copy=response.clone();
-        caches.open(CACHE).then(cache=>cache.put(event.request,copy)).catch(()=>{});
-        return response
-      })
-      .catch(()=>caches.match(event.request))
-  )
-});
+const CACHE="okeo-core-v3-6-final";
+const ASSETS=["./","index.html","styles.css","db.js","app-v3.6.0.js","manifest.webmanifest","okeo-logo.png"];
+self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
+self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==CACHE).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
+self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;if(e.request.mode==="navigate"){e.respondWith(fetch(e.request,{cache:"no-store"}).catch(()=>caches.match("index.html")));return}e.respondWith(fetch(e.request,{cache:"no-store"}).then(r=>{const c=r.clone();caches.open(CACHE).then(x=>x.put(e.request,c)).catch(()=>{});return r}).catch(()=>caches.match(e.request)))});

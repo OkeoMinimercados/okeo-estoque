@@ -1,38 +1,36 @@
-# OKEO Core V3.3.1 — Performance Isolado
+# OKEO Core V3.6 — FINAL
 
-O módulo operacional de Estoque & Compras foi isolado de Analytics e Financeiro.
+Versão final do núcleo operacional de Estoque & Compras, após homologação funcional automatizada e testes de carga.
 
-## O que entra no Core
-Produtos, unidades, fornecedores, estoque, inventário, lotes, validades, compras/NF, movimentações, Ponto de Controle, Demanda operacional, Reposição, vendas necessárias ao saldo/demanda, usuários/perfis, auditoria e integridade.
+## Homologação funcional
+Foram executados 46 testes de interface e fluxo em navegador automatizado, com 46 aprovações e 0 falhas. Foram validados autenticação, senha errada/correta, todas as abas, produtos/aliases/EAN, unidades, inventário, câmera para EAN, foto/câmera para validade, lotes, transferências, NF XML, compras, Ponto de Controle, grupos, Demanda, vendas, reposição, perfis, permissões, backups, snapshots externos, autoteste, integridade e auditoria.
 
-## Performance
-A sincronização foi separada:
-- CORE no login;
-- SALES apenas em Vendas;
-- MOVES apenas em Movimentações;
-- PURCHASES apenas em Compras/NF;
-- AUDIT apenas em Configurações.
+Também passaram smoke tests de autenticação/permissões do backend, segurança, geração de relatórios/PDF e auditoria estática frontend ↔ backend ↔ IndexedDB.
 
-O Dashboard não percorre mais históricos inteiros. Históricos visuais usam índices do IndexedDB e limites de linhas.
+## Performance medida
+Cenário de 2.000 produtos, 30 unidades e aproximadamente 62.000 saldos:
+- Estoque de uma unidade / 2.000 produtos: ~47 ms
+- Produtos / 2.000 produtos: ~7 ms
+- Demanda de uma unidade / 2.000 produtos: ~274 ms
+- Reposição 1 unidade / 2.000 produtos: ~113 ms
+- Reposição 5 unidades / ~5.864 necessidades: ~377 ms
+- Dashboard com ~62.000 saldos: ~7 ms
 
-## Analytics/Financeiro
-Configurações exporta snapshots `OKEO_ANALYTICS_V1` e `OKEO_FINANCE_V1`.
-São cópias somente-leitura. Sistemas externos não escrevem em estoque, lotes, movimentações ou compras.
+Com 250.000 registros históricos de venda:
+- Demanda de uma unidade: ~291 ms
+- Recalcular Demanda operacional de 5 unidades: ~383 ms
+
+## Arquitetura
+Analytics e Financeiro permanecem isolados do Core. Eles recebem snapshots somente-leitura e não participam do login, inventário, compras, estoque, lotes ou movimentações.
 
 ## Instalação
-1. Apps Script: `setupOkeoCoreV33`.
-2. Atualizar implantação e confirmar `/exec` = 3.3.0.
-3. Publicar todo o ZIP.
-4. Ctrl+F5.
-5. Executar Autoteste e Integridade.
+1. Substitua o Apps Script por `GoogleAppsScript_OKEO_CORE_V3_6_FINAL.gs`.
+2. Execute `setupOkeoCoreV36`.
+3. Atualize a implantação do Web App.
+4. Confirme `/exec?action=status` com versão `3.6.0` e `authContract: OKEO_AUTH_V1`.
+5. Publique TODO o conteúdo deste ZIP no GitHub Pages.
+6. Faça Ctrl+F5.
+7. Entre como Administrador.
+8. Execute Configurações → Autoteste e Verificação de Integridade.
 
-## Hotfix 3.3.1
-Corrigida a função `authPost`, necessária para login, criação do primeiro administrador, logout e validação de sessão. O backend 3.3.0 permanece compatível e não precisa ser substituído por causa deste hotfix.
-
-## V3.3.5 — autenticação reconstruída
-- Módulo de conexão/login foi refeito como bloco global independente.
-- `getBackendUrl`, `backendRequest`, `authPost`, login, sessão, bootstrap e logout ficam no mesmo módulo.
-- A tela de login agora permite Configurar/Testar a URL /exec sem precisar entrar no sistema.
-- A URL é recuperada do localStorage e, como fallback, do IndexedDB.
-- O arquivo principal foi renomeado para `app-v3.3.5.js`, eliminando a reutilização de `app.js` antigo em cache.
-- Service Worker foi reconstruído e força atualização dos assets.
+O cadastro de validade por câmera nesta versão captura/anexa a imagem pelo celular e registra lote/data informados. OCR automático da data de validade não é requisito para o funcionamento do Core e não bloqueia estoque/reposição.
