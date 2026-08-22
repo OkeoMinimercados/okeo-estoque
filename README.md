@@ -97,3 +97,30 @@ A busca considera nome oficial, EAN, aliases, nome VM Pay, fornecedor, segmento 
 Filtros rápidos: Todos, Com saldo, Ruptura, Reposição e Validade ≤ 7 dias.
 Inclui Selecionar visíveis e Limpar seleção.
 Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir diretamente a lista filtrada.
+
+## V3.16 — Navegação corrigida e Controle de Estoque unificado
+- Gestão de Estoque e Movimentação Estoque CD agora estão explicitamente no menu principal.
+- Estoque/Inventário e Ponto de Controle foram unidos em Controle de Estoque.
+- Controle de Estoque possui Contagem rápida e Ponto de Controle como modos internos.
+- Movimentações foi renomeada para Ajuste de Estoque.
+
+## V3.17 — homologação prática
+- Seletores de produto efetivamente presentes no HTML.
+- XLSX VM Pay: cabeçalho localizado dinamicamente após filtros; datas Excel convertidas; histórico mapeado por unidade e nome/alias do produto.
+- Vendas aceita CSV e XLSX.
+- Importação histórica calcula por semanas do período, salva snapshot compacto e descarta linhas brutas.
+- Quantidades de reposição inteiras.
+
+## V3.18 — correções encontradas na homologação
+- Busca de Produtos/Grupos inclui aliases e VM Pay.
+- Seletor Ruptura/Reposição usa a mesma lógica de grupos da Demanda.
+- Filtro de produtos da Central de Reposição agora filtra a tabela de verdade e preserva os índices de edição.
+
+## V3.18 — Homologação final para produção
+- Suíte prática: 59/59 testes aprovados.
+- Autoteste interno: 68/68.
+- 37/37 arquivos XLSX reais do VM Pay processados pelo importador.
+- CSV/JSON: aprovados.
+- Backend: autenticação, perfis, permissões e migração de perfis antigos aprovados.
+- Gestão de Estoque testada com ~60.000 saldos.
+- Zero pageerror e zero console error na suíte prática.

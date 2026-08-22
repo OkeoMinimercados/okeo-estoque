@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.15.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.18.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -70,11 +70,12 @@
     <div class="side-brand"><img src="okeo-logo.png" alt="OKEO"><small>MINIMERCADOS</small></div>
     <nav id="menu">
       <button data-v="home" data-icon="⌂">Dashboard</button>
+      <button data-v="stockmgmt" data-icon="▦">Gestão de Estoque</button>
+      <button data-v="controlstock" data-icon="✓">Controle de Estoque</button>
       <button data-v="sales" data-icon="▥">Vendas</button>
-      <button data-v="inventory" data-icon="▣">Estoque / Inventário</button>
-      <button data-v="control" data-icon="✓">Ponto de Controle</button>
       <button data-v="entries" data-icon="▤">Compras / NF</button>
-      <button data-v="moves" data-icon="⇄">Movimentações</button>
+      <button data-v="moves" data-icon="±">Ajuste de Estoque</button>
+      <button data-v="cdmove" data-icon="⇄">Movimentação Estoque CD</button>
       <button data-v="replenishment" data-icon="🛒">Central de Reposição</button>
       <button data-v="expiry" data-icon="□">Validades</button>
       <button data-v="groups" data-icon="⌘">Grupos</button>
@@ -91,7 +92,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.15.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.18.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -156,14 +157,24 @@
 <div id="ulist"></div>
 </section>
 
-<section id="inventory" class="view card hidden">
-<h2>Inventário / Contagem Física</h2>
+<section id="controlstock" class="view card hidden">
+<h2>Controle de Estoque</h2>
+<p class="muted">Contagem manual rápida e Ponto de Controle reunidos na mesma área.</p>
+<div class="controlstock-tabs">
+  <button id="controlStockTabQuick" type="button" class="active">Contagem rápida</button>
+  <button id="controlStockTabPoint" type="button" class="secondary">Ponto de Controle</button>
+</div>
+<div id="controlStockQuickPanel" class="controlstock-panel">
+  <div class="subcard">
+    <h3>Contagem rápida / identificação de produto</h3>
+    <p class="muted">Use EAN, câmera ou a lista de produtos. O valor observado substitui o saldo físico daquele produto.</p>
+    
 <div class="invtop">
   <label>Condomínio / CD<select id="iunit"></select></label>
   <span class="muted">Contagem física substitui o saldo-base da unidade.</span>
 </div>
 <div class="scanline">
-  <input id="iean" inputmode="numeric" autocomplete="off" placeholder="EAN / leitor físico"><small id="iproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small>
+  <input id="iean" inputmode="numeric" autocomplete="off" placeholder="EAN / leitor físico"><div class="selector-toggle-row"><button id="invSelectorBtn" type="button" class="secondary">Selecionar produto por lista</button></div><div id="invProductSelector" class="hidden"></div><small id="iproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small>
   <button id="scan">📷 Ler código</button>
 </div>
 <div id="scanbox" class="hidden"><video id="video" playsinline></video><button id="stopscan">Fechar câmera</button></div>
@@ -173,6 +184,24 @@
 <p id="invmsg" class="muted"></p>
 <input id="istocksearch" placeholder="Pesquisar no estoque desta unidade">
 <div id="stocksummary"></div><div id="stocklist"></div>
+
+  </div>
+</div>
+<div id="controlStockPointPanel" class="controlstock-panel hidden">
+  <div class="subcard">
+    <h3>Ponto de Controle</h3>
+    <p class="muted">Conferência formal da unidade com data/hora, divergências e início de um novo ciclo.</p>
+    
+<p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
+<div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
+<div class="actions"><button id="cstart">Iniciar ponto de controle</button><button id="capprove" class="secondary">Aprovar ponto de controle</button></div>
+<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div class="selector-toggle-row"><button id="controlSelectorBtn" type="button" class="secondary">Selecionar vários produtos para conferência</button></div>
+<div id="controlProductSelector" class="hidden"></div>
+<div class="actions"><button id="controlAddSelected" type="button" class="secondary hidden">Adicionar selecionados ao Ponto de Controle</button></div>
+<div id="cactive"></div><div id="chistory"></div>
+
+  </div>
+</div>
 </section>
 
 <section id="entries" class="view card hidden">
@@ -180,7 +209,7 @@
 <div class="tabsbar"><button id="purchaseTabManual" class="tabbtn active">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
 <div id="purchaseManualPanel">
 <div class="grid3"><label>Fornecedor<input id="purchaseSupplier" list="supplierOptions"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
-<div class="grid3"><label>EAN<input id="purchaseEAN"><small id="purchaseProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade<input id="purchaseQty" type="number" min="1" step="1" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
+<div class="grid3"><label>EAN<input id="purchaseEAN"><div class="selector-toggle-row"><button id="purchaseSelectorBtn" type="button" class="secondary">Procurar produto cadastrado</button></div><div id="purchaseProductSelector" class="hidden"></div><small id="purchaseProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade<input id="purchaseQty" type="number" min="1" step="1" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
 <div id="purchaseProductInfo" class="productbox muted">Digite um EAN.</div>
 <div class="grid3"><label>Validade<input id="purchaseExpiry" type="date"></label><label>Lote<input id="purchaseLot"></label><label>Observação<input id="purchaseNote"></label></div>
 <div class="actions"><button id="purchaseSuggest">Calcular distribuição sugerida</button><button id="purchaseAdd" class="secondary">Adicionar item</button></div></div>
@@ -206,7 +235,7 @@
     <option value="QUEBRA">Quebra</option>
     <option value="VENCIMENTO">Vencimento</option>
   </select></label>
-  <label>EAN<input id="mean" inputmode="numeric"><small id="mproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
+  <label>EAN<input id="mean" inputmode="numeric"><div class="selector-toggle-row"><button id="moveSelectorBtn" type="button" class="secondary">Procurar produto na lista</button></div><div id="moveProductSelector" class="hidden"></div><small id="mproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
   <label>Quantidade<input id="mqty" type="number" step="1" value="1"><small class="fieldhint">Use número inteiro. Para perdas/ajustes negativos, pode informar valor negativo.</small></label>
   <label>Origem<select id="mfrom"></select></label>
   <label>Destino<select id="mto"></select></label>
@@ -219,16 +248,7 @@
 
 </section>
 
-<section id="control" class="view card hidden">
-<h2>Ponto de Controle de Estoque</h2>
-<p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
-<div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
-<div class="actions"><button id="cstart">Iniciar ponto de controle</button><button id="capprove" class="secondary">Aprovar ponto de controle</button></div>
-<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div class="selector-toggle-row"><button id="controlSelectorBtn" type="button" class="secondary">Selecionar vários produtos para conferência</button></div>
-<div id="controlProductSelector" class="hidden"></div>
-<div class="actions"><button id="controlAddSelected" type="button" class="secondary hidden">Adicionar selecionados ao Ponto de Controle</button></div>
-<div id="cactive"></div><div id="chistory"></div>
-</section>
+
 
 <section id="cdmove" class="view card hidden">
 <h2>Movimentação de Estoque CD</h2>
@@ -307,7 +327,7 @@
 <section id="sales" class="view card hidden">
 <h2>Vendas / VM Pay</h2>
 <p><b>VM Pay:</b> estrutura preparada. Até a API ser disponibilizada, use CSV.</p>
-<input id="salesfile" type="file" accept=".csv">
+<input id="salesfile" type="file" accept=".csv,.xlsx">
 <button id="salesimport">Processar CSV</button>
 <p id="salesmsg"></p><div id="saleshist"></div>
 </section>
@@ -378,10 +398,11 @@
 <div id="usersPanel"><div class="grid3"><label>Usuário<input id="newUsername" placeholder="Ex.: braulio"></label><label>Nome<input id="newUserDisplayName" placeholder="Ex.: Braulio"></label><label>Perfil<select id="newUserRole"></select></label></div><div class="grid2"><label>Senha / nova senha<input id="newUserPassword" type="password" placeholder="Mínimo 8 caracteres"></label><label>Observação<input id="newUserNote" placeholder="Opcional"></label></div>
 <div class="permission-box"><b>Permissões do funcionário</b>
 <div class="perm-grid">
-<label><input type="checkbox" class="permcheck" value="inventory" checked> Estoque / Inventário</label>
-<label><input type="checkbox" class="permcheck" value="control" checked> Ponto de Controle</label>
-<label><input type="checkbox" class="permcheck" value="entries" checked> Entrada / NF</label>
-<label><input type="checkbox" class="permcheck" value="moves" checked> Movimentações</label>
+<label><input type="checkbox" class="permcheck" value="stockmgmt"> Gestão de Estoque</label>
+<label><input type="checkbox" class="permcheck" value="controlstock" checked> Controle de Estoque</label>
+<label><input type="checkbox" class="permcheck" value="entries" checked> Compras / NF</label>
+<label><input type="checkbox" class="permcheck" value="moves" checked> Ajuste de Estoque</label>
+<label><input type="checkbox" class="permcheck" value="cdmove" checked> Movimentação Estoque CD</label>
 <label><input type="checkbox" class="permcheck" value="expiry" checked> Validades</label>
 <label><input type="checkbox" class="permcheck" value="sales"> Vendas</label>
 <label><input type="checkbox" class="permcheck" value="replenishment"> Central de Reposição</label>
@@ -399,10 +420,11 @@
     <div class="perm-grid" id="profilePermissions">
       <label><input type="checkbox" class="profileperm" value="home"> Dashboard</label>
       <label><input type="checkbox" class="profileperm" value="sales"> Vendas</label>
-      <label><input type="checkbox" class="profileperm" value="inventory"> Estoque / Inventário</label>
-      <label><input type="checkbox" class="profileperm" value="control"> Ponto de Controle</label>
+      <label><input type="checkbox" class="profileperm" value="stockmgmt"> Gestão de Estoque</label>
+      <label><input type="checkbox" class="profileperm" value="controlstock"> Controle de Estoque</label>
       <label><input type="checkbox" class="profileperm" value="entries"> Entrada / NF</label>
-      <label><input type="checkbox" class="profileperm" value="moves"> Movimentações</label>
+      <label><input type="checkbox" class="profileperm" value="moves"> Ajuste de Estoque</label>
+      <label><input type="checkbox" class="profileperm" value="cdmove"> Movimentação Estoque CD</label>
       <label><input type="checkbox" class="profileperm" value="replenishment"> Central de Reposição</label>
       <label><input type="checkbox" class="profileperm" value="expiry"> Validades</label>
       <label><input type="checkbox" class="profileperm" value="groups"> Grupos</label>
@@ -461,5 +483,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.15.0.js"></script>
+<script src="app-v3.18.0.js"></script>
 </body></html>
