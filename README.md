@@ -34,3 +34,10 @@ Analytics e Financeiro permanecem isolados do Core. Eles recebem snapshots somen
 8. Execute Configurações → Autoteste e Verificação de Integridade.
 
 O cadastro de validade por câmera nesta versão captura/anexa a imagem pelo celular e registra lote/data informados. OCR automático da data de validade não é requisito para o funcionamento do Core e não bloqueia estoque/reposição.
+
+
+## V3.7 — ajustes operacionais
+- Central de Reposição: seleção de PDF por Ambos, Fornecedor ou Condomínio.
+- Seletor de unidades fecha ao clicar fora.
+- Movimentações: quantidades exclusivamente inteiras; decrementos registrados com sinal negativo.
+- Base Histórica de Demanda: seleção simultânea de vários JSONs, consolidação por unidade/EAN e soma dos períodos históricos.
