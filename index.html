@@ -10,7 +10,7 @@
 <body>
 <header>
   <b>OKEO Estoque</b>
-  <span>V1.4 • Base Mestre & Estoque</span>
+  <span>V1.4.1 • Aliases & VM Pay</span>
   <span id="syncState" class="syncstate">Local</span>
   <button id="logout" class="hidden">Sair</button>
 </header>
@@ -51,6 +51,8 @@
   <label>PC / preço referência<input id="ppc" type="number" step=".01"></label>
   <label>NCM<input id="pncm"></label>
   <label>CEST SC<input id="pcest"></label>
+  <label>Nome VM Pay<input id="pvm" placeholder="Preencher quando identificado"></label>
+  <label>Nomes alternativos / aliases<textarea id="palias" rows="3" readonly></textarea></label>
 </div>
 <input id="pid" type="hidden">
 <div class="actions"><button id="psave">Salvar produto</button><button id="pcancel" class="secondary">Limpar</button></div>
@@ -188,7 +190,7 @@
 <p id="syncMsg" class="muted"></p>
 <hr>
 <h3>Base Mestre Oficial</h3>
-<p>Arquivo embarcado: <b>OKEO Base Mestre V1</b>. A carga preserva Produto, Subproduto, Fornecedor, Segmento, Localização, PC, EAN, NCM e CEST.</p>
+<p>Arquivo embarcado: <b>OKEO Base Mestre V1.4.1</b>. A carga preserva Produto, Subproduto, Fornecedor, Segmento, Localização, PC, EAN, NCM e CEST.</p>
 <button id="loadMaster">Carregar / atualizar Base Mestre</button>
 <p id="masterMsg" class="muted"></p>
 <hr>

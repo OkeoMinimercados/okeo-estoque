@@ -113,13 +113,15 @@ async function home(){
 }
 
 // ---------- Produtos ----------
-function clearProductForm(){["pid","pname","psub","pean","psup","pseg","ploc","ppc","pncm","pcest"].forEach(i=>$("#"+i).value="")}
+function clearProductForm(){["pid","pname","psub","pean","psup","pseg","ploc","ppc","pncm","pcest","pvm","palias"].forEach(i=>$("#"+i).value="")}
 async function saveProduct(){
   const e=$("#pean").value.replace(/\D/g,""),name=$("#pname").value.trim();if(!e||!name)return alert("Informe EAN e Produto.");
   const existing=await get("products","p_"+e),obj={
     id:"p_"+e,ean:e,name,subproduct:$("#psub").value.trim(),supplier:$("#psup").value.trim(),segment:$("#pseg").value.trim(),
     location:$("#ploc").value.trim(),pc:+$("#ppc").value||0,ncm:$("#pncm").value.trim(),cest:$("#pcest").value.trim(),
-    active:true,individual:existing?.individual||false,groupId:existing?.groupId||"",updatedAt:new Date().toISOString()
+    active:true,individual:existing?.individual||false,groupId:existing?.groupId||"",
+    aliases:existing?.aliases||[],allNames:existing?.allNames||[name],vmPayName:$("#pvm").value.trim(),
+    source:existing?.source||"CADASTRO_MANUAL",masterManaged:existing?.masterManaged||false,updatedAt:new Date().toISOString()
   };
   const oldId=$("#pid").value;if(oldId&&oldId!==obj.id)await localDel("products",oldId);
   await localPut("products",obj);clearProductForm();renderProducts()
@@ -127,11 +129,11 @@ async function saveProduct(){
 async function editProduct(idv){
   const p=await get("products",idv);if(!p)return;
   $("#pid").value=p.id;$("#pname").value=p.name||"";$("#psub").value=p.subproduct||"";$("#pean").value=p.ean||"";$("#psup").value=p.supplier||"";
-  $("#pseg").value=p.segment||"";$("#ploc").value=p.location||"";$("#ppc").value=p.pc||"";$("#pncm").value=p.ncm||"";$("#pcest").value=p.cest||"";window.scrollTo({top:0,behavior:"smooth"})
+  $("#pseg").value=p.segment||"";$("#ploc").value=p.location||"";$("#ppc").value=p.pc||"";$("#pncm").value=p.ncm||"";$("#pcest").value=p.cest||"";$("#pvm").value=p.vmPayName||"";$("#palias").value=(p.aliases||[]).join("\n");window.scrollTo({top:0,behavior:"smooth"})
 }
 async function renderProducts(){
   const q=($("#psearch").value||"").toLowerCase(),r=(await all("products")).filter(x=>(x.name+" "+x.ean+" "+(x.supplier||"")+" "+(x.segment||"")).toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name)).slice(0,300);
-  $("#plist").innerHTML=r.map(x=>`<div class="row"><span><b>${esc(x.name)}</b><br><small>EAN ${x.ean} • ${esc(x.segment||"")} • ${esc(x.supplier||"")} • NCM ${esc(x.ncm||"-")} • CEST ${esc(x.cest||"-")}</small></span><span class="mini"><button onclick="editProduct('${x.id}')">Editar</button></span></div>`).join("")
+  $("#plist").innerHTML=r.map(x=>`<div class="row"><span><b>${esc(x.name)}</b><br><small>EAN ${x.ean} • ${esc(x.segment||"")} • ${esc(x.supplier||"")} • NCM ${esc(x.ncm||"-")} • CEST ${esc(x.cest||"-")} • Aliases ${(x.aliases||[]).length}${x.vmPayName?" • VM Pay: "+esc(x.vmPayName):""}</small></span><span class="mini"><button onclick="editProduct('${x.id}')">Editar</button></span></div>`).join("")
 }
 async function prod(e){return get("products","p_"+String(e).replace(/\D/g,""))}
 
@@ -283,22 +285,40 @@ async function calcDemand(){
 
 // ---------- Base Mestre ----------
 async function loadMaster(){
-  const m=$("#masterMsg");m.textContent="Lendo Base Mestre...";
+  const m=$("#masterMsg");m.textContent="Lendo Base Mestre V1.4.1...";
   try{
-    const resp=await fetch("base-master.json",{cache:"no-store"}),master=await resp.json();
-    for(const p of master.products){const old=await get("products",p.id);await put("products",{...old,...p,individual:old?.individual||false,groupId:old?.groupId||"",updatedAt:new Date().toISOString()})}
+    const resp=await fetch("base-master.json",{cache:"no-store"}),master=await resp.json(),masterIds=new Set(master.products.map(p=>p.id));
+    // Remove somente os cadastros de teste históricos explicitamente conhecidos.
+    for(const t of(master.legacyTestProducts||[])){
+      const cur=await get("products",t.id);
+      if(cur && cur.name===t.name) await localDel("products",t.id);
+    }
+    for(const p of master.products){
+      const old=await get("products",p.id);
+      // Dados fiscais/cadastrais oficiais são atualizados; classificação de demanda e Nome VM Pay preenchido manualmente são preservados.
+      await put("products",{...old,...p,individual:old?.individual||false,groupId:old?.groupId||"",vmPayName:old?.vmPayName||p.vmPayName||"",updatedAt:new Date().toISOString()})
+    }
     for(const u of master.units){const old=await get("units",u.id);await put("units",{...u,...old,active:true})}
-    m.textContent=`Base local carregada: ${master.products.length} produtos únicos por EAN. Enviando à Base Central...`;
+    m.textContent=`Base local: ${master.uniqueEans} EANs • ${master.aliasEans} EANs com nomes alternativos. Atualizando Base Central...`;
     if(getBackendUrl()){
-      for(let i=0;i<master.products.length;i+=150){m.textContent=`Base local OK. Base Central: ${Math.min(i+150,master.products.length)}/${master.products.length} produtos...`;await apiPost("bulk_upsert",{store:"products",payload:JSON.stringify(master.products.slice(i,i+150))})}
+      for(let i=0;i<master.products.length;i+=150){
+        m.textContent=`Base Central: ${Math.min(i+150,master.products.length)}/${master.products.length} produtos...`;
+        await apiPost("bulk_upsert",{store:"products",payload:JSON.stringify(master.products.slice(i,i+150))})
+      }
       await apiPost("bulk_upsert",{store:"units",payload:JSON.stringify(master.units)});
+      const dels=[];
+      for(const t of(master.legacyTestProducts||[]))dels.push({store:"products",op:"delete",rowId:t.id,qid:"cleanup|"+t.id});
+      if(dels.length)await apiPost("batch_push",{payload:JSON.stringify({ops:dels})});
       localStorage.setItem("okeo_server_cursor","");
     }
-    await selectors();m.textContent=`Concluído • ${master.products.length} produtos únicos por EAN + ${master.units.length} unidades iniciais.`;renderSettings()
+    await selectors();
+    const total=(await all("products")).length;
+    m.textContent=`Concluído • ${master.uniqueEans} EANs oficiais • ${master.aliasEans} EANs com aliases • ${master.aliasNames} nomes alternativos • cadastro local ${total}.`;
+    renderSettings()
   }catch(e){m.textContent="Falha na carga: "+e.message}
 }
 
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
 async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Cadastro local atual: ${p.length} produtos.`;updateSyncState()}
-async function backup(){const o={version:"1.4",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
+async function backup(){const o={version:"1.4.1",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
