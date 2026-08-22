@@ -49,6 +49,10 @@ function bind(){
 }
 async function checkBootstrapStatus(){
   try{
+
+function getBackendUrl(){
+  return String(localStorage.getItem("okeo_backend_url")||"").trim();
+}
     const base=getBackendUrl();if(!base)return;
     const u=new URL(base);u.searchParams.set("action","bootstrap_status");u.searchParams.set("_",Date.now());
     const r=await fetch(u.toString(),{cache:"no-store",redirect:"follow"}),j=await r.json();
@@ -663,4 +667,4 @@ async function renderAudit(){if(!$("#auditList"))return;const rows=(await all("a
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
 async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Base local sincronizada: ${p.length} produtos.`;updateSyncState();if(currentSession?.role==="ADMIN"){await renderUsersAdmin();await renderSupplierRegistry();await renderAudit()}}
-async function backup(){const o={version:"3.3.3",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_CORE_Backup_V3_3.json";a.click()}
+async function backup(){const o={version:"3.3.4",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_CORE_Backup_V3_3.json";a.click()}
