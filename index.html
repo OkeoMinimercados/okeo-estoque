@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.12.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.15.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -91,7 +91,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.12.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.15.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -216,10 +216,7 @@
 <button id="msave">Registrar movimentação</button>
 <p id="mmsg" class="muted"></p>
 <div id="mlist"></div>
-<hr><h3>Estoque do CD e sugestões de alocação</h3>
-<p class="muted">Consulte um produto do CD para ver quanto há disponível e quais condomínios estão abaixo do Nível de Alerta/Estoque Ideal.</p>
-<div class="grid3"><label>EAN<input id="cdSuggestEAN" inputmode="numeric" placeholder="EAN do produto"><small id="cdSuggestProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>&nbsp;<button id="cdSuggestBtn" type="button" class="primarywide">Calcular destinos</button></label></div>
-<div id="cdAllocationSuggestions"></div>
+
 </section>
 
 <section id="control" class="view card hidden">
@@ -227,7 +224,27 @@
 <p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
 <div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
 <div class="actions"><button id="cstart">Iniciar ponto de controle</button><button id="capprove" class="secondary">Aprovar ponto de controle</button></div>
-<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div id="cactive"></div><div id="chistory"></div>
+<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div class="selector-toggle-row"><button id="controlSelectorBtn" type="button" class="secondary">Selecionar vários produtos para conferência</button></div>
+<div id="controlProductSelector" class="hidden"></div>
+<div class="actions"><button id="controlAddSelected" type="button" class="secondary hidden">Adicionar selecionados ao Ponto de Controle</button></div>
+<div id="cactive"></div><div id="chistory"></div>
+</section>
+
+<section id="cdmove" class="view card hidden">
+<h2>Movimentação de Estoque CD</h2>
+<p class="muted">Selecione produtos disponíveis no CD e veja as sugestões de alocação calculadas pela Demanda Inteligente.</p>
+<div id="cdMoveMetrics" class="metriccards"></div>
+<div class="grid2 cd-move-layout">
+  <div class="subcard">
+    <div class="section-head"><div><h3>Produtos disponíveis no CD</h3><p class="muted">Marque um ou mais produtos para analisar.</p></div><div class="actions"><button id="cdSelectAll" type="button" class="secondary">Selecionar visíveis</button><button id="cdClearSelection" type="button" class="secondary">Limpar</button></div></div>
+    <input id="cdMoveSearch" placeholder="Pesquisar produto ou EAN">
+    <div id="cdMoveProductList" class="checklist-list"></div>
+  </div>
+  <div class="subcard">
+    <h3>Estoque do CD e sugestões de alocação</h3>
+    <div id="cdMoveSuggestions"><p class="muted">Selecione um produto à esquerda.</p></div>
+  </div>
+</div>
 </section>
 <section id="expiry" class="view card hidden">
 <h2>Validades</h2>
@@ -241,6 +258,8 @@
 </div>
 <label>Foto da validade<input id="ephoto" type="file" accept="image/*" capture="environment"></label>
 <button id="esave">Salvar validade</button>
+<div class="selector-toggle-row"><button id="expirySelectorBtn" type="button" class="secondary">Selecionar produtos</button></div>
+<div id="expiryProductSelector" class="hidden"></div>
 <div id="elist"></div>
 </section>
 
@@ -268,6 +287,23 @@
 <div id="gsuggestions"></div>
 </section>
 
+
+<section id="stockmgmt" class="view card hidden">
+<h2>Gestão de Estoque</h2>
+<p class="muted">Fotografia operacional do estoque atual, independente da próxima importação de vendas.</p>
+<div id="stockMgmtMetrics" class="metriccards"></div>
+<div class="grid2 stock-analysis-grid">
+  <div class="subcard"><h3>Estoque por unidade</h3><div id="stockMgmtUnits"></div>
+<div class="selector-toggle-row"><button id="stockMgmtSelectorBtn" type="button" class="secondary">Abrir lista de produtos</button></div>
+<div id="stockMgmtProductSelector" class="hidden"></div></div>
+  <div class="subcard"><h3>Validades — próximos 7 dias</h3><div id="stockMgmtExpiry"></div></div>
+</div>
+<div class="subcard">
+  <div class="section-head"><div><h3>Histórico recente de movimentos</h3><p class="muted">Análise das últimas movimentações para conferência operacional.</p></div>
+  <div class="actions"><select id="stockMovePeriod"><option value="7">7 dias</option><option value="15">15 dias</option><option value="30" selected>30 dias</option><option value="90">90 dias</option></select><button id="exportStockMoveReport" type="button">Exportar relatório CSV</button></div></div>
+  <div id="stockMgmtMoveSummary"></div><div id="stockMgmtMoves"></div>
+</div>
+</section>
 <section id="sales" class="view card hidden">
 <h2>Vendas / VM Pay</h2>
 <p><b>VM Pay:</b> estrutura preparada. Até a API ser disponibilizada, use CSV.</p>
@@ -282,9 +318,9 @@
 
 <div class="subcard demand-import-card">
   <h3>1. Base histórica</h3>
-  <p class="muted">Selecione vários arquivos JSON ou CSV de meses/CNPJs diferentes. O sistema valida cada arquivo, ignora arquivos incompatíveis sem apagar a base existente e recalcula a Demanda Inteligente.</p>
+  <p class="muted">Selecione vários arquivos XLSX, CSV ou JSON de meses/CNPJs diferentes. O sistema valida cada arquivo, ignora arquivos incompatíveis sem apagar a base existente e recalcula a Demanda Inteligente.</p>
   <div class="grid2">
-    <label>Arquivos históricos<input id="demandSnapshotFile" type="file" accept=".json,.csv" multiple></label>
+    <label>Arquivos históricos<input id="demandSnapshotFile" type="file" accept=".json,.csv,.xlsx" multiple></label>
     <div class="actions align-end"><button id="loadDemandSnapshot" type="button">Importar e calcular demanda</button></div>
   </div>
   <p id="demandSnapshotMsg" class="muted"></p>
@@ -301,6 +337,8 @@
   <div class="actions"><button id="dcalc">Calcular / atualizar demanda</button></div>
   <p id="demandCalcMsg" class="muted"></p><div id="demandStorageStatus" class="storage-status"></div>
 </div>
+<div class="selector-toggle-row"><button id="demandSelectorBtn" type="button" class="secondary">Filtrar produtos da análise</button></div>
+<div id="demandProductSelector" class="hidden"></div>
 <div id="dlist"></div>
 </section>
 
@@ -323,7 +361,9 @@
   <div class="field"><label>Agrupar PDF por</label><select id="repMode"><option value="BOTH">Ambos — Fornecedor e Condomínio</option><option value="SUPPLIER">Fornecedor</option><option value="UNIT">Condomínio</option></select></div>
 </div>
 <div class="actions"><button id="repDraft">Gerar / recalcular rascunho</button><button id="repApprove">Aprovar reposição e gerar PDF</button></div>
-<p id="repMsg" class="muted"></p><div id="repSummary"></div><div id="repEditor"></div><hr><h3>Reposições registradas</h3><div id="repHistory"></div>
+<p id="repMsg" class="muted"></p><div id="repSummary"></div><div class="selector-toggle-row"><button id="repProductSelectorBtn" type="button" class="secondary">Filtrar produtos da reposição</button></div>
+<div id="repProductSelector" class="hidden"></div>
+<div id="repEditor"></div><hr><h3>Reposições registradas</h3><div id="repHistory"></div>
 </section>
 
 <section id="settings" class="view card hidden">
@@ -421,5 +461,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.12.0.js"></script>
+<script src="app-v3.15.0.js"></script>
 </body></html>

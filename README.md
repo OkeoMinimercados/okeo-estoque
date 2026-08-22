@@ -77,3 +77,23 @@ O cadastro de validade por câmera nesta versão captura/anexa a imagem pelo cel
 
 ## V3.12 — Snapshot enxuto de Demanda
 Os históricos são processados em memória. O Core persiste somente o snapshot consolidado Unidade+EAN e a demanda operacional. A base bruta não é armazenada. O snapshot é verificado antes da conclusão e são mantidos metadados do processamento.
+
+
+## V3.13 — Gestão de Estoque e Movimentação CD
+- Importação de Demanda aceita XLSX diretamente, além de CSV/JSON.
+- Nova aba Gestão de Estoque: valor e quantidade total, CD, condomínios, SKUs e itens a vencer em 7 dias.
+- Gestão de Estoque possui análise dos movimentos recentes e exportação CSV do relatório.
+- “Movimentações” foi renomeada para “Ajuste de Estoque”.
+- Nova aba Movimentação Estoque CD: valor/quantidade no CD, checklist pesquisável de produtos e sugestões de alocação pela Demanda Inteligente.
+- O painel de sugestões do CD foi retirado do Ajuste de Estoque e reaproveitado na nova aba.
+
+## V3.14 — Gestão de Estoque com Ruptura/Reposição
+A Gestão de Estoque passa a exibir total de itens em Ruptura, total de itens em Reposição e quantidade total sugerida para abastecimento. O detalhamento por unidade também mostra esses três indicadores.
+
+
+## V3.15 — Seletor de Produtos OKEO
+Foi criado um componente único de pesquisa/checklist reutilizado em Inventário, Ponto de Controle, Compras, Ajuste de Estoque, Validades, Reposição, Demanda Inteligente e Gestão de Estoque.
+A busca considera nome oficial, EAN, aliases, nome VM Pay, fornecedor, segmento e grupo.
+Filtros rápidos: Todos, Com saldo, Ruptura, Reposição e Validade ≤ 7 dias.
+Inclui Selecionar visíveis e Limpar seleção.
+Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir diretamente a lista filtrada.
