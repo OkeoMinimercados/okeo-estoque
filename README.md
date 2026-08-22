@@ -131,3 +131,14 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - Ao recarregar/abrir novamente sem "Manter conectado", o sistema exige usuário, senha e clique em "Entrar no sistema".
 - Login automático é permitido somente quando "Manter conectado" foi marcado explicitamente.
 - Sessões temporárias antigas gravadas por versões anteriores são apagadas no início.
+
+## V3.20 — Controle de Estoque operacional
+- Menu lateral com ícones mais largos, maior espaçamento e leitura melhor.
+- “Ponto de Controle” passa a se chamar “Contagem de Estoque Física”.
+- A Contagem de Estoque Física carrega a lista de produtos existentes na unidade selecionada.
+- Cada produto mostra saldo previsto, observado e diferença.
+- Quantidade observada pode ser digitada ou ajustada com +/−.
+- Leitura por câmera/EAN identifica o produto e soma 1 na contagem observada.
+- EAN novo oferece abertura imediata do Cadastro de Produto.
+- “Contagem rápida” passa a se chamar “Incremento de Estoque”.
+- Incremento de Estoque adiciona manualmente quantidade positiva ao saldo, registra movimento e lote sem validade conhecida, sem substituir o saldo existente.

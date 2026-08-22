@@ -90,3 +90,18 @@ table{font-size:12px}
 
 .controlstock-tabs{display:flex;gap:10px;margin:14px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .controlstock-tabs button{min-width:180px}.controlstock-tabs button.active{background:#078b3d;color:#fff;border-color:#078b3d}.controlstock-panel>.subcard{margin-top:0}
+
+/* V3.20 — menu lateral mais legível */
+#menu{display:flex;flex-direction:column;gap:5px;padding:8px 8px 10px}
+#menu button{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;column-gap:11px;min-height:38px;padding:8px 10px;border-radius:8px;line-height:1.15;text-align:left}
+#menu button::before{content:attr(data-icon);display:flex;align-items:center;justify-content:center;width:28px;min-width:28px;height:28px;font-size:17px;line-height:1}
+#menu button+button{margin-top:1px}
+#menu button.active{padding-top:9px;padding-bottom:9px}
+.physical-count-list-card{margin:16px 0;padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.physical-count-product-list{max-height:540px;overflow:auto;margin-top:12px}
+.physical-qty-edit{display:grid;grid-template-columns:34px 72px 34px;gap:6px;align-items:center}
+.physical-qty-edit button{min-width:34px;padding:5px}
+.physical-qty-edit input{text-align:center}
+.ean-camera-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.camera-overlay{position:fixed;inset:0;background:rgba(0,0,0,.68);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.camera-box{width:min(520px,96vw);background:#fff;border-radius:16px;padding:16px}.camera-box video{width:100%;max-height:60vh;border-radius:10px;background:#111}
