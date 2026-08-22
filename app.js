@@ -118,6 +118,15 @@ function applyAccessProfile(){
   if($("#currentUserRole"))$("#currentUserRole").textContent=currentSession?.profileName||(currentSession?.role==="ADMIN"?"Administrador":"Funcionário");
   if($("#userAdminPanel"))$("#userAdminPanel").classList.toggle("hidden",currentSession?.role!=="ADMIN")
 }
+async function authPost(action,params={}){
+  const base=getBackendUrl();if(!base)throw new Error("Base Central não configurada.");
+  const body=new URLSearchParams({action,...Object.fromEntries(Object.entries(params).map(([k,v])=>[k,String(v)]))});
+  const r=await fetch(base,{method:"POST",body,cache:"no-store",redirect:"follow"});
+  if(!r.ok)throw new Error("HTTP "+r.status);
+  const j=await r.json();
+  if(j.ok===false)throw new Error(j.error||"Falha de autenticação");
+  return j
+}
 async function apiGet(action,params={}){
   const base=getBackendUrl();if(!base)throw new Error("Base Central não configurada.");
   const u=new URL(base);u.searchParams.set("action",action);Object.entries(authHeadersOrParams({...params})).forEach(([k,v])=>u.searchParams.set(k,String(v)));u.searchParams.set("_",Date.now());
@@ -648,4 +657,4 @@ async function renderAudit(){if(!$("#auditList"))return;const rows=(await all("a
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
 async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Base local sincronizada: ${p.length} produtos.`;updateSyncState();if(currentSession?.role==="ADMIN"){await renderUsersAdmin();await renderSupplierRegistry();await renderAudit()}}
-async function backup(){const o={version:"3.3",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_CORE_Backup_V3_3.json";a.click()}
+async function backup(){const o={version:"3.3.1",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_CORE_Backup_V3_3.json";a.click()}

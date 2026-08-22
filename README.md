@@ -1,4 +1,4 @@
-# OKEO Core V3.3 — Performance Isolado
+# OKEO Core V3.3.1 — Performance Isolado
 
 O módulo operacional de Estoque & Compras foi isolado de Analytics e Financeiro.
 
@@ -25,3 +25,6 @@ São cópias somente-leitura. Sistemas externos não escrevem em estoque, lotes,
 3. Publicar todo o ZIP.
 4. Ctrl+F5.
 5. Executar Autoteste e Integridade.
+
+## Hotfix 3.3.1
+Corrigida a função `authPost`, necessária para login, criação do primeiro administrador, logout e validação de sessão. O backend 3.3.0 permanece compatível e não precisa ser substituído por causa deste hotfix.
