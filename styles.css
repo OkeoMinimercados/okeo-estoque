@@ -52,3 +52,5 @@ body{background:var(--bg);font-size:14px}.sidebar{background:linear-gradient(180
 .login-connection-status.ok{background:#eaf8ee;color:#18723a}
 .login-connection-status.warn{background:#fff7df;color:#826000}
 .login-connection-status.bad{background:#fff0f0;color:#a02d2d}
+
+.ean-product-hint{display:block;margin-top:4px;font-size:10px;color:#68766e}.ean-product-hint.found{color:#14713a}.ean-product-hint.missing{color:#a46d00}.linkbtn{border:0;background:transparent;color:#087838;text-decoration:underline;padding:0 3px;font-size:10px;cursor:pointer}.assist-banner{padding:12px 14px;border:1px solid #b9ddc5;background:#eef9f2;border-radius:12px;margin:0 0 14px;color:#285f3d}

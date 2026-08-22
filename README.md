@@ -41,3 +41,17 @@ O cadastro de validade por câmera nesta versão captura/anexa a imagem pelo cel
 - Seletor de unidades fecha ao clicar fora.
 - Movimentações: quantidades exclusivamente inteiras; decrementos registrados com sinal negativo.
 - Base Histórica de Demanda: seleção simultânea de vários JSONs, consolidação por unidade/EAN e soma dos períodos históricos.
+
+
+## V3.8 — fluxo de recebimento e ponto de controle
+- Ponto de Controle registra data, hora e minuto da contagem e usa esse timestamp como marco inicial do novo ciclo.
+- XML/NF importada gera tabela de conferência editável: EAN, produto, quantidade, custo, lote, validade e fornecedor.
+- Compras possui opção “Receber tudo no CD e distribuir depois”.
+- Movimentações exibe estoque do CD e sugere destinos por condomínio usando a Demanda Inteligente.
+
+
+## V3.9 — cadastro assistido por EAN
+- NF com EAN ainda não cadastrado oferece Cadastro/Completar produto diretamente da conferência.
+- Cadastro assistido pré-preenche EAN, nome, fornecedor, custo/PC e demais dados disponíveis; os demais campos de-para permanecem abertos para completar.
+- Campos operacionais baseados em EAN mostram automaticamente o nome cadastrado (e fornecedor quando disponível).
+- EAN desconhecido em Estoque/Inventário, Compras, Movimentações, Validades, Ponto de Controle e consulta do CD oferece abertura imediata do Cadastro de Produto.

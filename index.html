@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.7.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.9.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -91,7 +91,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.7.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.9.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -126,7 +126,7 @@
   <label>Nome VM Pay<input id="pvm" placeholder="Preencher quando identificado"></label>
   <label>Nomes alternativos / aliases<textarea id="palias" rows="3" placeholder="Separe os nomes por ponto e vírgula, vírgula ou linha"></textarea></label>
 </div>
-<input id="pid" type="hidden">
+<input id="pid" type="hidden"><div id="productAssistBanner" class="hidden assist-banner"></div>
 <div class="actions"><button id="psave">Salvar produto</button><button id="pcancel" class="secondary">Limpar</button></div>
 <p class="muted">EAN é a chave única. Produto novo deve preservar todos os campos cadastrais da Base Mestre.</p>
 <input id="psearch" placeholder="Pesquisar produto, EAN, fornecedor ou segmento">
@@ -163,7 +163,7 @@
   <span class="muted">Contagem física substitui o saldo-base da unidade.</span>
 </div>
 <div class="scanline">
-  <input id="iean" inputmode="numeric" autocomplete="off" placeholder="EAN / leitor físico">
+  <input id="iean" inputmode="numeric" autocomplete="off" placeholder="EAN / leitor físico"><small id="iproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small>
   <button id="scan">📷 Ler código</button>
 </div>
 <div id="scanbox" class="hidden"><video id="video" playsinline></video><button id="stopscan">Fechar câmera</button></div>
@@ -180,12 +180,14 @@
 <div class="tabsbar"><button id="purchaseTabManual" class="tabbtn active">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
 <div id="purchaseManualPanel">
 <div class="grid3"><label>Fornecedor<input id="purchaseSupplier" list="supplierOptions"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
-<div class="grid3"><label>EAN<input id="purchaseEAN"></label><label>Quantidade<input id="purchaseQty" type="number" min=".01" step=".01" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
+<div class="grid3"><label>EAN<input id="purchaseEAN"><small id="purchaseProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade<input id="purchaseQty" type="number" min=".01" step=".01" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
 <div id="purchaseProductInfo" class="productbox muted">Digite um EAN.</div>
 <div class="grid3"><label>Validade<input id="purchaseExpiry" type="date"></label><label>Lote<input id="purchaseLot"></label><label>Observação<input id="purchaseNote"></label></div>
 <div class="actions"><button id="purchaseSuggest">Calcular distribuição sugerida</button><button id="purchaseAdd" class="secondary">Adicionar item</button></div></div>
 <div id="purchaseNFPanel" class="hidden"><div class="upload-card"><label>Arquivo da NF<input id="purchaseNFFile" type="file" accept="image/*,.pdf,.xml,text/xml,application/xml"></label><p class="muted"><b>XML NF-e:</b> leitura automática de fornecedor, número da NF, EAN, quantidade, custo e, quando existir, lote e validade. PDF/foto ficam anexados para conferência manual.</p><div class="actions"><button id="purchaseAttachNF">Ler / anexar NF</button></div><span id="purchaseNFStatus" class="muted"></span></div><div id="nfParsedItems"></div></div>
-<hr><h3>Distribuição sugerida</h3><p class="muted">Ruptura e reposição têm prioridade; completa até o Estoque Ideal; a sobra vai para o CD. Tudo é editável.</p><div id="purchaseDistribution"></div>
+<hr><h3>Distribuição da compra</h3>
+<div class="purchase-options"><label class="inline-check"><input id="purchaseAllToCD" type="checkbox"> <b>Receber tudo no CD e distribuir depois</b></label></div>
+<p class="muted">Sem essa opção, Ruptura/Reposição têm prioridade e a sobra vai para o CD. Tudo continua editável.</p><div id="purchaseDistribution"></div>
 <hr><h3>Itens da compra</h3><div id="purchaseItems"></div>
 <div class="actions"><button id="purchaseSave">Confirmar compra e abastecimento</button><button id="purchaseClear" class="secondary">Limpar</button></div><p id="purchaseMsg" class="muted"></p>
 <hr><h3>Histórico de compras</h3><div id="purchaseHistory"></div></section>
@@ -204,7 +206,7 @@
     <option value="QUEBRA">Quebra</option>
     <option value="VENCIMENTO">Vencimento</option>
   </select></label>
-  <label>EAN<input id="mean" inputmode="numeric"></label>
+  <label>EAN<input id="mean" inputmode="numeric"><small id="mproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
   <label>Quantidade<input id="mqty" type="number" step="1" value="1"><small class="fieldhint">Use número inteiro. Para perdas/ajustes negativos, pode informar valor negativo.</small></label>
   <label>Origem<select id="mfrom"></select></label>
   <label>Destino<select id="mto"></select></label>
@@ -214,21 +216,25 @@
 <button id="msave">Registrar movimentação</button>
 <p id="mmsg" class="muted"></p>
 <div id="mlist"></div>
+<hr><h3>Estoque do CD e sugestões de alocação</h3>
+<p class="muted">Consulte um produto do CD para ver quanto há disponível e quais condomínios estão abaixo do Nível de Alerta/Estoque Ideal.</p>
+<div class="grid3"><label>EAN<input id="cdSuggestEAN" inputmode="numeric" placeholder="EAN do produto"><small id="cdSuggestProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>&nbsp;<button id="cdSuggestBtn" type="button" class="primarywide">Calcular destinos</button></label></div>
+<div id="cdAllocationSuggestions"></div>
 </section>
 
 <section id="control" class="view card hidden">
 <h2>Ponto de Controle de Estoque</h2>
 <p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
-<div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Observação<input id="cnote"></label></div>
+<div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
 <div class="actions"><button id="cstart">Iniciar ponto de controle</button><button id="capprove" class="secondary">Aprovar ponto de controle</button></div>
-<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"></label><label>Quantidade observada<input id="cqty" type="number" min="0" step=".01" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div id="cactive"></div><div id="chistory"></div>
+<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step=".01" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div id="cactive"></div><div id="chistory"></div>
 </section>
 <section id="expiry" class="view card hidden">
 <h2>Validades</h2>
 <div class="grid3"><label>Relatório por unidade<select id="expiryFilter"></select></label><label>Faixa<select id="expiryRange"><option value="ALL">Todas</option><option value="OVERDUE">Vencidos</option><option value="7">Até 7 dias</option><option value="15">8–15 dias</option><option value="30">16–30 dias</option></select></label><label>&nbsp;<button id="expiryReport" class="primarywide">Atualizar relatório</button></label></div>
 <hr><h3>Registrar validade</h3><div class="grid3">
   <label>Unidade<select id="eunit"></select></label>
-  <label>EAN<input id="eean" inputmode="numeric"></label>
+  <label>EAN<input id="eean" inputmode="numeric"><small id="eproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
   <label>Validade<input id="edate" type="date"></label>
   <label>Quantidade<input id="eqty" type="number" value="1"></label>
   <label>Lote<input id="elot" placeholder="Opcional"></label>
@@ -249,7 +255,7 @@
 <div id="glist"></div>
 <hr>
 <div class="grid3">
-  <label>Pesquisar<input id="gsearch" placeholder="Produto, EAN, fornecedor, segmento"></label>
+  <label>Pesquisar<input id="gsearch" placeholder="Produto, EAN, alias, fornecedor, segmento"></label>
   <label>Filtrar grupo<select id="gfilter"><option value="">Todos</option><option value="UNCLASSIFIED">Não classificados</option><option value="I">Individuais</option></select></label>
   <label>&nbsp;<button id="gindividual" class="secondary primarywide">Marcar selecionados como Individual</button></label>
 </div>
@@ -405,5 +411,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.7.0.js"></script>
+<script src="app-v3.9.0.js"></script>
 </body></html>
