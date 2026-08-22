@@ -105,3 +105,7 @@ table{font-size:12px}
 .ean-camera-row{display:grid;grid-template-columns:1fr auto;gap:8px}
 .camera-overlay{position:fixed;inset:0;background:rgba(0,0,0,.68);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
 .camera-box{width:min(520px,96vw);background:#fff;border-radius:16px;padding:16px}.camera-box video{width:100%;max-height:60vh;border-radius:10px;background:#111}
+
+.control-physical-only{margin-top:12px}.physical-list-actions{display:flex;gap:8px;align-items:center;margin:8px 0 10px}.row-disabled{opacity:.45}.row-disabled input[type=number],.row-disabled button{pointer-events:none}
+.product-increment-card{margin:18px 0}.product-increment-card #prodIncSelector{margin-top:10px}
+.cd-list-meta{padding:8px 2px;color:var(--muted);font-size:11px}

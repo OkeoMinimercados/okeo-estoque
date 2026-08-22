@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.20.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.21.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -92,7 +92,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.20.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.21.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -131,6 +131,29 @@
 <div class="actions"><button id="psave">Salvar produto</button><button id="pcancel" class="secondary">Limpar</button></div>
 <p class="muted">EAN é a chave única. Produto novo deve preservar todos os campos cadastrais da Base Mestre.</p>
 <input id="psearch" placeholder="Pesquisar produto, EAN, fornecedor ou segmento">
+<div class="subcard product-increment-card">
+  <div class="section-head">
+    <div>
+      <h3>Incremento Manual de Estoque</h3>
+      <p class="muted">Use para adicionar manualmente unidades de um produto já cadastrado a um condomínio ou CD.</p>
+    </div>
+  </div>
+  <div class="grid4">
+    <label>Unidade<select id="prodIncUnit"></select></label>
+    <label>EAN / Produto
+      <input id="prodIncEAN" inputmode="numeric" placeholder="EAN do produto">
+      <small id="prodIncHint" class="ean-product-hint">Digite ou selecione um produto abaixo.</small>
+    </label>
+    <label>Quantidade<input id="prodIncQty" type="number" min="1" step="1" value="1"></label>
+    <label>Observação<input id="prodIncNote" placeholder="Motivo / origem"></label>
+  </div>
+  <div class="actions">
+    <button id="prodIncCamera" type="button" class="secondary">📷 Ler código</button>
+    <button id="prodIncSave" type="button">Lançar incremento</button>
+  </div>
+  <div id="prodIncSelector"></div>
+  <p id="prodIncMsg" class="muted"></p>
+</div>
 <div id="plist"></div>
 </section>
 
@@ -159,35 +182,9 @@
 
 <section id="controlstock" class="view card hidden">
 <h2>Controle de Estoque</h2>
-<p class="muted">Incremento manual de estoque e Contagem de Estoque Física reunidos na mesma área.</p>
-<div class="controlstock-tabs">
-  <button id="controlStockTabQuick" type="button" class="active">Incremento de Estoque</button>
-  <button id="controlStockTabPoint" type="button" class="secondary">Contagem de Estoque Física</button>
-</div>
-<div id="controlStockQuickPanel" class="controlstock-panel">
-  <div class="subcard">
-    <h3>Incremento de Estoque</h3>
-    <p class="muted">Use EAN, câmera ou a lista de produtos para lançar manualmente uma entrada positiva em uma unidade, quando o item não vier pelo fluxo de Compras/NF.</p>
-    
-<div class="invtop">
-  <label>Condomínio / CD<select id="iunit"></select></label>
-  <span class="muted">Incremento manual adiciona unidades ao saldo atual da unidade.</span>
-</div>
-<div class="scanline">
-  <input id="iean" inputmode="numeric" autocomplete="off" placeholder="EAN / leitor físico"><div class="selector-toggle-row"><button id="invSelectorBtn" type="button" class="secondary">Selecionar produto por lista</button></div><div id="invProductSelector" class="hidden"></div><small id="iproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small>
-  <button id="scan">📷 Ler código</button>
-</div>
-<div id="scanbox" class="hidden"><video id="video" playsinline></video><button id="stopscan">Fechar câmera</button></div>
-<div id="iprod" class="productbox">Digite ou leia um EAN</div>
-<label>Observação do incremento<input id="incrementNote" placeholder="Ex.: recebimento manual, sobra de compra, ajuste positivo"></label><div class="qtybox"><button id="iminus" class="qtybtn">−</button><input id="iqty" type="number" min="0" step="1" value="0"><button id="iplus" class="qtybtn">+</button></div>
-<button id="isave" class="primarywide">Lançar incremento e próximo</button>
-<p id="invmsg" class="muted"></p>
-<input id="istocksearch" placeholder="Pesquisar no estoque desta unidade">
-<div id="stocksummary"></div><div id="stocklist"></div>
-
-  </div>
-</div>
-<div id="controlStockPointPanel" class="controlstock-panel hidden">
+<p class="muted">Contagem de Estoque Física por unidade, com pesquisa, lista completa, checklist e leitura por câmera.</p>
+<div class="subcard control-physical-only">
+  
   <div class="subcard">
     <h3>Contagem de Estoque Física</h3>
     <p class="muted">Conferência formal da unidade com data/hora, divergências e início de um novo ciclo.</p>
@@ -205,7 +202,7 @@
       <p class="muted">A lista é carregada conforme a unidade selecionada. Digite a quantidade observada ou use a câmera: cada leitura soma 1 unidade ao item correspondente.</p>
     </div>
     <div class="actions">
-      <button id="physicalCountLoadProducts" type="button" class="secondary">Carregar produtos da unidade</button>
+      <button id="physicalCountLoadProducts" type="button" class="secondary">Atualizar lista da unidade</button>
       <button id="physicalCountResetObserved" type="button" class="secondary">Zerar contagem observada</button>
     </div>
   </div>
@@ -226,6 +223,7 @@
 <div id="cactive"></div><div id="chistory"></div>
 
   </div>
+
 </div>
 </section>
 
@@ -281,7 +279,7 @@
 <div id="cdMoveMetrics" class="metriccards"></div>
 <div class="grid2 cd-move-layout">
   <div class="subcard">
-    <div class="section-head"><div><h3>Produtos disponíveis no CD</h3><p class="muted">Marque um ou mais produtos para analisar.</p></div><div class="actions"><button id="cdSelectAll" type="button" class="secondary">Selecionar visíveis</button><button id="cdClearSelection" type="button" class="secondary">Limpar</button></div></div>
+    <div class="section-head"><div><h3>Produtos disponíveis no CD</h3><p class="muted">Lista completa dos produtos com saldo no CD. Pesquise e marque um ou mais itens para calcular destinos.</p></div><div class="actions"><button id="cdSelectAll" type="button" class="secondary">Selecionar visíveis</button><button id="cdClearSelection" type="button" class="secondary">Limpar</button></div></div>
     <input id="cdMoveSearch" placeholder="Pesquisar produto ou EAN">
     <div id="cdMoveProductList" class="checklist-list"></div>
   </div>
@@ -508,5 +506,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.20.0.js"></script>
+<script src="app-v3.21.0.js"></script>
 </body></html>

@@ -142,3 +142,10 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - EAN novo oferece abertura imediata do Cadastro de Produto.
 - “Contagem rápida” passa a se chamar “Incremento de Estoque”.
 - Incremento de Estoque adiciona manualmente quantidade positiva ao saldo, registra movimento e lote sem validade conhecida, sem substituir o saldo existente.
+
+## V3.21 — Fluxo de controle simplificado
+- Controle de Estoque fica exclusivamente com Contagem de Estoque Física.
+- A unidade selecionada carrega uma lista pesquisável/checklist dos produtos já associados via estoque/demanda.
+- A câmera localiza o item na lista e soma 1 à quantidade observada; EAN novo direciona ao cadastro.
+- Incremento Manual de Estoque foi movido para Produtos, com lista/checklist, câmera, unidade, quantidade e observação.
+- Movimentação Estoque CD mantém a lista completa de produtos com saldo, pesquisa e checklist sempre visíveis.
