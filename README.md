@@ -1,18 +1,27 @@
-# OKEO Estoque V2.5 — Compras + Login + Perfis
+# OKEO Core V3.3 — Performance Isolado
 
-Login:
-- primeiro administrador criado diretamente na tela de login;
-- usuários e perfis gerenciados dentro do OKEO;
-- qualquer usuário pode alterar a própria senha pelo menu da conta;
-- administrador pode editar usuário, perfil, nome, observação e redefinir senha;
-- último acesso registrado.
+O módulo operacional de Estoque & Compras foi isolado de Analytics e Financeiro.
 
-Compras/NF:
-- lançamento manual;
-- leitura automática de XML NF-e para fornecedor, nº NF, data, EAN, quantidade e custo;
-- lote/validade capturados quando existirem no XML;
-- PDF/foto podem ser anexados;
-- Demanda Inteligente considera estoque atual e reposições já aprovadas/em trânsito;
-- prioridade: Ruptura → Reposição → sobra para CD;
-- distribuição totalmente editável;
-- confirmação atualiza estoque, movimentação, custo e validade por destino.
+## O que entra no Core
+Produtos, unidades, fornecedores, estoque, inventário, lotes, validades, compras/NF, movimentações, Ponto de Controle, Demanda operacional, Reposição, vendas necessárias ao saldo/demanda, usuários/perfis, auditoria e integridade.
+
+## Performance
+A sincronização foi separada:
+- CORE no login;
+- SALES apenas em Vendas;
+- MOVES apenas em Movimentações;
+- PURCHASES apenas em Compras/NF;
+- AUDIT apenas em Configurações.
+
+O Dashboard não percorre mais históricos inteiros. Históricos visuais usam índices do IndexedDB e limites de linhas.
+
+## Analytics/Financeiro
+Configurações exporta snapshots `OKEO_ANALYTICS_V1` e `OKEO_FINANCE_V1`.
+São cópias somente-leitura. Sistemas externos não escrevem em estoque, lotes, movimentações ou compras.
+
+## Instalação
+1. Apps Script: `setupOkeoCoreV33`.
+2. Atualizar implantação e confirmar `/exec` = 3.3.0.
+3. Publicar todo o ZIP.
+4. Ctrl+F5.
+5. Executar Autoteste e Integridade.

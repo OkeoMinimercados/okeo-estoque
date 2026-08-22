@@ -45,7 +45,7 @@
   </div>
 </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>Sistema online e seguro <b>v2.5</b></div>
+      <div class="secure-status"><span></span>Sistema online e seguro <b>v3.3</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -77,14 +77,25 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Local</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">OKEO Minimercados</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.3</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
         
 
 
-<section id="home" class="view card"></section>
+<section id="home" class="view dashboard-view">
+<div class="dashboard-hero"><div><h2 id="helloTitle">Olá!</h2><p>Visão geral da operação OKEO</p></div><div id="dashboardUpdated" class="muted"></div></div>
+<div id="dashboardMetrics" class="metriccards dashboard-metrics"></div>
+<div class="dashboard-grid">
+  <div class="dash-card"><h3>Acesso rápido</h3><p class="muted">Principais módulos do sistema</p><div id="quickAccess" class="quick-grid"></div></div>
+  <div class="dash-card"><h3>Resumo operacional</h3><div id="todaySummary"></div></div>
+</div>
+<div class="dashboard-grid">
+  <div class="dash-card"><h3>Últimas atividades</h3><div id="recentActivity"></div></div>
+  <div class="dash-card"><h3>Avisos importantes</h3><div id="importantAlerts"></div></div>
+</div>
+</section>
 
 <section id="products" class="view card hidden">
 <h2>Cadastro Mestre de Produtos</h2>
@@ -92,7 +103,7 @@
   <label>Produto<input id="pname"></label>
   <label>Subproduto<input id="psub"></label>
   <label>EAN<input id="pean" inputmode="numeric"></label>
-  <label>Fornecedor<input id="psup"></label>
+  <label>Fornecedor<input id="psup" list="supplierOptions"><datalist id="supplierOptions"></datalist></label>
   <label>Segmento<input id="pseg"></label>
   <label>Localização<input id="ploc"></label>
   <label>PC / preço referência<input id="ppc" type="number" step=".01"></label>
@@ -114,6 +125,7 @@
   <input id="uid" type="hidden"><label>Nome<input id="uname"></label>
   <label>Tipo<select id="utype"><option value="CONDOMINIO">Condomínio / Mercado</option><option value="CD">CD</option></select></label>
   <label>Abastecimentos por semana<select id="ufreq"><option value="1">1x/semana</option><option value="2">2x/semana</option><option value="3">3x/semana</option><option value="5">5x/semana</option><option value="7">Diário</option></select></label>
+  <label>Aliases da unidade<input id="ualias" placeholder="Ex.: VILLE; VILLE DE LEON"></label>
 </div>
 <label>Dias preferenciais de abastecimento</label>
 <div class="weekdaybox">
@@ -153,7 +165,7 @@
 <h2>Compras / NF</h2><p class="muted">Lance a compra, distribua por condomínio/CD e atualize estoque e validade em um único fluxo.</p>
 <div class="tabsbar"><button id="purchaseTabManual" class="tabbtn active">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
 <div id="purchaseManualPanel">
-<div class="grid3"><label>Fornecedor<input id="purchaseSupplier"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
+<div class="grid3"><label>Fornecedor<input id="purchaseSupplier" list="supplierOptions"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
 <div class="grid3"><label>EAN<input id="purchaseEAN"></label><label>Quantidade<input id="purchaseQty" type="number" min=".01" step=".01" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
 <div id="purchaseProductInfo" class="productbox muted">Digite um EAN.</div>
 <div class="grid3"><label>Validade<input id="purchaseExpiry" type="date"></label><label>Lote<input id="purchaseLot"></label><label>Observação<input id="purchaseNote"></label></div>
@@ -205,6 +217,7 @@
   <label>EAN<input id="eean" inputmode="numeric"></label>
   <label>Validade<input id="edate" type="date"></label>
   <label>Quantidade<input id="eqty" type="number" value="1"></label>
+  <label>Lote<input id="elot" placeholder="Opcional"></label>
 </div>
 <label>Foto da validade<input id="ephoto" type="file" accept="image/*" capture="environment"></label>
 <button id="esave">Salvar validade</button>
@@ -339,9 +352,9 @@
 </div>
 <p id="syncMsg" class="muted"></p>
 <hr>
-<h3>Base Mestre Oficial</h3>
-<p>Arquivo embarcado: <b>OKEO Base Mestre V1.4.1</b>. A carga preserva Produto, Subproduto, Fornecedor, Segmento, Localização, PC, EAN, NCM e CEST.</p>
-<button id="loadMaster">Carregar / atualizar Base Mestre</button>
+<h3>Base Central de Produtos</h3>
+<p>Produtos e unidades são carregados da Base Central autenticada. Alterações locais são sincronizadas automaticamente.</p>
+<div class="actions"><button id="loadMaster">Atualizar produtos da Base Central</button></div>
 <p id="masterMsg" class="muted"></p>
 <hr>
 <h3>Base Histórica de Demanda</h3>
@@ -352,6 +365,25 @@
 <hr>
 <p><b>VM Pay:</b> backend preparado; credenciais permanecem fora do GitHub.</p>
 <button id="backup">Exportar backup</button>
+<hr>
+<h3>Core Operacional</h3>
+<div class="core-lock"><b>OKEO Core — Estoque & Compras</b><span>Isolado de Analytics e Financeiro</span><small>Analytics/Financeiro recebem cópias somente-leitura e não participam do ciclo de estoque.</small></div>
+<div class="actions"><button id="exportAnalytics" type="button" class="secondary">Exportar para Analytics</button><button id="exportFinance" type="button" class="secondary">Exportar para Financeiro</button></div>
+<p id="exchangeMsg" class="muted"></p>
+<hr>
+<h3>Integridade e Escalabilidade</h3>
+<p class="muted">Valida cadastros duplicados, referências órfãs, saldos inconsistentes e estrutura da Base Central.</p>
+<div class="actions"><button id="runIntegrity" type="button">Executar verificação de integridade</button><button id="runSelfTest" type="button" class="secondary">Executar autoteste do sistema</button></div>
+<div id="integrityResult"></div><div id="selfTestResult"></div>
+<hr>
+<h3>Fornecedores Cadastrados</h3>
+<p class="muted">Fornecedores são criados automaticamente a partir do cadastro de produtos e das compras.</p>
+<div id="supplierRegistry"></div>
+<hr>
+<h3>Auditoria Operacional</h3>
+<p class="muted">Histórico das alterações críticas efetuadas no sistema.</p>
+<div class="actions"><button id="refreshAudit" type="button">Atualizar auditoria</button></div>
+<div id="auditList"></div>
 </section>
 
       </section>
