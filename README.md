@@ -28,3 +28,11 @@ São cópias somente-leitura. Sistemas externos não escrevem em estoque, lotes,
 
 ## Hotfix 3.3.1
 Corrigida a função `authPost`, necessária para login, criação do primeiro administrador, logout e validação de sessão. O backend 3.3.0 permanece compatível e não precisa ser substituído por causa deste hotfix.
+
+## V3.3.5 — autenticação reconstruída
+- Módulo de conexão/login foi refeito como bloco global independente.
+- `getBackendUrl`, `backendRequest`, `authPost`, login, sessão, bootstrap e logout ficam no mesmo módulo.
+- A tela de login agora permite Configurar/Testar a URL /exec sem precisar entrar no sistema.
+- A URL é recuperada do localStorage e, como fallback, do IndexedDB.
+- O arquivo principal foi renomeado para `app-v3.3.5.js`, eliminando a reutilização de `app.js` antigo em cache.
+- Service Worker foi reconstruído e força atualização dos assets.
