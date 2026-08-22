@@ -1,9 +1,17 @@
-# OKEO Estoque V1.4.1 — Aliases & VM Pay
+# OKEO Estoque V1.5 — Grupos & Ruptura
 
-- 1245 SKUs únicos por EAN.
-- 169 EANs possuem mais de uma nomenclatura na planilha final.
-- 189 nomes alternativos preservados como aliases.
-- Mesmo EAN continua sendo um único produto para estoque, vendas, custo e demanda.
-- Campo `vmPayName` preparado para registrar a nomenclatura oficial observada na VM Pay.
-- Limpeza segura apenas dos dois produtos de teste históricos conhecidos; produtos futuros cadastrados manualmente não são apagados.
-- Base fiscal/cadastral oficial continua preservando Produto, Subproduto, Fornecedor, Segmento, Localização, PC, EAN, NCM e CEST.
+## Regras da Demanda Inteligente
+- Nível de Alerta = 50% da demanda semanal média, arredondado para cima.
+- Estoque Ideal = 100% da demanda semanal média, arredondado para cima.
+- Pico semanal é indicador histórico; não define automaticamente o Estoque Ideal.
+- OK: saldo calculado acima do Nível de Alerta.
+- REPOSIÇÃO: saldo > 0 e <= Nível de Alerta. Repor até Estoque Ideal.
+- RUPTURA: saldo = 0.
+- Eventos de ruptura são persistidos para análise futura de frequência/duração.
+
+## Grupos
+- Seleção múltipla de produtos.
+- Criar grupos de produtos substituíveis.
+- Adicionar vários produtos de uma vez ao grupo.
+- Marcar produtos sem substituto como Individual.
+- A Demanda Inteligente permanece bloqueada enquanto houver produto ativo sem classificação.

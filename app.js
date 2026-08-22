@@ -1,6 +1,6 @@
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let stream,timer,syncBusy=false,pushTimer=null;
-const SYNC_STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices"];
+const SYNC_STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents"];
 document.addEventListener("DOMContentLoaded",init);
 
 async function init(){
@@ -19,7 +19,9 @@ function bind(){
   $("#enean").oninput=entryProd;$("#ensave").onclick=saveEntry;
   $("#mean").oninput=moveProd;$("#mtype").onchange=moveTypeUI;$("#msave").onclick=saveMove;
   $("#esave").onclick=saveExpiry;
-  $("#gsave").onclick=saveGroup;$("#gsearch").oninput=renderGroups;
+  $("#gsave").onclick=saveGroup;$("#gsearch").oninput=renderGroups;$("#gfilter").onchange=renderGroups;
+  $("#gselectall").onclick=selectVisibleGroups;$("#gclear").onclick=()=>{groupSelection.clear();renderGroups()};
+  $("#gindividual").onclick=()=>assignSelectedGroup("I");
   $("#salesimport").onclick=importSales;$("#dcalc").onclick=calcDemand;
   $("#backsave").onclick=saveBackend;$("#testBackend").onclick=testBackend;$("#syncNow").onclick=syncAll;$("#loadMaster").onclick=loadMaster;$("#backup").onclick=backup;
 }
@@ -223,11 +225,48 @@ async function saveExpiry(){const e=$("#eean").value.replace(/\D/g,""),p=await p
 async function renderExpiry(){const units=new Map((await all("units")).map(x=>[x.id,x.name])),now=new Date(),r=(await all("expiries")).sort((a,b)=>a.date.localeCompare(b.date));$("#elist").innerHTML=r.map(x=>{const d=Math.ceil((new Date(x.date+"T12:00")-now)/86400000);return `<div class="row"><span>${esc(x.product)}<br><small>${esc(units.get(x.unitId)||"")} • ${x.date} • Qtd ${x.qty}${x.photo?" • 📷":""}</small></span><b class="${d<0?"bad":d<=15?"warn":""}">${d<0?"Vencido":d+" dias"}</b></div>`}).join("")}
 
 // ---------- Grupos ----------
-async function saveGroup(){const n=$("#gname").value.trim();if(!n)return;await localPut("groups",{id:id("g"),name:n,description:$("#gdesc").value,updatedAt:new Date().toISOString()});$("#gname").value="";renderGroups()}
+let groupSelection=new Set(),visibleGroupProducts=[];
+async function saveGroup(){
+  const n=$("#gname").value.trim();if(!n)return;
+  await localPut("groups",{id:id("g"),name:n,description:$("#gdesc").value,updatedAt:new Date().toISOString()});
+  $("#gname").value="";$("#gdesc").value="";renderGroups()
+}
+async function deleteGroup(gid){
+  const p=(await all("products")).filter(x=>x.groupId===gid);
+  if(p.length&&!confirm(`Este grupo possui ${p.length} produto(s). Eles voltarão a ficar não classificados. Continuar?`))return;
+  for(const x of p){x.groupId="";x.individual=false;x.updatedAt=new Date().toISOString();await localPut("products",x)}
+  await localDel("groups",gid);renderGroups()
+}
+async function assignSelectedGroup(v){
+  if(!groupSelection.size)return alert("Selecione pelo menos um produto.");
+  for(const pid of groupSelection){
+    const p=await get("products",pid);if(!p)continue;
+    p.individual=v==="I";p.groupId=v&&v!=="I"?v:"";p.updatedAt=new Date().toISOString();await localPut("products",p)
+  }
+  groupSelection.clear();await renderGroups();gate()
+}
+function toggleGroupProduct(pid,on){on?groupSelection.add(pid):groupSelection.delete(pid);$("#gselected").textContent=`${groupSelection.size} selecionado(s)`}
+function selectVisibleGroups(){visibleGroupProducts.forEach(p=>groupSelection.add(p.id));renderGroups()}
 async function renderGroups(){
-  const[g,p]=await Promise.all([all("groups"),all("products")]),q=($("#gsearch").value||"").toLowerCase();
-  $("#glist").innerHTML=g.map(x=>`<div class="row"><b>${esc(x.name)}</b><small>${esc(x.description||"")}</small></div>`).join("");
-  $("#gproducts").innerHTML=p.filter(x=>(x.name+" "+x.ean).toLowerCase().includes(q)).slice(0,300).map(x=>`<div class="row"><span>${esc(x.name)}<br><small>${x.ean}</small></span><select onchange="setGroup('${x.id}',this.value)"><option value="">Não classificado</option><option value="I" ${x.individual?"selected":""}>Individual</option>${g.map(a=>`<option value="${a.id}" ${x.groupId===a.id?"selected":""}>${esc(a.name)}</option>`).join("")}</select></div>`).join("")
+  const[g,p]=await Promise.all([all("groups"),all("products")]),q=($("#gsearch").value||"").toLowerCase(),f=$("#gfilter")?.value||"";
+  $("#glist").innerHTML=g.length?g.map(x=>{
+    const count=p.filter(a=>a.groupId===x.id).length;
+    return `<div class="row"><span><b>${esc(x.name)}</b><br><small>${esc(x.description||"")} • ${count} produto(s)</small></span><span class="mini"><button onclick="assignSelectedGroup('${x.id}')">Adicionar selecionados</button><button class="secondary" onclick="deleteGroup('${x.id}')">Excluir</button></span></div>`
+  }).join(""):'<p class="muted">Nenhum grupo criado.</p>';
+  let filtered=p.filter(x=>(x.name+" "+x.ean+" "+(x.supplier||"")+" "+(x.segment||"")).toLowerCase().includes(q));
+  if(f==="UNCLASSIFIED")filtered=filtered.filter(x=>!x.individual&&!x.groupId);
+  else if(f==="I")filtered=filtered.filter(x=>x.individual);
+  else if(f)filtered=filtered.filter(x=>x.groupId===f);
+  visibleGroupProducts=filtered.slice(0,500);
+  const filter=$("#gfilter");if(filter){
+    const cur=filter.value,base='<option value="">Todos</option><option value="UNCLASSIFIED">Não classificados</option><option value="I">Individuais</option>';
+    filter.innerHTML=base+g.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join("");filter.value=cur
+  }
+  $("#gselected").textContent=`${groupSelection.size} selecionado(s)`;
+  $("#gproducts").innerHTML=visibleGroupProducts.map(x=>{
+    const gr=x.groupId?g.find(a=>a.id===x.groupId)?.name:(x.individual?"Individual":"Não classificado");
+    return `<div class="row"><span><input style="width:auto;margin-right:8px" type="checkbox" ${groupSelection.has(x.id)?"checked":""} onchange="toggleGroupProduct('${x.id}',this.checked)"><b>${esc(x.name)}</b><br><small>EAN ${x.ean} • ${esc(x.segment||"")} • ${esc(x.supplier||"")} • <b>${esc(gr||"Não classificado")}</b></small></span></div>`
+  }).join("")
 }
 async function setGroup(i,v){const p=await get("products",i);p.individual=v==="I";p.groupId=v&&v!=="I"?v:"";p.updatedAt=new Date().toISOString();await localPut("products",p);gate()}
 
@@ -252,17 +291,32 @@ function unitScope(sel,units){
   if(sel==="TOTAL_MERCADOS")return new Set(units.filter(x=>x.type!=="CD").map(x=>x.id));
   return new Set([sel])
 }
-async function calcDemand(){
-  const [p,units,sw,g,st,moves]=await Promise.all(["products","units","salesWeekly","groups","stock","moves"].map(all)),scope=unitScope($("#dunit").value,units),w=+$("#dweeks").value;
-  const pm=new Map(p.map(x=>[x.ean,x])),gm=new Map(g.map(x=>[x.id,x])),cut=new Date();cut.setDate(cut.getDate()-w*7);
-  const groups={};
-  for(const x of sw){
-    if(!scope.has(x.unitId)||new Date(x.week)<cut)continue;const pr=pm.get(x.ean);if(!pr)continue;const k=pr.groupId?"g:"+pr.groupId:"p:"+pr.ean,label=pr.groupId?gm.get(pr.groupId)?.name:pr.name;
-    groups[k]=groups[k]||{label,weeks:{},eans:new Set()};groups[k].weeks[x.week]=(groups[k].weeks[x.week]||0)+(+x.qty||0);groups[k].eans.add(pr.ean)
+async function recordRupture(key,label,unitView,stock){
+  const openId="open|"+unitView+"|"+key,open=await get("ruptureEvents",openId);
+  if(stock<=0&&!open){
+    await localPut("ruptureEvents",{id:openId,demandKey:key,label,unitView,startedAt:new Date().toISOString(),endedAt:"",status:"OPEN",updatedAt:new Date().toISOString()})
+  }else if(stock>0&&open){
+    open.endedAt=new Date().toISOString();open.status="CLOSED";open.updatedAt=open.endedAt;
+    await localPut("ruptureEvents",{...open,id:id("rupture")});await localDel("ruptureEvents",openId)
   }
-  const result=[];
-  for(const x of Object.values(groups)){
-    const v=Object.values(x.weeks),avg=v.reduce((s,n)=>s+n,0)/Math.max(1,w),peak=Math.max(0,...v);
+}
+async function calcDemand(){
+  const [p,units,sw,g,st,moves]=await Promise.all(["products","units","salesWeekly","groups","stock","moves"].map(all)),
+        scope=unitScope($("#dunit").value,units),w=+$("#dweeks").value,pm=new Map(p.map(x=>[x.ean,x])),gm=new Map(g.map(x=>[x.id,x])),cut=new Date();
+  cut.setDate(cut.getDate()-w*7);
+  const groups={};
+  for(const pr of p.filter(x=>x.active!==false)){
+    const k=pr.groupId?"g:"+pr.groupId:"p:"+pr.ean,label=pr.groupId?gm.get(pr.groupId)?.name:pr.name;
+    groups[k]=groups[k]||{label,weeks:{},eans:new Set()};groups[k].eans.add(pr.ean)
+  }
+  for(const x of sw){
+    if(!scope.has(x.unitId)||new Date(x.week)<cut)continue;const pr=pm.get(x.ean);if(!pr)continue;
+    const k=pr.groupId?"g:"+pr.groupId:"p:"+pr.ean;if(!groups[k])continue;
+    groups[k].weeks[x.week]=(groups[k].weeks[x.week]||0)+(+x.qty||0)
+  }
+  const result=[],unitView=$("#dunit").value;
+  for(const [key,x] of Object.entries(groups)){
+    const v=Object.values(x.weeks),total=v.reduce((s,n)=>s+n,0),avg=total/Math.max(1,w),peak=Math.max(0,...v);
     const stocks=st.filter(s=>scope.has(s.unitId)&&x.eans.has(s.ean));
     const physical=stocks.reduce((s,n)=>s+(+(n.physicalQty??n.qty)||0),0);
     const baselineDates=stocks.map(s=>s.baselineAt).filter(Boolean).sort(),baseline=baselineDates.length?baselineDates[0]:"1970-01-01T00:00:00.000Z";
@@ -270,17 +324,21 @@ async function calcDemand(){
     let inc=0,dec=0;
     for(const mv of moves){
       if(new Date(mv.at)<new Date(baseline)||!x.eans.has(mv.ean))continue;
-      if(["INVENTARIO"].includes(mv.type))continue;
+      if(mv.type==="INVENTARIO")continue;
       const fromIn=scope.has(mv.from),toIn=scope.has(mv.to),q=+mv.qty||0;
       if(["COMPRA_NF","INCREMENTO_MANUAL","AJUSTE_POSITIVO"].includes(mv.type)&&toIn)inc+=q;
       else if(["TRANSFERENCIA","EMPRESTIMO","DEVOLUCAO"].includes(mv.type)){if(toIn&&!fromIn)inc+=q;if(fromIn&&!toIn)dec+=q}
       else if(["AJUSTE_NEGATIVO","PERDA","FURTO","QUEBRA","VENCIMENTO"].includes(mv.type)&&(fromIn||toIn))dec+=q
     }
-    const calculated=Math.max(0,physical+inc-salesSince-dec),min=Math.ceil(avg*(+$("#dmin").value||1)),ideal=Math.ceil(Math.max(avg*(+$("#dideal").value||1.2),peak));
-    result.push({...x,physical,avg,peak,min,ideal,salesSince,inc,dec,calculated,replenish:Math.max(0,ideal-calculated)})
+    const calculated=Math.max(0,physical+inc-salesSince-dec);
+    const alert=Math.ceil(avg*0.5),ideal=Math.ceil(avg);
+    const status=calculated<=0?"RUPTURA":calculated<=alert?"REPOSIÇÃO":"OK";
+    const replenish=status==="OK"?0:Math.max(0,ideal-calculated);
+    await recordRupture(key,x.label,unitView,calculated);
+    result.push({...x,physical,avg,peak,alert,ideal,salesSince,inc,dec,calculated,status,replenish})
   }
-  result.sort((a,b)=>b.replenish-a.replenish);
-  $("#dlist").innerHTML=`<div class="dtable"><table><thead><tr><th>Produto/Grupo</th><th>Estoque atual</th><th>Mínimo</th><th>Ideal</th><th>Pico vendas</th><th>Média vendas</th><th>Vendas desde base</th><th>Incrementos</th><th>Decrementos</th><th>Saldo calculado</th><th>Repor</th></tr></thead><tbody>${result.map(x=>`<tr><td>${esc(x.label)}</td><td>${n2(x.physical)}</td><td>${x.min}</td><td>${x.ideal}</td><td>${n2(x.peak)}</td><td>${n2(x.avg)}</td><td>${n2(x.salesSince)}</td><td>${n2(x.inc)}</td><td>${n2(x.dec)}</td><td><b>${n2(x.calculated)}</b></td><td><b>${n2(x.replenish)}</b></td></tr>`).join("")}</tbody></table></div>`
+  result.sort((a,b)=>({RUPTURA:0,"REPOSIÇÃO":1,OK:2}[a.status]-{RUPTURA:0,"REPOSIÇÃO":1,OK:2}[b.status])||b.replenish-a.replenish);
+  $("#dlist").innerHTML=`<div class="dtable"><table><thead><tr><th>Produto/Grupo</th><th>Estoque atual</th><th>Nível de Alerta</th><th>Estoque Ideal</th><th>Pico vendas</th><th>Média semanal</th><th>Vendas desde base</th><th>Incrementos</th><th>Decrementos</th><th>Saldo calculado</th><th>Status</th><th>Repor</th></tr></thead><tbody>${result.map(x=>`<tr><td>${esc(x.label)}</td><td>${n2(x.physical)}</td><td>${x.alert}</td><td>${x.ideal}</td><td>${n2(x.peak)}</td><td>${n2(x.avg)}</td><td>${n2(x.salesSince)}</td><td>${n2(x.inc)}</td><td>${n2(x.dec)}</td><td><b>${n2(x.calculated)}</b></td><td><b class="${x.status==="RUPTURA"?"bad":x.status==="REPOSIÇÃO"?"warn":"ok"}">${x.status}</b></td><td><b>${n2(x.replenish)}</b></td></tr>`).join("")}</tbody></table></div>`
 }
 
 // ---------- Base Mestre ----------
@@ -321,4 +379,4 @@ async function loadMaster(){
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
 async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Cadastro local atual: ${p.length} produtos.`;updateSyncState()}
-async function backup(){const o={version:"1.4.1",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
+async function backup(){const o={version:"1.5",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}

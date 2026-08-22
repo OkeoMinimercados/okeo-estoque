@@ -10,7 +10,7 @@
 <body>
 <header>
   <b>OKEO Estoque</b>
-  <span>V1.4.1 • Aliases & VM Pay</span>
+  <span>V1.5 • Grupos & Ruptura</span>
   <span id="syncState" class="syncstate">Local</span>
   <button id="logout" class="hidden">Sair</button>
 </header>
@@ -150,11 +150,20 @@
 
 <section id="groups" class="view card hidden">
 <h2>Grupos de Demanda</h2>
-<p>A Demanda Inteligente só libera quando todos os produtos ativos estiverem marcados como Individual ou vinculados a um grupo.</p>
-<div class="grid2"><input id="gname" placeholder="Novo grupo"><input id="gdesc" placeholder="Descrição"></div>
-<button id="gsave">Criar grupo</button>
+<p>Produtos substituíveis devem ser agrupados antes do cálculo da Demanda Inteligente. Produtos que não possuem substituto ficam como <b>Individual</b>.</p>
+<div class="grid3">
+  <label>Nome do grupo<input id="gname" placeholder="Ex.: Água 500ml"></label>
+  <label>Descrição<input id="gdesc" placeholder="Produtos equivalentes para reposição"></label>
+  <label>&nbsp;<button id="gsave" class="primarywide">Criar grupo</button></label>
+</div>
 <div id="glist"></div>
-<input id="gsearch" placeholder="Pesquisar produto para classificar">
+<hr>
+<div class="grid3">
+  <label>Pesquisar<input id="gsearch" placeholder="Produto, EAN, fornecedor, segmento"></label>
+  <label>Filtrar grupo<select id="gfilter"><option value="">Todos</option><option value="UNCLASSIFIED">Não classificados</option><option value="I">Individuais</option></select></label>
+  <label>&nbsp;<button id="gindividual" class="secondary primarywide">Marcar selecionados como Individual</button></label>
+</div>
+<div class="actions"><button id="gselectall" class="secondary">Selecionar visíveis</button><button id="gclear" class="secondary">Limpar seleção</button><span id="gselected" class="muted">0 selecionados</span></div>
 <div id="gproducts"></div>
 </section>
 
@@ -172,8 +181,8 @@
 <div class="grid3">
   <label>Visão<select id="dunit"></select></label>
   <label>Período de vendas<select id="dweeks"><option>4</option><option>8</option><option selected>12</option><option>16</option></select></label>
-  <label>Fator estoque mínimo<input id="dmin" type="number" step=".1" value="1"></label>
-  <label>Fator estoque ideal<input id="dideal" type="number" step=".1" value="1.2"></label>
+  <label>Nível de Alerta<input value="50% da demanda semanal média" readonly></label>
+  <label>Estoque Ideal<input value="100% da demanda semanal média" readonly></label>
 </div>
 <button id="dcalc">Calcular demanda</button>
 <div id="dlist"></div>
