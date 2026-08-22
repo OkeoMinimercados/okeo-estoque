@@ -3,7 +3,7 @@ let dbp;
 function op(){
   if(dbp)return dbp;
   dbp=new Promise((ok,no)=>{
-    const r=indexedDB.open("okeo-estoque-v1",6);
+    const r=indexedDB.open("okeo-estoque-v1",7);
     r.onupgradeneeded=()=>{for(const s of STORES)if(!r.result.objectStoreNames.contains(s))r.result.createObjectStore(s,{keyPath:"id"})};
     r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)
   });return dbp

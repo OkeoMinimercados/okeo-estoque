@@ -2,51 +2,95 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let stream,timer,syncBusy=false,pushTimer=null;
 const SYNC_STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents","demandBase","replenishments","controlPoints","controlPointItems"];
 document.addEventListener("DOMContentLoaded",init);
+let currentSession=null,repSelectedUnits=new Set();
 
 async function init(){
   if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
-  if(!(await all("units")).length)await put("units",{id:"cd",name:"CD",type:"CD",active:true});
   bind();
-  sessionStorage.getItem("okeo")?showApp():showLogin();
+  const saved=localStorage.getItem("okeo_session")||sessionStorage.getItem("okeo_session");
+  if(saved){
+    try{const s=JSON.parse(saved);if(await validateSession(s.token)){currentSession=s;await showApp();return}}catch(e){}
+  }
+  showLogin()
 }
 function bind(){
-  $("#enter").onclick=login;$("#logout").onclick=()=>{sessionStorage.clear();showLogin()};
+  $("#enter").onclick=login;$("#togglePass").onclick=()=>{$("#pass").type=$("#pass").type==="password"?"text":"password"};
+  $("#logout").onclick=logout;
   $$("[data-v]").forEach(b=>b.onclick=()=>view(b.dataset.v));
-  $("#psave").onclick=saveProduct;$("#pcancel").onclick=clearProductForm;$("#psearch").oninput=renderProducts;$("#usave").onclick=saveUnit;
+  $("#psave").onclick=saveProduct;$("#pcancel").onclick=clearProductForm;$("#psearch").oninput=renderProducts;$("#usave").onclick=saveUnit;$("#ucancel").onclick=clearUnitForm;
   $("#iean").oninput=invProd;$("#iean").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();invProd(true)}};$("#iunit").onchange=renderStock;$("#istocksearch").oninput=renderStock;
   $("#isave").onclick=saveInventory;$("#iplus").onclick=()=>$("#iqty").value=+$("#iqty").value+1;$("#iminus").onclick=()=>$("#iqty").value=Math.max(0,+$("#iqty").value-1);
   $("#scan").onclick=startScan;$("#stopscan").onclick=stopScan;
-  $("#enean").oninput=entryProd;$("#ensave").onclick=saveEntry;
-  $("#mean").oninput=moveProd;$("#mtype").onchange=moveTypeUI;$("#msave").onclick=saveMove;
+  $("#enean").oninput=entryProd;$("#ensave").onclick=saveEntry;$("#mean").oninput=moveProd;$("#mtype").onchange=moveTypeUI;$("#msave").onclick=saveMove;
   $("#esave").onclick=saveExpiry;$("#expiryReport").onclick=renderExpiry;$("#expiryFilter").onchange=renderExpiry;$("#expiryRange").onchange=renderExpiry;
-  $("#gsave").onclick=saveGroup;$("#gsearch").oninput=renderGroups;$("#gfilter").onchange=renderGroups;
-  $("#gselectall").onclick=selectVisibleGroups;$("#gclear").onclick=()=>{groupSelection.clear();renderGroups()};
-  $("#gindividual").onclick=()=>assignSelectedGroup("I");$("#gsuggest").onclick=generateGroupSuggestions;
+  $("#gsave").onclick=saveGroup;$("#gsearch").oninput=renderGroups;$("#gfilter").onchange=renderGroups;$("#gselectall").onclick=selectVisibleGroups;$("#gclear").onclick=()=>{groupSelection.clear();renderGroups()};$("#gindividual").onclick=()=>assignSelectedGroup("I");$("#gsuggest").onclick=generateGroupSuggestions;
   $("#salesimport").onclick=importSales;$("#dcalc").onclick=calcDemand;
-  $("#backsave").onclick=saveBackend;$("#testBackend").onclick=testBackend;$("#syncNow").onclick=syncAll;$("#loadMaster").onclick=loadMaster;$("#backup").onclick=backup;
-  $("#loadDemandSnapshot").onclick=loadDemandSnapshot;$("#repDraft").onclick=generateReplenishmentDraft;$("#repApprove").onclick=approveReplenishment;$("#cstart").onclick=startControlPoint;$("#capprove").onclick=approveControlPoint;
+  $("#backsave").onclick=saveBackend;$("#testBackend").onclick=testBackend;$("#syncNow").onclick=syncAll;$("#backup").onclick=backup;$("#loadDemandSnapshot").onclick=loadDemandSnapshot;
+  $("#repDraft").onclick=generateReplenishmentDraft;$("#repApprove").onclick=approveReplenishment;$("#cstart").onclick=startControlPoint;$("#capprove").onclick=approveControlPoint;$("#cadd").onclick=addControlItem;
+  $("#repUnitsToggle").onclick=()=>$("#repUnitsPanel").classList.toggle("hidden");$("#repSelectAll").onclick=()=>selectAllRepUnits();$("#repClearUnits").onclick=()=>{repSelectedUnits.clear();renderRepUnitChecks()};$("#repUnitSearch").oninput=renderRepUnitChecks;
 }
-function showLogin(){$("#login").classList.remove("hidden");$("#app").classList.add("hidden");$("#logout").classList.add("hidden")}
-function showApp(){$("#login").classList.add("hidden");$("#app").classList.remove("hidden");$("#logout").classList.remove("hidden");selectors();view("home");updateSyncState();setTimeout(()=>processQueue(),1200)}
-function login(){if($("#user").value==="admin"&&$("#pass").value==="admin123"){sessionStorage.setItem("okeo","1");showApp()}else $("#loginMsg").textContent="Usuário ou senha inválidos"}
-function view(v){$$(".view").forEach(x=>x.classList.add("hidden"));$("#"+v).classList.remove("hidden");({home,products:renderProducts,units:renderUnits,inventory:renderStock,control:renderControlPoint,entries:renderEntries,moves:renderMoves,expiry:renderExpiry,groups:renderGroups,sales:renderSales,demand:gate,replenishment:renderReplenishment,settings:renderSettings}[v]||(()=>{}))()}
+function showLogin(){$("#loginPage").classList.remove("hidden");$("#shell").classList.add("hidden")}
+async function showApp(){
+  $("#loginPage").classList.add("hidden");$("#shell").classList.remove("hidden");
+  await bootstrapFromCentral();await syncAll(false);await selectors();view("home");updateSyncState();setTimeout(()=>processQueue(),1200)
+}
+async function login(){
+  const u=$("#user").value.trim(),p=$("#pass").value,m=$("#loginMsg");if(!u||!p){m.textContent="Informe usuário e senha.";return}
+  m.textContent="Validando acesso...";
+  try{
+    const r=await authPost("login",{username:u,password:p});if(!r.ok)throw new Error(r.error||"Acesso negado");
+    currentSession={token:r.token,username:r.username,expiresAt:r.expiresAt};
+    const store=$("#remember").checked?localStorage:sessionStorage;store.setItem("okeo_session",JSON.stringify(currentSession));
+    m.textContent="";await showApp()
+  }catch(e){m.textContent=e.message==="AUTH_INVALID"?"Usuário ou senha inválidos.":"Falha no login: "+e.message}
+}
+async function logout(){
+  try{if(currentSession?.token)await authPost("logout",{token:currentSession.token})}catch(e){}
+  localStorage.removeItem("okeo_session");sessionStorage.removeItem("okeo_session");currentSession=null;showLogin()
+}
+async function validateSession(token){
+  if(!getBackendUrl())return false;
+  try{const r=await authPost("validate_session",{token});return !!r.valid}catch(e){return false}
+}
+function view(v){
+  $$(".view").forEach(x=>x.classList.add("hidden"));$("#"+v).classList.remove("hidden");
+  $$("[data-v]").forEach(b=>b.classList.toggle("active",b.dataset.v===v));
+  const titles={home:["Dashboard","Resumo operacional"],products:["Produtos","Cadastro Mestre"],units:["Unidades","Condomínios, mercados e CD"],inventory:["Estoque / Inventário","Contagem e saldo"],control:["Ponto de Controle","Conferência física e divergências"],entries:["Entrada / NF","Recebimentos e custos"],moves:["Movimentações","Transferências e ajustes"],expiry:["Validades","Produtos próximos do vencimento"],groups:["Grupos","Produtos substituíveis"],sales:["Vendas","Importação e histórico"],demand:["Demanda Inteligente","Estoque ideal e alertas"],replenishment:["Central de Reposição","Planeje e gerencie os abastecimentos"],settings:["Configurações","Base Central e integrações"]};
+  $("#pageTitle").textContent=titles[v]?.[0]||"OKEO";$("#pageSubtitle").textContent=titles[v]?.[1]||"";
+  ({home,products:renderProducts,units:renderUnits,inventory:renderStock,control:renderControlPoint,entries:renderEntries,moves:renderMoves,expiry:renderExpiry,groups:renderGroups,sales:renderSales,demand:gate,replenishment:renderReplenishment,settings:renderSettings}[v]||(()=>{}))()
+}
 const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
 const money=n=>(+n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const n2=n=>(+n||0).toLocaleString("pt-BR",{maximumFractionDigits:2});
 
 // ---------- Base Central ----------
-function getBackendUrl(){return localStorage.getItem("okeo_backend_url")||""}
-function setSyncState(text,cls=""){const e=$("#syncState");if(!e)return;e.textContent=text;e.className="syncstate "+cls}
-async function updateSyncState(){const q=await all("syncQueue");setSyncState(getBackendUrl()?(q.length?`Fila ${q.length}`:"Sincronizado"):"Local",getBackendUrl()?(q.length?"warn":"ok"):"")}
+const DEFAULT_BACKEND_URL="https://script.google.com/macros/s/AKfycbzlAtpcqF8DAqv-yeD7wq6KBCk0igRlm8QIT-YhC1SjnHeQe0riXyWzOy-0-vIJQBAutw/exec";
+function getBackendUrl(){return localStorage.getItem("okeo_backend_url")||DEFAULT_BACKEND_URL}
+function authHeadersOrParams(obj={}){if(currentSession?.token)obj.token=currentSession.token;return obj}
+async function authPost(action,params={}){
+  const base=getBackendUrl();if(!base)throw new Error("Base Central não configurada.");
+  const body=new URLSearchParams({action,...Object.fromEntries(Object.entries(params).map(([k,v])=>[k,String(v)]))});
+  const r=await fetch(base,{method:"POST",body,cache:"no-store",redirect:"follow"});if(!r.ok)throw new Error("HTTP "+r.status);return await r.json()
+}
 async function apiGet(action,params={}){
   const base=getBackendUrl();if(!base)throw new Error("Base Central não configurada.");
-  const u=new URL(base);u.searchParams.set("action",action);Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,String(v)));u.searchParams.set("_",Date.now());
-  const r=await fetch(u.toString(),{cache:"no-store",redirect:"follow"});if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();if(!j.ok)throw new Error(j.error||"Erro Base Central");return j;
+  const u=new URL(base);u.searchParams.set("action",action);Object.entries(authHeadersOrParams({...params})).forEach(([k,v])=>u.searchParams.set(k,String(v)));u.searchParams.set("_",Date.now());
+  const r=await fetch(u.toString(),{cache:"no-store",redirect:"follow"});if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();if(j.error==="AUTH_REQUIRED"){await logout();throw new Error("Sessão expirada.")}if(!j.ok)throw new Error(j.error||"Erro Base Central");return j
 }
 async function apiPost(action,params={}){
   const base=getBackendUrl();if(!base)throw new Error("Base Central não configurada.");
-  const body=new URLSearchParams({action,...Object.fromEntries(Object.entries(params).map(([k,v])=>[k,String(v)]))});
-  const r=await fetch(base,{method:"POST",body,cache:"no-store",redirect:"follow"});if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();if(!j.ok)throw new Error(j.error||"Erro Base Central");return j;
+  const payload=authHeadersOrParams({...params}),body=new URLSearchParams({action,...Object.fromEntries(Object.entries(payload).map(([k,v])=>[k,String(v)]))});
+  const r=await fetch(base,{method:"POST",body,cache:"no-store",redirect:"follow"});if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();if(j.error==="AUTH_REQUIRED"){await logout();throw new Error("Sessão expirada.")}if(!j.ok)throw new Error(j.error||"Erro Base Central");return j
+}
+async function bootstrapFromCentral(){
+  if(!getBackendUrl()||!currentSession?.token)return;
+  try{
+    // On login, pull current products/units from authenticated Base Central. Public base-master is no longer needed.
+    for(const store of ["products","units"]){
+      const r=await apiGet("list",{store});
+      if(Array.isArray(r.rows)){for(const row of r.rows)await put(store,row)}
+    }
+  }catch(e){}
 }
 function sanitize(store,row){const o=JSON.parse(JSON.stringify(row));if((store==="expiries"||store==="invoices")&&o.photo){o.photoLocal=true;delete o.photo}return o}
 async function queue(store,op,rowOrId){
@@ -100,12 +144,22 @@ window.addEventListener("online",processQueue);
 
 // ---------- selectors / summary ----------
 async function selectors(){
-  const u=(await all("units")).filter(x=>x.active!==false),o=u.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
-  ["iunit","enunit","eunit"].forEach(x=>$("#"+x).innerHTML=o);
-  $("#mfrom").innerHTML='<option value="">Selecione</option>'+o;$("#mto").innerHTML='<option value="">Selecione</option>'+o;
-  $("#dunit").innerHTML='<option value="TOTAL_CONSOLIDADO">Consolidado total (CD + mercados)</option><option value="TOTAL_MERCADOS">Consolidado mercados (sem CD)</option>'+o;
-  if($("#repDate")&&!$("#repDate").value)$("#repDate").value=new Date().toISOString().slice(0,10);if($("#cunit"))$("#cunit").innerHTML=o;if($("#expiryFilter"))$("#expiryFilter").innerHTML='<option value="ALL">Todas as unidades</option>'+o
+  const units=(await all("units")).filter(x=>x.active!==false).sort((a,b)=>(a.type==="CD"?-1:b.type==="CD"?1:a.name.localeCompare(b.name)));
+  const options=units.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+  const set=(id,html,preserve=true)=>{const e=$("#"+id);if(!e)return;const old=preserve?e.value:"";e.innerHTML=html;if(old&&[...e.options].some(o=>o.value===old))e.value=old};
+  ["iunit","enunit","eunit","cunit"].forEach(id=>set(id,options));set("mfrom",'<option value="">Selecione</option>'+options);set("mto",'<option value="">Selecione</option>'+options);
+  set("expiryFilter",'<option value="ALL">Todas as unidades</option>'+options);set("dunit",'<option value="TOTAL_CONSOLIDADO">Consolidado total (CD + mercados)</option><option value="TOTAL_MERCADOS">Consolidado mercados (sem CD)</option>'+options);
+  if($("#repDate")&&!$("#repDate").value)$("#repDate").value=new Date().toISOString().slice(0,10);
+  renderRepUnitChecks()
 }
+async function renderRepUnitChecks(){
+  const q=($("#repUnitSearch")?.value||"").toLowerCase(),units=(await all("units")).filter(x=>x.active!==false&&x.type!=="CD"&&x.name.toLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));
+  $("#repUnitChecks").innerHTML=units.map(u=>`<label class="unitcheck"><input type="checkbox" ${repSelectedUnits.has(u.id)?"checked":""} onchange="toggleRepUnit('${u.id}',this.checked)"> ${esc(u.name)}</label>`).join("");
+  $("#repUnitSummary").textContent=repSelectedUnits.size?`${repSelectedUnits.size} unidade(s) selecionada(s)`:"Nenhuma unidade selecionada";
+  $("#repUnitsToggle").firstChild.textContent=repSelectedUnits.size?`${repSelectedUnits.size} selecionada(s) `:"Selecionar unidades "
+}
+function toggleRepUnit(idv,on){on?repSelectedUnits.add(idv):repSelectedUnits.delete(idv);renderRepUnitChecks()}
+async function selectAllRepUnits(){for(const u of(await all("units")).filter(x=>x.active!==false&&x.type!=="CD"))repSelectedUnits.add(u.id);renderRepUnitChecks()}
 async function home(){
   const[p,u,s,e,m]=await Promise.all(["products","units","stock","expiries","moves"].map(all));
   const totalValue=s.reduce((z,x)=>z+(+x.qty||0)*(+x.avgCost||+x.lastCost||0),0),totalQty=s.reduce((z,x)=>z+(+x.qty||0),0);
@@ -143,25 +197,19 @@ async function prod(e){return get("products","p_"+String(e).replace(/\D/g,""))}
 
 // ---------- Unidades ----------
 function selectedWeekdays(){return $$('input[name="uday"]:checked').map(x=>+x.value)}
+function clearUnitForm(){$("#uid").value="";$("#uname").value="";$("#utype").value="CONDOMINIO";$("#ufreq").value="1";$$('input[name="uday"]').forEach(x=>x.checked=false)}
 async function saveUnit(){
-  const n=$("#uname").value.trim();if(!n)return;
-  const days=selectedWeekdays(),freq=+$("#ufreq").value||1;
-  await localPut("units",{id:id("u"),name:n,type:$("#utype").value,active:true,replenishmentsPerWeek:freq,replenishmentDays:days,updatedAt:new Date().toISOString()});
-  $("#uname").value="";$$('input[name="uday"]').forEach(x=>x.checked=false);await selectors();renderUnits()
+  const n=$("#uname").value.trim();if(!n)return alert("Informe o nome da unidade.");
+  const existingId=$("#uid").value,old=existingId?await get("units",existingId):null;
+  const obj={...(old||{}),id:existingId||id("u"),name:n,type:$("#utype").value,active:old?.active!==false,replenishmentsPerWeek:+$("#ufreq").value||1,replenishmentDays:selectedWeekdays(),updatedAt:new Date().toISOString()};
+  await localPut("units",obj);clearUnitForm();await selectors();renderUnits()
 }
-async function updateUnitSchedule(uid,freq,daysStr){
-  const u=await get("units",uid);if(!u)return;
-  u.replenishmentsPerWeek=+freq||1;u.replenishmentDays=String(daysStr||"").split(",").filter(Boolean).map(Number);u.updatedAt=new Date().toISOString();
-  await localPut("units",u);renderUnits()
-}
+async function editUnit(uid){const u=await get("units",uid);if(!u)return;$("#uid").value=u.id;$("#uname").value=u.name||"";$("#utype").value=u.type||"CONDOMINIO";$("#ufreq").value=String(u.replenishmentsPerWeek||1);$$('input[name="uday"]').forEach(x=>x.checked=(u.replenishmentDays||[]).includes(+x.value));window.scrollTo({top:0,behavior:"smooth"})}
+async function toggleUnit(uid){const u=await get("units",uid);if(!u)return;if(u.type==="CD"&&u.active!==false)return alert("O CD principal não pode ser inativado.");u.active=u.active===false;u.updatedAt=new Date().toISOString();await localPut("units",u);await selectors();renderUnits()}
 async function renderUnits(){
-  const r=await all("units"),dn=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
-  $("#ulist").innerHTML=r.map(x=>{
-    const days=(x.replenishmentDays||[]).map(d=>dn[d]).join(", ")||"Não definidos";
-    return `<div class="row"><span><b>${esc(x.name)}</b><br><small>${x.type} • ${x.replenishmentsPerWeek||1}x/semana • ${days}</small></span><span>${x.active===false?"Inativa":"Ativa"}</span></div>`
-  }).join("")
+  const r=(await all("units")).sort((a,b)=>(a.type==="CD"?-1:b.type==="CD"?1:a.name.localeCompare(b.name))),dn=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+  $("#ulist").innerHTML=r.map(x=>{const days=(x.replenishmentDays||[]).map(d=>dn[d]).join(", ")||"Não definidos";return `<div class="row"><span><b>${esc(x.name)}</b><br><small>${x.type} • ${x.replenishmentsPerWeek||1}x/semana • ${days}</small></span><span class="mini"><button onclick="editUnit('${x.id}')">Editar</button>${x.type!=="CD"?`<button class="secondary" onclick="toggleUnit('${x.id}')">${x.active===false?"Ativar":"Inativar"}</button>`:""}<span>${x.active===false?"Inativa":"Ativa"}</span></span></div>`}).join("")
 }
-
 // ---------- Estoque / Inventário ----------
 async function invProd(focus=false){
   const e=$("#iean").value.replace(/\D/g,"");$("#iean").value=e;const p=await prod(e),u=$("#iunit").value,s=e?await get("stock",u+"|"+e):null;
@@ -331,10 +379,20 @@ async function applySuggestedGroup(i){
 function csv(t){const l=t.replace(/\r/g,"").split("\n").filter(Boolean),sep=(l[0]||"").includes(";")?";":",",h=l[0].split(sep).map(x=>x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,""));return l.slice(1).map(x=>{const a=x.split(sep),o={};h.forEach((k,i)=>o[k]=a[i]||"");return o})}
 function wk(v){const d=new Date(v);if(isNaN(d))return"";d.setDate(d.getDate()-((d.getDay()+6)%7));return d.toISOString().slice(0,10)}
 async function importSales(){
-  const f=$("#salesfile").files[0];if(!f)return;const r=csv(await f.text()),u=await all("units"),p=await all("products"),pn=new Map(p.map(x=>[x.name.toLowerCase(),x])),a={};let ok=0;
-  for(const x of r){const date=x.data||x.datahora,pr=pn.get(String(x.produto||"").toLowerCase()),un=u.find(z=>z.name.toLowerCase()===String(x.local||x.unidade||x.condominio||"").toLowerCase());if(!date||!pr||!un)continue;const k=wk(date)+"|"+un.id+"|"+pr.ean,q=+(x.quantidade||x.qtd||1);a[k]=a[k]||{id:k,week:wk(date),unitId:un.id,ean:pr.ean,product:pr.name,qty:0};a[k].qty+=q;ok++}
-  for(const z of Object.values(a)){const o=await get("salesWeekly",z.id);z.qty+=+(o?.qty||0);await localPut("salesWeekly",z)}
-  await localPut("salesImports",{id:id("i"),file:f.name,at:new Date().toISOString(),rows:ok,weekly:Object.keys(a).length});$("#salesmsg").textContent=`${ok} linhas aceitas`;renderSales()
+  const f=$("#salesfile").files[0];if(!f)return;const text=await f.text(),hashbuf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(text)),hash=[...new Uint8Array(hashbuf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+  if((await all("salesImports")).some(x=>x.hash===hash))return alert("Este arquivo de vendas já foi importado.");
+  const rows=csv(text),units=await all("units"),products=await all("products"),bases=await all("demandBase"),nameMap=new Map();
+  for(const p of products)for(const n of [p.name,p.vmPayName,...(p.aliases||[]),...(p.allNames||[])].filter(Boolean))nameMap.set(String(n).trim().toLowerCase(),p);
+  const baseEnd=bases.map(x=>x.periodEnd).filter(Boolean).sort().pop()||"",weekly={},stockDeltas={};let ok=0,skippedHistorical=0,unmapped=0;
+  for(const x of rows){
+    const date=x.data||x.datahora,productName=String(x.produto||"").trim(),pr=nameMap.get(productName.toLowerCase()),un=units.find(z=>z.name.toLowerCase()===String(x.local||x.unidade||x.condominio||"").trim().toLowerCase());
+    if(!date||!pr||!un){if(productName)unmapped++;continue}const week=wk(date);if(!week)continue;if(baseEnd&&week<=baseEnd){skippedHistorical++;continue}
+    const qty=+(x.quantidade||x.qtd||1);if(!qty)continue;const k=week+"|"+un.id+"|"+pr.ean;weekly[k]=weekly[k]||{id:k,week,unitId:un.id,ean:pr.ean,product:pr.name,qty:0};weekly[k].qty+=qty;
+    const sk=un.id+"|"+pr.ean;stockDeltas[sk]=(stockDeltas[sk]||0)+qty;ok++
+  }
+  for(const z of Object.values(weekly)){const old=await get("salesWeekly",z.id);z.qty+=(+old?.qty||0);await localPut("salesWeekly",z)}
+  for(const [key,qty] of Object.entries(stockDeltas)){const split=key.indexOf("|"),unitId=key.slice(0,split),ean=key.slice(split+1),p=await prod(ean),s=await get("stock",key);if(!p||!s)continue;const before=+s.qty||0;s.qty=Math.max(0,before-qty);s.updatedAt=new Date().toISOString();await localPut("stock",s);await localPut("moves",{id:id("m"),at:new Date().toISOString(),type:"VENDA_IMPORTADA",from:unitId,to:"",ean,product:p.name,qty,previousQty:before,afterQty:s.qty,note:"Importação "+f.name})}
+  await localPut("salesImports",{id:id("i"),file:f.name,hash,at:new Date().toISOString(),rows:ok,weekly:Object.keys(weekly).length,skippedHistorical,unmapped});$("#salesmsg").textContent=`${ok} linhas novas aceitas • ${skippedHistorical} históricas ignoradas • ${unmapped} não mapeadas`;renderSales()
 }
 async function renderSales(){const r=await all("salesImports");$("#saleshist").innerHTML=r.map(x=>`<div class="row"><span>${esc(x.file)}</span><small>${x.rows} linhas / ${x.weekly} resumos</small></div>`).join("")}
 
@@ -387,7 +445,7 @@ async function calcDemand(){
       else if(["TRANSFERENCIA","EMPRESTIMO","DEVOLUCAO"].includes(mv.type)){if(toIn&&!fromIn)inc+=q;if(fromIn&&!toIn)dec+=q}
       else if(["AJUSTE_NEGATIVO","PERDA","FURTO","QUEBRA","VENCIMENTO"].includes(mv.type)&&(fromIn||toIn))dec+=q
     }
-    const calculated=Math.max(0,physical+inc-salesSince-dec);
+    const calculated=Math.max(0,stocks.reduce((s,n)=>s+(+n.qty||0),0));
     const alert=Math.ceil(avg*0.5),ideal=Math.ceil(avg);
     const status=calculated<=0?"RUPTURA":calculated<=alert?"REPOSIÇÃO":"OK";
     const replenish=status==="OK"?0:Math.max(0,ideal-calculated);
@@ -399,122 +457,9 @@ async function calcDemand(){
 }
 
 // ---------- Base Mestre ----------
-async function loadMaster(){
-  const m=$("#masterMsg");m.textContent="Lendo Base Mestre V1.4.1...";
-  try{
-    const resp=await fetch("base-master.json",{cache:"no-store"}),master=await resp.json(),masterIds=new Set(master.products.map(p=>p.id));
-    // Remove somente os cadastros de teste históricos explicitamente conhecidos.
-    for(const t of(master.legacyTestProducts||[])){
-      const cur=await get("products",t.id);
-      if(cur && cur.name===t.name) await localDel("products",t.id);
-    }
-    for(const p of master.products){
-      const old=await get("products",p.id);
-      // Dados fiscais/cadastrais oficiais são atualizados; classificação de demanda e Nome VM Pay preenchido manualmente são preservados.
-      await put("products",{...old,...p,individual:old?.individual||false,groupId:old?.groupId||"",vmPayName:old?.vmPayName||p.vmPayName||"",updatedAt:new Date().toISOString()})
-    }
-    for(const u of master.units){const old=await get("units",u.id);await put("units",{...u,...old,active:true})}
-    m.textContent=`Base local: ${master.uniqueEans} EANs • ${master.aliasEans} EANs com nomes alternativos. Atualizando Base Central...`;
-    if(getBackendUrl()){
-      for(let i=0;i<master.products.length;i+=150){
-        m.textContent=`Base Central: ${Math.min(i+150,master.products.length)}/${master.products.length} produtos...`;
-        await apiPost("bulk_upsert",{store:"products",payload:JSON.stringify(master.products.slice(i,i+150))})
-      }
-      await apiPost("bulk_upsert",{store:"units",payload:JSON.stringify(master.units)});
-      const dels=[];
-      for(const t of(master.legacyTestProducts||[]))dels.push({store:"products",op:"delete",rowId:t.id,qid:"cleanup|"+t.id});
-      if(dels.length)await apiPost("batch_push",{payload:JSON.stringify({ops:dels})});
-      localStorage.setItem("okeo_server_cursor","");
-    }
-    await selectors();
-    const total=(await all("products")).length;
-    m.textContent=`Concluído • ${master.uniqueEans} EANs oficiais • ${master.aliasEans} EANs com aliases • ${master.aliasNames} nomes alternativos • cadastro local ${total}.`;
-    renderSettings()
-  }catch(e){m.textContent="Falha na carga: "+e.message}
-}
-
-// ---------- Snapshot histórico ----------
-async function loadDemandSnapshot(){
-  const f=$("#demandSnapshotFile").files[0],m=$("#demandSnapshotMsg");if(!f)return alert("Selecione um arquivo JSON.");
-  try{const j=JSON.parse(await f.text());if(!Array.isArray(j.records))throw new Error("Snapshot inválido.");await clearStore("demandBase");const units=await all("units");let ok=0;
-    for(const r of j.records){const u=units.find(x=>x.name===r.unit);if(!u)continue;await localPut("demandBase",{id:u.id+"|"+r.ean,unitId:u.id,ean:String(r.ean),product:r.product||"",vmPayName:r.vmPayName||"",historicalQty:+r.historicalQty||0,averageWeekly:+r.averageWeekly||0,peakWeekly:+r.peakWeekly||0,alertLevel:Math.ceil((+r.averageWeekly||0)*0.5),idealStock:Math.ceil(+r.averageWeekly||0),confidence:r.confidence||"",periodStart:r.periodStart||j.periodStart||"",periodEnd:r.periodEnd||j.periodEnd||"",updatedAt:new Date().toISOString()});ok++}
-    m.textContent=`Snapshot importado: ${ok} registros.`}catch(e){m.textContent="Falha: "+e.message}
-}
-function isUnitDue(u,date){const days=(u.replenishmentDays||[]).map(Number);if(days.length)return days.includes(date.getDay());return true}
-
-// ---------- Central de Reposição ----------
-let repDraftRows=[];
-async function expiryWarning(unitId,ean){
-  const today=new Date(),rows=(await all("expiries")).filter(x=>x.unitId===unitId&&x.ean===ean),near=rows.filter(x=>Math.ceil((new Date(x.date+"T12:00")-today)/86400000)<=7);
-  if(!near.length)return "";near.sort((a,b)=>a.date.localeCompare(b.date));const min=near[0],days=Math.ceil((new Date(min.date+"T12:00")-today)/86400000);
-  return days<0?`ATENÇÃO: há produto vencido (${min.date}) no local.`:`ATENÇÃO: validade em até 7 dias; mais próxima ${min.date}.`
-}
-async function generateReplenishmentDraft(){
-  const date=new Date($("#repDate").value+"T12:00:00"),scope=$("#repScope").value;
-  const [units,products,baseDemand,stocks,reps]=await Promise.all(["units","products","demandBase","stock","replenishments"].map(all));
-  if(!baseDemand.length){$("#repMsg").textContent="Importe a Base Histórica de Demanda primeiro.";return}
-  const pm=new Map(products.map(x=>[x.ean,x])),cd=units.find(x=>x.active!==false&&x.type==="CD"),cdAvail={};if(cd)for(const s of stocks.filter(x=>x.unitId===cd.id))cdAvail[s.ean]=Math.max(0,+s.qty||0);
-  const openByKey={};for(const rep of reps.filter(x=>["APPROVED","IN_PROGRESS"].includes(x.status)))for(const it of(rep.items||[])){const pending=Math.max(0,(+it.finalQty||0)-(+it.receivedQty||0)-(+it.executedQty||0));if(pending>0)openByKey[it.unitId+"|"+it.ean]=(openByKey[it.unitId+"|"+it.ean]||0)+pending}
-  repDraftRows=[];
-  for(const u of units.filter(x=>x.active!==false&&x.type!=="CD")){
-    if(scope==="DUE"&&!isUnitDue(u,date))continue;
-    for(const d of baseDemand.filter(x=>x.unitId===u.id)){
-      const p=pm.get(d.ean);if(!p)continue;const s=stocks.find(x=>x.unitId===u.id&&x.ean===d.ean),saldo=Math.max(0,+s?.qty||0),ideal=Math.max(0,Math.ceil(+d.idealStock||+d.averageWeekly||0)),alert=Math.max(0,Math.ceil(+d.alertLevel||ideal*.5)),status=saldo<=0?"RUPTURA":saldo<=alert?"REPOSIÇÃO":"OK",open=openByKey[u.id+"|"+d.ean]||0;
-      let need=status==="OK"?0:Math.max(0,ideal-saldo-open);if(need<=0)continue;
-      const fromCd=Math.min(need,+cdAvail[d.ean]||0);cdAvail[d.ean]=Math.max(0,(+cdAvail[d.ean]||0)-fromCd);
-      if(fromCd>0){repDraftRows.push({id:id("ri"),unitId:u.id,unit:u.name,ean:d.ean,product:p.name,suggestedQty:fromCd,finalQty:fromCd,originType:"CD",originUnitId:cd?.id||"",supplier:"",status,stock:saldo,ideal,alert,warning:await expiryWarning(u.id,d.ean),receivedQty:0,executedQty:0});need-=fromCd}
-      if(need>0)repDraftRows.push({id:id("ri"),unitId:u.id,unit:u.name,ean:d.ean,product:p.name,suggestedQty:need,finalQty:need,originType:"COMPRA",originUnitId:"",supplier:p.supplier||"",status,stock:saldo,ideal,alert,warning:await expiryWarning(u.id,d.ean),receivedQty:0,executedQty:0})
-    }
-  }
-  renderReplenishmentEditor()
-}
-async function renderReplenishmentEditor(){
-  const units=(await all("units")).filter(x=>x.active!==false),uo=units.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
-  $("#repSummary").innerHTML=`<div class="metriccards"><div class="metric">Linhas<b>${repDraftRows.length}</b></div><div class="metric">Qtd total<b>${n2(repDraftRows.reduce((s,x)=>s+(+x.finalQty||0),0))}</b></div><div class="metric">CD<b>${n2(repDraftRows.filter(x=>x.originType==="CD").reduce((s,x)=>s+(+x.finalQty||0),0))}</b></div><div class="metric">Compra<b>${n2(repDraftRows.filter(x=>x.originType==="COMPRA").reduce((s,x)=>s+(+x.finalQty||0),0))}</b></div></div>`;
-  $("#repEditor").innerHTML=repDraftRows.length?`<div class="repedit"><table><thead><tr><th>Condomínio</th><th>Produto</th><th>Saldo</th><th>Ideal</th><th>Status</th><th>Sugerida</th><th>Final</th><th>Origem final</th><th>Unidade origem</th><th>Fornecedor final</th><th>Validade/obs.</th></tr></thead><tbody>${repDraftRows.map((x,i)=>`<tr><td>${esc(x.unit)}</td><td>${esc(x.product)}<br><small>${x.ean}</small></td><td>${n2(x.stock)}</td><td>${x.ideal}</td><td><span class="tag ${x.status==="RUPTURA"?"bad":"warn"}">${x.status}</span></td><td>${n2(x.suggestedQty)}</td><td><input type="number" min="0" step=".01" value="${x.finalQty}" onchange="editRep(${i},'finalQty',this.value)"></td><td><select onchange="editRep(${i},'originType',this.value)"><option value="CD" ${x.originType==="CD"?"selected":""}>CD</option><option value="COMPRA" ${x.originType==="COMPRA"?"selected":""}>Compra externa</option><option value="EMPRESTIMO">Empréstimo condomínio</option><option value="NAO_REPOR">Não repor agora</option><option value="AJUSTE">Ajuste manual</option></select></td><td><select onchange="editRep(${i},'originUnitId',this.value)"><option value="">-</option>${uo}</select></td><td><input value="${esc(x.supplier||"")}" onchange="editRep(${i},'supplier',this.value)"></td><td>${esc(x.warning||"")}</td></tr>`).join("")}</tbody></table></div>`:'<p class="ok">Nenhuma reposição necessária.</p>';
-  $$("#repEditor tbody tr").forEach((tr,i)=>{const sel=tr.querySelectorAll("select")[1];if(sel)sel.value=repDraftRows[i].originUnitId||""});$("#repMsg").textContent="Rascunho editável. Revise antes de aprovar."
-}
-function editRep(i,k,v){if(repDraftRows[i])repDraftRows[i][k]=k==="finalQty"?Math.max(0,+v||0):v}
-async function approveReplenishment(){
-  const items=repDraftRows.filter(x=>+x.finalQty>0&&x.originType!=="NAO_REPOR");if(!items.length)return alert("Não há itens para aprovar.");
-  const now=new Date().toISOString(),rid="REP-"+now.slice(0,10).replaceAll("-","")+"-"+String(Date.now()).slice(-5),rep={id:rid,createdAt:now,routeDate:$("#repDate").value,status:"APPROVED",mode:$("#repMode").value,items,pdfId:"",pdfUrl:"",updatedAt:now};
-  await localPut("replenishments",rep);$("#repMsg").textContent="Aprovada. Gerando PDF...";
-  if(getBackendUrl())try{const pdf=await apiPost("generate_replenishment_pdf",{payload:JSON.stringify(rep)});rep.pdfId=pdf.fileId||"";rep.pdfUrl=pdf.url||"";rep.updatedAt=new Date().toISOString();await localPut("replenishments",rep);$("#repMsg").innerHTML=`${rid} aprovada e registrada. ${rep.pdfUrl?`<a href="${rep.pdfUrl}" target="_blank">Abrir PDF</a>`:""}`}catch(e){$("#repMsg").textContent=`${rid} aprovada; falha no PDF: ${e.message}`}
-  repDraftRows=[];renderReplenishment()
-}
-async function renderReplenishment(){
-  if(!$("#repDate").value)$("#repDate").value=new Date().toISOString().slice(0,10);
-  const reps=(await all("replenishments")).sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,80);
-  $("#repHistory").innerHTML=reps.map(r=>`<div class="row"><span><b>${r.id}</b><br><small>${new Date(r.createdAt).toLocaleString("pt-BR")} • ${r.items?.length||0} itens • ${r.status}</small></span><span class="mini">${r.pdfUrl?`<button onclick="window.open('${r.pdfUrl}','_blank')">PDF</button>`:""}</span></div>`).join("")||'<p class="muted">Nenhuma reposição registrada.</p>'
-}
-async function markReplenishmentReceived(rid,ean,unitId,qty){
-  const r=await get("replenishments",rid);if(!r)return;let left=+qty||0;for(const it of(r.items||[])){if(left<=0)break;if(it.ean===ean&&it.unitId===unitId&&it.originType==="COMPRA"){const pending=Math.max(0,(+it.finalQty||0)-(+it.receivedQty||0)),take=Math.min(pending,left);it.receivedQty=(+it.receivedQty||0)+take;left-=take}}
-  const done=(r.items||[]).every(it=>it.originType!=="COMPRA"||(+it.receivedQty||0)>=+it.finalQty);r.status=done?"CONCLUDED":"IN_PROGRESS";r.updatedAt=new Date().toISOString();await localPut("replenishments",r)
-}
-
-// ---------- Ponto de Controle ----------
-let activeControlId="";
-async function startControlPoint(){
-  const unitId=$("#cunit").value,owner=$("#cowner").value.trim(),note=$("#cnote").value.trim(),stocks=(await all("stock")).filter(x=>x.unitId===unitId);if(!unitId)return;
-  const now=new Date().toISOString(),cid="PC-"+now.slice(0,10).replaceAll("-","")+"-"+String(Date.now()).slice(-5),cp={id:cid,unitId,owner,note,status:"DRAFT",createdAt:now,approvedAt:"",updatedAt:now};await localPut("controlPoints",cp);
-  for(const s of stocks)await localPut("controlPointItems",{id:cid+"|"+s.ean,controlId:cid,unitId,ean:s.ean,product:s.product,predicted:+s.qty||0,observed:+s.qty||0,avgCost:+s.avgCost||0,difference:0,valueDifference:0,updatedAt:now});
-  activeControlId=cid;renderControlPoint()
-}
-async function renderControlPoint(){
-  const cps=(await all("controlPoints")).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));if(!activeControlId){const d=cps.find(x=>x.status==="DRAFT");activeControlId=d?.id||""}
-  if(activeControlId){const cp=await get("controlPoints",activeControlId),items=(await all("controlPointItems")).filter(x=>x.controlId===activeControlId);$("#cactive").innerHTML=`<h3>${cp.id} • Em conferência</h3>`+items.map(x=>`<div class="controlrow"><span>${esc(x.product)}<br><small>${x.ean}</small></span><span>Previsto <b>${n2(x.predicted)}</b></span><input type="number" min="0" step=".01" value="${x.observed}" onchange="updateControlObserved('${x.id}',this.value)"><span>Dif. <b>${n2(x.observed-x.predicted)}</b></span><span>${money((x.observed-x.predicted)*x.avgCost)}</span></div>`).join("")}else $("#cactive").innerHTML='<p class="muted">Nenhum ponto de controle em andamento.</p>';
-  const hist=cps.filter(x=>x.status==="APPROVED").slice(0,50).map(x=>`<div class="row"><span><b>${x.id}</b><br><small>${new Date(x.approvedAt).toLocaleString("pt-BR")} • ${esc(x.owner||"")}</small></span><span>Concluído</span></div>`).join("");
-  $("#chistory").innerHTML="<h3>Histórico</h3>"+hist
-}
-async function updateControlObserved(idv,v){const x=await get("controlPointItems",idv);if(!x)return;x.observed=Math.max(0,+v||0);x.difference=x.observed-x.predicted;x.valueDifference=x.difference*(+x.avgCost||0);x.updatedAt=new Date().toISOString();await localPut("controlPointItems",x);renderControlPoint()}
-async function approveControlPoint(){
-  if(!activeControlId)return alert("Nenhum ponto de controle em andamento.");if(!confirm("Aprovar? O estoque observado passará a ser a nova referência."))return;
-  const cp=await get("controlPoints",activeControlId),items=(await all("controlPointItems")).filter(x=>x.controlId===activeControlId),now=new Date().toISOString();
-  for(const x of items){const s=await get("stock",cp.unitId+"|"+x.ean),p=await prod(x.ean);if(!p)continue;await localPut("stock",{...(s||{}),id:cp.unitId+"|"+x.ean,unitId:cp.unitId,ean:x.ean,product:p.name,qty:x.observed,physicalQty:x.observed,baselineAt:now,lastCountAt:now,avgCost:+(s?.avgCost||x.avgCost||0),lastCost:+(s?.lastCost||0),updatedAt:now});await localPut("moves",{id:id("m"),at:now,type:"PONTO_CONTROLE",to:cp.unitId,ean:x.ean,product:p.name,qty:x.observed,previousQty:x.predicted,difference:x.difference,valueDifference:x.valueDifference,note:"Aprovação "+cp.id})}
-  cp.status="APPROVED";cp.approvedAt=now;cp.updatedAt=now;await localPut("controlPoints",cp);activeControlId="";$("#cmsg").textContent="Ponto de controle aprovado. Novo ciclo iniciado.";renderControlPoint()
-}
+async function loadMaster(){alert("A Base Mestre agora é carregada pela Base Central autenticada. Não há mais arquivo público no GitHub.")}
 
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
 async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Cadastro local atual: ${p.length} produtos.`;updateSyncState()}
-async function backup(){const o={version:"2.0",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
+async function backup(){const o={version:"2.1",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
