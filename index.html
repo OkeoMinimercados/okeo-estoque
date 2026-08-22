@@ -10,7 +10,7 @@
 <body>
 <header>
   <b>OKEO Estoque</b>
-  <span>V1.5 • Grupos & Ruptura</span>
+  <span>V2.0 • Fluxo Operacional</span>
   <span id="syncState" class="syncstate">Local</span>
   <button id="logout" class="hidden">Sair</button>
 </header>
@@ -27,13 +27,15 @@
   <button data-v="home">🏠 Início</button>
   <button data-v="products">🏷️ Produtos</button>
   <button data-v="units">🏢 Unidades</button>
-  <button data-v="inventory">📦 Inventário</button>
+  <button data-v="inventory">📦 Estoque / Inventário</button>
+  <button data-v="control">✅ Ponto de Controle</button>
   <button data-v="entries">➕ Entradas / NF</button>
   <button data-v="moves">↔️ Movimentações</button>
   <button data-v="expiry">📷 Validades</button>
   <button data-v="groups">🧩 Grupos</button>
   <button data-v="sales">⬇️ Vendas</button>
   <button data-v="demand">🧠 Demanda Inteligente</button>
+  <button data-v="replenishment">🚚 Central de Reposição</button>
   <button data-v="settings">⚙️ Configurações</button>
 </nav>
 
@@ -66,6 +68,17 @@
 <div class="grid3">
   <label>Nome<input id="uname"></label>
   <label>Tipo<select id="utype"><option value="CONDOMINIO">Condomínio / Mercado</option><option value="CD">CD</option></select></label>
+  <label>Abastecimentos por semana<select id="ufreq"><option value="1">1x/semana</option><option value="2">2x/semana</option><option value="3">3x/semana</option><option value="5">5x/semana</option><option value="7">Diário</option></select></label>
+</div>
+<label>Dias preferenciais de abastecimento</label>
+<div class="weekdaybox">
+<label><input type="checkbox" name="uday" value="1"> Seg</label>
+<label><input type="checkbox" name="uday" value="2"> Ter</label>
+<label><input type="checkbox" name="uday" value="3"> Qua</label>
+<label><input type="checkbox" name="uday" value="4"> Qui</label>
+<label><input type="checkbox" name="uday" value="5"> Sex</label>
+<label><input type="checkbox" name="uday" value="6"> Sáb</label>
+<label><input type="checkbox" name="uday" value="0"> Dom</label>
 </div>
 <button id="usave">Adicionar unidade</button>
 <p class="muted">Novas unidades entram automaticamente nos inventários, transferências, consolidados e demanda.</p>
@@ -96,7 +109,7 @@
 <div class="grid3">
   <label>Unidade recebedora<select id="enunit"></select></label>
   <label>Tipo<select id="entype"><option value="COMPRA_NF">Compra / NF</option><option value="INCREMENTO_MANUAL">Incremento manual</option></select></label>
-  <label>Nº NF<input id="ennf" placeholder="Opcional"></label>
+  <label>Nº NF<input id="ennf" placeholder="Opcional"></label><label>Reposição/Pedido relacionado<select id="enrep"><option value="">Nenhum</option></select></label>
   <label>EAN<input id="enean" inputmode="numeric"></label>
   <label>Quantidade<input id="enqty" type="number" min="0" step=".01" value="1"></label>
   <label>Preço unitário pago<input id="encost" type="number" min="0" step=".01" value="0"></label>
@@ -135,9 +148,17 @@
 <div id="mlist"></div>
 </section>
 
+<section id="control" class="view card hidden">
+<h2>Ponto de Controle de Estoque</h2>
+<p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
+<div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Observação<input id="cnote"></label></div>
+<div class="actions"><button id="cstart">Iniciar ponto de controle</button><button id="capprove" class="secondary">Aprovar ponto de controle</button></div>
+<p id="cmsg" class="muted"></p><div id="cactive"></div><div id="chistory"></div>
+</section>
 <section id="expiry" class="view card hidden">
 <h2>Validades</h2>
-<div class="grid3">
+<div class="grid3"><label>Relatório por unidade<select id="expiryFilter"></select></label><label>Faixa<select id="expiryRange"><option value="ALL">Todas</option><option value="OVERDUE">Vencidos</option><option value="7">Até 7 dias</option><option value="15">8–15 dias</option><option value="30">16–30 dias</option></select></label><label>&nbsp;<button id="expiryReport" class="primarywide">Atualizar relatório</button></label></div>
+<hr><h3>Registrar validade</h3><div class="grid3">
   <label>Unidade<select id="eunit"></select></label>
   <label>EAN<input id="eean" inputmode="numeric"></label>
   <label>Validade<input id="edate" type="date"></label>
@@ -165,6 +186,11 @@
 </div>
 <div class="actions"><button id="gselectall" class="secondary">Selecionar visíveis</button><button id="gclear" class="secondary">Limpar seleção</button><span id="gselected" class="muted">0 selecionados</span></div>
 <div id="gproducts"></div>
+<hr>
+<h3>Classificação assistida</h3>
+<p class="muted">O sistema sugere apenas grupos prováveis. Nada é aplicado sem sua confirmação.</p>
+<button id="gsuggest">Gerar sugestões de grupos</button>
+<div id="gsuggestions"></div>
 </section>
 
 <section id="sales" class="view card hidden">
@@ -188,6 +214,15 @@
 <div id="dlist"></div>
 </section>
 
+
+<section id="replenishment" class="view card hidden">
+<h2>Central de Reposição</h2>
+<p><b>Fluxo:</b> vendas → cálculo → rascunho editável → aprovação → PDF registrado → confirmação física/NF → estoque atualizado.</p>
+<div class="grid3"><label>Data da rota<input id="repDate" type="date"></label><label>Unidades<select id="repScope"><option value="DUE">Somente unidades programadas</option><option value="ALL">Todas</option></select></label><label>Agrupar PDF por<select id="repMode"><option value="SUPPLIER">Fornecedor</option><option value="UNIT">Condomínio</option></select></label></div>
+<div class="actions"><button id="repDraft">Gerar / recalcular rascunho</button><button id="repApprove">Aprovar reposição e gerar PDF</button></div>
+<p id="repMsg" class="muted"></p><div id="repSummary"></div><div id="repEditor"></div><hr><h3>Reposições registradas</h3><div id="repHistory"></div>
+</section>
+
 <section id="settings" class="view card hidden">
 <h2>Configurações</h2>
 <label>URL Base Central /exec<input id="backend"></label>
@@ -202,6 +237,12 @@
 <p>Arquivo embarcado: <b>OKEO Base Mestre V1.4.1</b>. A carga preserva Produto, Subproduto, Fornecedor, Segmento, Localização, PC, EAN, NCM e CEST.</p>
 <button id="loadMaster">Carregar / atualizar Base Mestre</button>
 <p id="masterMsg" class="muted"></p>
+<hr>
+<h3>Base Histórica de Demanda</h3>
+<p>Depois de confirmar os grupos, importe o snapshot histórico calculado fora do sistema. O OKEO passa a tratar apenas vendas e movimentações novas.</p>
+<input id="demandSnapshotFile" type="file" accept=".json">
+<button id="loadDemandSnapshot">Importar snapshot de demanda</button>
+<p id="demandSnapshotMsg" class="muted"></p>
 <hr>
 <p><b>VM Pay:</b> backend preparado; credenciais permanecem fora do GitHub.</p>
 <button id="backup">Exportar backup</button>

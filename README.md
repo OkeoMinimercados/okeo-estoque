@@ -1,17 +1,14 @@
-# OKEO Estoque V1.5 — Grupos & Ruptura
+# OKEO Estoque V2.0 — Fluxo Operacional
 
-## Regras da Demanda Inteligente
-- Nível de Alerta = 50% da demanda semanal média, arredondado para cima.
-- Estoque Ideal = 100% da demanda semanal média, arredondado para cima.
-- Pico semanal é indicador histórico; não define automaticamente o Estoque Ideal.
-- OK: saldo calculado acima do Nível de Alerta.
-- REPOSIÇÃO: saldo > 0 e <= Nível de Alerta. Repor até Estoque Ideal.
-- RUPTURA: saldo = 0.
-- Eventos de ruptura são persistidos para análise futura de frequência/duração.
+Fluxo oficial:
+Vendas -> Demanda -> Rascunho editável -> Aprovação -> PDF registrado -> NF/transferência confirmada -> Estoque -> Validades -> Ponto de Controle.
 
-## Grupos
-- Seleção múltipla de produtos.
-- Criar grupos de produtos substituíveis.
-- Adicionar vários produtos de uma vez ao grupo.
-- Marcar produtos sem substituto como Individual.
-- A Demanda Inteligente permanece bloqueada enquanto houver produto ativo sem classificação.
+Regras principais:
+- Frequência define somente quando a unidade entra na rota.
+- Estoque Ideal = 100% da demanda média semanal; Nível de Alerta = 50%.
+- CD é a primeira origem automática.
+- Transferência entre condomínios nunca é automática; o usuário pode escolher manualmente no rascunho.
+- Fornecedor final pode ser alterado/digitado manualmente.
+- PDF aprovado vira registro de reposição, mas não altera estoque sozinho.
+- Validade não bloqueia movimentação; até 7 dias aparece como alerta no relatório.
+- Ponto de Controle pode ser feito a qualquer momento e só sobrescreve o saldo após aprovação.

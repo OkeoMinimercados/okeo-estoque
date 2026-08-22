@@ -1,6 +1,6 @@
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let stream,timer,syncBusy=false,pushTimer=null;
-const SYNC_STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents"];
+const SYNC_STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents","demandBase","replenishments","controlPoints","controlPointItems"];
 document.addEventListener("DOMContentLoaded",init);
 
 async function init(){
@@ -18,17 +18,18 @@ function bind(){
   $("#scan").onclick=startScan;$("#stopscan").onclick=stopScan;
   $("#enean").oninput=entryProd;$("#ensave").onclick=saveEntry;
   $("#mean").oninput=moveProd;$("#mtype").onchange=moveTypeUI;$("#msave").onclick=saveMove;
-  $("#esave").onclick=saveExpiry;
+  $("#esave").onclick=saveExpiry;$("#expiryReport").onclick=renderExpiry;$("#expiryFilter").onchange=renderExpiry;$("#expiryRange").onchange=renderExpiry;
   $("#gsave").onclick=saveGroup;$("#gsearch").oninput=renderGroups;$("#gfilter").onchange=renderGroups;
   $("#gselectall").onclick=selectVisibleGroups;$("#gclear").onclick=()=>{groupSelection.clear();renderGroups()};
-  $("#gindividual").onclick=()=>assignSelectedGroup("I");
+  $("#gindividual").onclick=()=>assignSelectedGroup("I");$("#gsuggest").onclick=generateGroupSuggestions;
   $("#salesimport").onclick=importSales;$("#dcalc").onclick=calcDemand;
   $("#backsave").onclick=saveBackend;$("#testBackend").onclick=testBackend;$("#syncNow").onclick=syncAll;$("#loadMaster").onclick=loadMaster;$("#backup").onclick=backup;
+  $("#loadDemandSnapshot").onclick=loadDemandSnapshot;$("#repDraft").onclick=generateReplenishmentDraft;$("#repApprove").onclick=approveReplenishment;$("#cstart").onclick=startControlPoint;$("#capprove").onclick=approveControlPoint;
 }
 function showLogin(){$("#login").classList.remove("hidden");$("#app").classList.add("hidden");$("#logout").classList.add("hidden")}
 function showApp(){$("#login").classList.add("hidden");$("#app").classList.remove("hidden");$("#logout").classList.remove("hidden");selectors();view("home");updateSyncState();setTimeout(()=>processQueue(),1200)}
 function login(){if($("#user").value==="admin"&&$("#pass").value==="admin123"){sessionStorage.setItem("okeo","1");showApp()}else $("#loginMsg").textContent="Usuário ou senha inválidos"}
-function view(v){$$(".view").forEach(x=>x.classList.add("hidden"));$("#"+v).classList.remove("hidden");({home,products:renderProducts,units:renderUnits,inventory:renderStock,entries:renderEntries,moves:renderMoves,expiry:renderExpiry,groups:renderGroups,sales:renderSales,demand:gate,settings:renderSettings}[v]||(()=>{}))()}
+function view(v){$$(".view").forEach(x=>x.classList.add("hidden"));$("#"+v).classList.remove("hidden");({home,products:renderProducts,units:renderUnits,inventory:renderStock,control:renderControlPoint,entries:renderEntries,moves:renderMoves,expiry:renderExpiry,groups:renderGroups,sales:renderSales,demand:gate,replenishment:renderReplenishment,settings:renderSettings}[v]||(()=>{}))()}
 const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
 const money=n=>(+n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const n2=n=>(+n||0).toLocaleString("pt-BR",{maximumFractionDigits:2});
@@ -102,7 +103,8 @@ async function selectors(){
   const u=(await all("units")).filter(x=>x.active!==false),o=u.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
   ["iunit","enunit","eunit"].forEach(x=>$("#"+x).innerHTML=o);
   $("#mfrom").innerHTML='<option value="">Selecione</option>'+o;$("#mto").innerHTML='<option value="">Selecione</option>'+o;
-  $("#dunit").innerHTML='<option value="TOTAL_CONSOLIDADO">Consolidado total (CD + mercados)</option><option value="TOTAL_MERCADOS">Consolidado mercados (sem CD)</option>'+o
+  $("#dunit").innerHTML='<option value="TOTAL_CONSOLIDADO">Consolidado total (CD + mercados)</option><option value="TOTAL_MERCADOS">Consolidado mercados (sem CD)</option>'+o;
+  if($("#repDate")&&!$("#repDate").value)$("#repDate").value=new Date().toISOString().slice(0,10);if($("#cunit"))$("#cunit").innerHTML=o;if($("#expiryFilter"))$("#expiryFilter").innerHTML='<option value="ALL">Todas as unidades</option>'+o
 }
 async function home(){
   const[p,u,s,e,m]=await Promise.all(["products","units","stock","expiries","moves"].map(all));
@@ -140,8 +142,25 @@ async function renderProducts(){
 async function prod(e){return get("products","p_"+String(e).replace(/\D/g,""))}
 
 // ---------- Unidades ----------
-async function saveUnit(){const n=$("#uname").value.trim();if(!n)return;await localPut("units",{id:id("u"),name:n,type:$("#utype").value,active:true,updatedAt:new Date().toISOString()});$("#uname").value="";await selectors();renderUnits()}
-async function renderUnits(){const r=await all("units");$("#ulist").innerHTML=r.map(x=>`<div class="row"><span><b>${esc(x.name)}</b><br><small>${x.type}</small></span><span>${x.active===false?"Inativa":"Ativa"}</span></div>`).join("")}
+function selectedWeekdays(){return $$('input[name="uday"]:checked').map(x=>+x.value)}
+async function saveUnit(){
+  const n=$("#uname").value.trim();if(!n)return;
+  const days=selectedWeekdays(),freq=+$("#ufreq").value||1;
+  await localPut("units",{id:id("u"),name:n,type:$("#utype").value,active:true,replenishmentsPerWeek:freq,replenishmentDays:days,updatedAt:new Date().toISOString()});
+  $("#uname").value="";$$('input[name="uday"]').forEach(x=>x.checked=false);await selectors();renderUnits()
+}
+async function updateUnitSchedule(uid,freq,daysStr){
+  const u=await get("units",uid);if(!u)return;
+  u.replenishmentsPerWeek=+freq||1;u.replenishmentDays=String(daysStr||"").split(",").filter(Boolean).map(Number);u.updatedAt=new Date().toISOString();
+  await localPut("units",u);renderUnits()
+}
+async function renderUnits(){
+  const r=await all("units"),dn=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+  $("#ulist").innerHTML=r.map(x=>{
+    const days=(x.replenishmentDays||[]).map(d=>dn[d]).join(", ")||"Não definidos";
+    return `<div class="row"><span><b>${esc(x.name)}</b><br><small>${x.type} • ${x.replenishmentsPerWeek||1}x/semana • ${days}</small></span><span>${x.active===false?"Inativa":"Ativa"}</span></div>`
+  }).join("")
+}
 
 // ---------- Estoque / Inventário ----------
 async function invProd(focus=false){
@@ -177,12 +196,12 @@ async function fileData(f){if(!f)return"";return new Promise((ok,no)=>{const r=n
 async function saveEntry(){
   const u=$("#enunit").value,e=$("#enean").value.replace(/\D/g,""),q=+$("#enqty").value,cost=+$("#encost").value||0,p=await prod(e);if(!u||!p||q<=0)return alert("Unidade, EAN e quantidade são obrigatórios.");
   const now=new Date().toISOString(),adj=await adjustStock(u,e,q,p,cost),invoiceId=id("nf");
-  const inv={id:invoiceId,at:now,unitId:u,type:$("#entype").value,invoiceNo:$("#ennf").value.trim(),ean:e,product:p.name,qty:q,unitCost:cost,totalCost:q*cost,note:$("#ennote").value.trim(),photo:await fileData($("#enphoto").files[0]),updatedAt:now};
+  const inv={id:invoiceId,at:now,unitId:u,type:$("#entype").value,invoiceNo:$("#ennf").value.trim(),replenishmentId:$("#enrep").value||"",ean:e,product:p.name,qty:q,unitCost:cost,totalCost:q*cost,note:$("#ennote").value.trim(),photo:await fileData($("#enphoto").files[0]),updatedAt:now};
   await localPut("invoices",inv);await localPut("moves",{id:id("m"),at:now,type:$("#entype").value,from:"",to:u,ean:e,product:p.name,qty:q,unitCost:cost,totalCost:q*cost,note:inv.note,invoiceId});
   $("#enmsg").textContent=`Entrada registrada: ${p.name} +${n2(q)} • custo médio ${money(adj.avgCost)} • estoque ${n2(adj.after)}`;
-  $("#enean").value="";$("#enqty").value=1;$("#encost").value=0;$("#ennote").value="";$("#enphoto").value="";$("#enprod").textContent="Informe o EAN";renderEntries()
+  if(inv.replenishmentId)await markReplenishmentReceived(inv.replenishmentId,e,u,q);$("#enean").value="";$("#enqty").value=1;$("#encost").value=0;$("#ennote").value="";$("#enphoto").value="";$("#enprod").textContent="Informe o EAN";renderEntries()
 }
-async function renderEntries(){const r=(await all("invoices")).sort((a,b)=>b.at.localeCompare(a.at)).slice(0,80);$("#enlist").innerHTML=r.map(x=>`<div class="row"><span><b>${esc(x.product)}</b><br><small>${x.type} • NF ${esc(x.invoiceNo||"-")} • ${new Date(x.at).toLocaleString("pt-BR")}${x.photo?" • 📷":""}</small></span><span>${n2(x.qty)} × ${money(x.unitCost)} = <b>${money(x.totalCost)}</b></span></div>`).join("")}
+async function renderEntries(){const reps=(await all("replenishments")).filter(x=>["APPROVED","IN_PROGRESS"].includes(x.status)).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));$("#enrep").innerHTML='<option value="">Nenhum</option>'+reps.map(x=>`<option value="${x.id}">${x.id}</option>`).join("");const r=(await all("invoices")).sort((a,b)=>b.at.localeCompare(a.at)).slice(0,80);$("#enlist").innerHTML=r.map(x=>`<div class="row"><span><b>${esc(x.product)}</b><br><small>${x.type} • NF ${esc(x.invoiceNo||"-")} • ${new Date(x.at).toLocaleString("pt-BR")}${x.photo?" • 📷":""}</small></span><span>${n2(x.qty)} × ${money(x.unitCost)} = <b>${money(x.totalCost)}</b></span></div>`).join("")}
 
 // ---------- Movimentações ----------
 async function moveProd(){const e=$("#mean").value.replace(/\D/g,"");$("#mean").value=e;const p=await prod(e);$("#mprod").innerHTML=p?`<b>${esc(p.name)}</b><br><small>${e}</small>`:(e.length>=8?"EAN não cadastrado":"Informe o EAN")}
@@ -222,7 +241,12 @@ async function startScan(){
 }
 function stopScan(){if(timer)clearInterval(timer);if(stream)stream.getTracks().forEach(t=>t.stop());$("#scanbox").classList.add("hidden")}
 async function saveExpiry(){const e=$("#eean").value.replace(/\D/g,""),p=await prod(e);if(!p)return alert("Produto não cadastrado.");if(!$("#edate").value)return alert("Informe validade.");await localPut("expiries",{id:id("e"),unitId:$("#eunit").value,ean:e,product:p.name,date:$("#edate").value,qty:+$("#eqty").value,photo:await fileData($("#ephoto").files[0]),updatedAt:new Date().toISOString()});renderExpiry()}
-async function renderExpiry(){const units=new Map((await all("units")).map(x=>[x.id,x.name])),now=new Date(),r=(await all("expiries")).sort((a,b)=>a.date.localeCompare(b.date));$("#elist").innerHTML=r.map(x=>{const d=Math.ceil((new Date(x.date+"T12:00")-now)/86400000);return `<div class="row"><span>${esc(x.product)}<br><small>${esc(units.get(x.unitId)||"")} • ${x.date} • Qtd ${x.qty}${x.photo?" • 📷":""}</small></span><b class="${d<0?"bad":d<=15?"warn":""}">${d<0?"Vencido":d+" dias"}</b></div>`}).join("")}
+async function renderExpiry(){
+  const units=new Map((await all("units")).map(x=>[x.id,x.name])),now=new Date(),uf=$("#expiryFilter")?.value||"ALL",range=$("#expiryRange")?.value||"ALL";
+  let r=(await all("expiries")).sort((a,b)=>a.date.localeCompare(b.date));if(uf!=="ALL")r=r.filter(x=>x.unitId===uf);
+  r=r.filter(x=>{const d=Math.ceil((new Date(x.date+"T12:00")-now)/86400000);if(range==="OVERDUE")return d<0;if(range==="7")return d>=0&&d<=7;if(range==="15")return d>=8&&d<=15;if(range==="30")return d>=16&&d<=30;return true});
+  $("#elist").innerHTML=r.map(x=>{const d=Math.ceil((new Date(x.date+"T12:00")-now)/86400000);return `<div class="row ${d<0?"expired":d<=7?"expiry7":""}"><span><b>${esc(x.product)}</b><br><small>${esc(units.get(x.unitId)||"")} • ${x.ean} • validade ${x.date} • qtd ${x.qty}${x.photo?" • 📷":""}</small></span><b class="${d<0?"bad":d<=7?"warn":""}">${d<0?"VENCIDO":d+" dias"}</b></div>`}).join("")||'<p class="muted">Nenhum produto nesta faixa.</p>'
+}
 
 // ---------- Grupos ----------
 let groupSelection=new Set(),visibleGroupProducts=[];
@@ -269,6 +293,39 @@ async function renderGroups(){
   }).join("")
 }
 async function setGroup(i,v){const p=await get("products",i);p.individual=v==="I";p.groupId=v&&v!=="I"?v:"";p.updatedAt=new Date().toISOString();await localPut("products",p);gate()}
+
+
+function detectVolume(name){
+  const s=String(name||"").toUpperCase().replace(",",".");
+  let m=s.match(/(\d+(?:\.\d+)?)\s*ML\b/);if(m)return `${parseFloat(m[1])}ml`;
+  m=s.match(/(\d+(?:\.\d+)?)\s*(?:L|LT)\b/);if(m)return `${parseFloat(m[1])}L`;
+  return "";
+}
+function suggestGroupForProduct(p){
+  const s=(p.name||"").toUpperCase(),vol=detectVolume(s);
+  if(/\bAGUA\b|ÁGUA/.test(s) && !/SANITARIA|SANITÁRIA|OXIGENADA/.test(s) && vol)return `Água ${vol}`;
+  if(/\bMONSTER\b/.test(s))return "Monster";
+  if(/COCA/.test(s) && (vol==="1.5L"||vol==="2L"))return "Coca-Cola 1,5L/2L";
+  if(/GUARANA|GUARANÁ/.test(s) && vol==="2L")return "Guaraná 2L";
+  if(/BARRA.*CHOCOLATE|CHOCOLATE.*BARRA/.test(s))return "Barras de Chocolate";
+  if(/SACO.*LIXO/.test(s))return "Sacos de Lixo";
+  if(/ESPONJA/.test(s))return "Esponjas";
+  return "";
+}
+let groupSuggestions=[];
+async function generateGroupSuggestions(){
+  const p=(await all("products")).filter(x=>x.active!==false&&!x.individual&&!x.groupId),map={};
+  for(const x of p){const g=suggestGroupForProduct(x);if(g)(map[g]||(map[g]=[])).push(x)}
+  groupSuggestions=Object.entries(map).filter(([k,v])=>v.length>=2).sort((a,b)=>b[1].length-a[1].length);
+  $("#gsuggestions").innerHTML=groupSuggestions.length?groupSuggestions.map(([name,items],i)=>`<div class="suggestion"><b>${esc(name)}</b> • ${items.length} produtos<br><small>${items.slice(0,8).map(x=>esc(x.name)).join(" • ")}${items.length>8?" ...":""}</small><div class="actions"><button onclick="applySuggestedGroup(${i})">Criar grupo e associar</button></div></div>`).join(""):'<p class="muted">Nenhuma sugestão automática encontrada entre os produtos não classificados.</p>'
+}
+async function applySuggestedGroup(i){
+  const [name,items]=groupSuggestions[i]||[];if(!name)return;
+  if(!confirm(`Criar o grupo "${name}" com ${items.length} produtos?`))return;
+  const g={id:id("g"),name,description:"Grupo sugerido e confirmado pelo usuário",updatedAt:new Date().toISOString()};await localPut("groups",g);
+  for(const x of items){const p=await get("products",x.id);p.groupId=g.id;p.individual=false;p.updatedAt=new Date().toISOString();await localPut("products",p)}
+  await renderGroups();generateGroupSuggestions();gate()
+}
 
 // ---------- Vendas ----------
 function csv(t){const l=t.replace(/\r/g,"").split("\n").filter(Boolean),sep=(l[0]||"").includes(";")?";":",",h=l[0].split(sep).map(x=>x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,""));return l.slice(1).map(x=>{const a=x.split(sep),o={};h.forEach((k,i)=>o[k]=a[i]||"");return o})}
@@ -376,7 +433,88 @@ async function loadMaster(){
   }catch(e){m.textContent="Falha na carga: "+e.message}
 }
 
+// ---------- Snapshot histórico ----------
+async function loadDemandSnapshot(){
+  const f=$("#demandSnapshotFile").files[0],m=$("#demandSnapshotMsg");if(!f)return alert("Selecione um arquivo JSON.");
+  try{const j=JSON.parse(await f.text());if(!Array.isArray(j.records))throw new Error("Snapshot inválido.");await clearStore("demandBase");const units=await all("units");let ok=0;
+    for(const r of j.records){const u=units.find(x=>x.name===r.unit);if(!u)continue;await localPut("demandBase",{id:u.id+"|"+r.ean,unitId:u.id,ean:String(r.ean),product:r.product||"",vmPayName:r.vmPayName||"",historicalQty:+r.historicalQty||0,averageWeekly:+r.averageWeekly||0,peakWeekly:+r.peakWeekly||0,alertLevel:Math.ceil((+r.averageWeekly||0)*0.5),idealStock:Math.ceil(+r.averageWeekly||0),confidence:r.confidence||"",periodStart:r.periodStart||j.periodStart||"",periodEnd:r.periodEnd||j.periodEnd||"",updatedAt:new Date().toISOString()});ok++}
+    m.textContent=`Snapshot importado: ${ok} registros.`}catch(e){m.textContent="Falha: "+e.message}
+}
+function isUnitDue(u,date){const days=(u.replenishmentDays||[]).map(Number);if(days.length)return days.includes(date.getDay());return true}
+
+// ---------- Central de Reposição ----------
+let repDraftRows=[];
+async function expiryWarning(unitId,ean){
+  const today=new Date(),rows=(await all("expiries")).filter(x=>x.unitId===unitId&&x.ean===ean),near=rows.filter(x=>Math.ceil((new Date(x.date+"T12:00")-today)/86400000)<=7);
+  if(!near.length)return "";near.sort((a,b)=>a.date.localeCompare(b.date));const min=near[0],days=Math.ceil((new Date(min.date+"T12:00")-today)/86400000);
+  return days<0?`ATENÇÃO: há produto vencido (${min.date}) no local.`:`ATENÇÃO: validade em até 7 dias; mais próxima ${min.date}.`
+}
+async function generateReplenishmentDraft(){
+  const date=new Date($("#repDate").value+"T12:00:00"),scope=$("#repScope").value;
+  const [units,products,baseDemand,stocks,reps]=await Promise.all(["units","products","demandBase","stock","replenishments"].map(all));
+  if(!baseDemand.length){$("#repMsg").textContent="Importe a Base Histórica de Demanda primeiro.";return}
+  const pm=new Map(products.map(x=>[x.ean,x])),cd=units.find(x=>x.active!==false&&x.type==="CD"),cdAvail={};if(cd)for(const s of stocks.filter(x=>x.unitId===cd.id))cdAvail[s.ean]=Math.max(0,+s.qty||0);
+  const openByKey={};for(const rep of reps.filter(x=>["APPROVED","IN_PROGRESS"].includes(x.status)))for(const it of(rep.items||[])){const pending=Math.max(0,(+it.finalQty||0)-(+it.receivedQty||0)-(+it.executedQty||0));if(pending>0)openByKey[it.unitId+"|"+it.ean]=(openByKey[it.unitId+"|"+it.ean]||0)+pending}
+  repDraftRows=[];
+  for(const u of units.filter(x=>x.active!==false&&x.type!=="CD")){
+    if(scope==="DUE"&&!isUnitDue(u,date))continue;
+    for(const d of baseDemand.filter(x=>x.unitId===u.id)){
+      const p=pm.get(d.ean);if(!p)continue;const s=stocks.find(x=>x.unitId===u.id&&x.ean===d.ean),saldo=Math.max(0,+s?.qty||0),ideal=Math.max(0,Math.ceil(+d.idealStock||+d.averageWeekly||0)),alert=Math.max(0,Math.ceil(+d.alertLevel||ideal*.5)),status=saldo<=0?"RUPTURA":saldo<=alert?"REPOSIÇÃO":"OK",open=openByKey[u.id+"|"+d.ean]||0;
+      let need=status==="OK"?0:Math.max(0,ideal-saldo-open);if(need<=0)continue;
+      const fromCd=Math.min(need,+cdAvail[d.ean]||0);cdAvail[d.ean]=Math.max(0,(+cdAvail[d.ean]||0)-fromCd);
+      if(fromCd>0){repDraftRows.push({id:id("ri"),unitId:u.id,unit:u.name,ean:d.ean,product:p.name,suggestedQty:fromCd,finalQty:fromCd,originType:"CD",originUnitId:cd?.id||"",supplier:"",status,stock:saldo,ideal,alert,warning:await expiryWarning(u.id,d.ean),receivedQty:0,executedQty:0});need-=fromCd}
+      if(need>0)repDraftRows.push({id:id("ri"),unitId:u.id,unit:u.name,ean:d.ean,product:p.name,suggestedQty:need,finalQty:need,originType:"COMPRA",originUnitId:"",supplier:p.supplier||"",status,stock:saldo,ideal,alert,warning:await expiryWarning(u.id,d.ean),receivedQty:0,executedQty:0})
+    }
+  }
+  renderReplenishmentEditor()
+}
+async function renderReplenishmentEditor(){
+  const units=(await all("units")).filter(x=>x.active!==false),uo=units.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+  $("#repSummary").innerHTML=`<div class="metriccards"><div class="metric">Linhas<b>${repDraftRows.length}</b></div><div class="metric">Qtd total<b>${n2(repDraftRows.reduce((s,x)=>s+(+x.finalQty||0),0))}</b></div><div class="metric">CD<b>${n2(repDraftRows.filter(x=>x.originType==="CD").reduce((s,x)=>s+(+x.finalQty||0),0))}</b></div><div class="metric">Compra<b>${n2(repDraftRows.filter(x=>x.originType==="COMPRA").reduce((s,x)=>s+(+x.finalQty||0),0))}</b></div></div>`;
+  $("#repEditor").innerHTML=repDraftRows.length?`<div class="repedit"><table><thead><tr><th>Condomínio</th><th>Produto</th><th>Saldo</th><th>Ideal</th><th>Status</th><th>Sugerida</th><th>Final</th><th>Origem final</th><th>Unidade origem</th><th>Fornecedor final</th><th>Validade/obs.</th></tr></thead><tbody>${repDraftRows.map((x,i)=>`<tr><td>${esc(x.unit)}</td><td>${esc(x.product)}<br><small>${x.ean}</small></td><td>${n2(x.stock)}</td><td>${x.ideal}</td><td><span class="tag ${x.status==="RUPTURA"?"bad":"warn"}">${x.status}</span></td><td>${n2(x.suggestedQty)}</td><td><input type="number" min="0" step=".01" value="${x.finalQty}" onchange="editRep(${i},'finalQty',this.value)"></td><td><select onchange="editRep(${i},'originType',this.value)"><option value="CD" ${x.originType==="CD"?"selected":""}>CD</option><option value="COMPRA" ${x.originType==="COMPRA"?"selected":""}>Compra externa</option><option value="EMPRESTIMO">Empréstimo condomínio</option><option value="NAO_REPOR">Não repor agora</option><option value="AJUSTE">Ajuste manual</option></select></td><td><select onchange="editRep(${i},'originUnitId',this.value)"><option value="">-</option>${uo}</select></td><td><input value="${esc(x.supplier||"")}" onchange="editRep(${i},'supplier',this.value)"></td><td>${esc(x.warning||"")}</td></tr>`).join("")}</tbody></table></div>`:'<p class="ok">Nenhuma reposição necessária.</p>';
+  $$("#repEditor tbody tr").forEach((tr,i)=>{const sel=tr.querySelectorAll("select")[1];if(sel)sel.value=repDraftRows[i].originUnitId||""});$("#repMsg").textContent="Rascunho editável. Revise antes de aprovar."
+}
+function editRep(i,k,v){if(repDraftRows[i])repDraftRows[i][k]=k==="finalQty"?Math.max(0,+v||0):v}
+async function approveReplenishment(){
+  const items=repDraftRows.filter(x=>+x.finalQty>0&&x.originType!=="NAO_REPOR");if(!items.length)return alert("Não há itens para aprovar.");
+  const now=new Date().toISOString(),rid="REP-"+now.slice(0,10).replaceAll("-","")+"-"+String(Date.now()).slice(-5),rep={id:rid,createdAt:now,routeDate:$("#repDate").value,status:"APPROVED",mode:$("#repMode").value,items,pdfId:"",pdfUrl:"",updatedAt:now};
+  await localPut("replenishments",rep);$("#repMsg").textContent="Aprovada. Gerando PDF...";
+  if(getBackendUrl())try{const pdf=await apiPost("generate_replenishment_pdf",{payload:JSON.stringify(rep)});rep.pdfId=pdf.fileId||"";rep.pdfUrl=pdf.url||"";rep.updatedAt=new Date().toISOString();await localPut("replenishments",rep);$("#repMsg").innerHTML=`${rid} aprovada e registrada. ${rep.pdfUrl?`<a href="${rep.pdfUrl}" target="_blank">Abrir PDF</a>`:""}`}catch(e){$("#repMsg").textContent=`${rid} aprovada; falha no PDF: ${e.message}`}
+  repDraftRows=[];renderReplenishment()
+}
+async function renderReplenishment(){
+  if(!$("#repDate").value)$("#repDate").value=new Date().toISOString().slice(0,10);
+  const reps=(await all("replenishments")).sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0,80);
+  $("#repHistory").innerHTML=reps.map(r=>`<div class="row"><span><b>${r.id}</b><br><small>${new Date(r.createdAt).toLocaleString("pt-BR")} • ${r.items?.length||0} itens • ${r.status}</small></span><span class="mini">${r.pdfUrl?`<button onclick="window.open('${r.pdfUrl}','_blank')">PDF</button>`:""}</span></div>`).join("")||'<p class="muted">Nenhuma reposição registrada.</p>'
+}
+async function markReplenishmentReceived(rid,ean,unitId,qty){
+  const r=await get("replenishments",rid);if(!r)return;let left=+qty||0;for(const it of(r.items||[])){if(left<=0)break;if(it.ean===ean&&it.unitId===unitId&&it.originType==="COMPRA"){const pending=Math.max(0,(+it.finalQty||0)-(+it.receivedQty||0)),take=Math.min(pending,left);it.receivedQty=(+it.receivedQty||0)+take;left-=take}}
+  const done=(r.items||[]).every(it=>it.originType!=="COMPRA"||(+it.receivedQty||0)>=+it.finalQty);r.status=done?"CONCLUDED":"IN_PROGRESS";r.updatedAt=new Date().toISOString();await localPut("replenishments",r)
+}
+
+// ---------- Ponto de Controle ----------
+let activeControlId="";
+async function startControlPoint(){
+  const unitId=$("#cunit").value,owner=$("#cowner").value.trim(),note=$("#cnote").value.trim(),stocks=(await all("stock")).filter(x=>x.unitId===unitId);if(!unitId)return;
+  const now=new Date().toISOString(),cid="PC-"+now.slice(0,10).replaceAll("-","")+"-"+String(Date.now()).slice(-5),cp={id:cid,unitId,owner,note,status:"DRAFT",createdAt:now,approvedAt:"",updatedAt:now};await localPut("controlPoints",cp);
+  for(const s of stocks)await localPut("controlPointItems",{id:cid+"|"+s.ean,controlId:cid,unitId,ean:s.ean,product:s.product,predicted:+s.qty||0,observed:+s.qty||0,avgCost:+s.avgCost||0,difference:0,valueDifference:0,updatedAt:now});
+  activeControlId=cid;renderControlPoint()
+}
+async function renderControlPoint(){
+  const cps=(await all("controlPoints")).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));if(!activeControlId){const d=cps.find(x=>x.status==="DRAFT");activeControlId=d?.id||""}
+  if(activeControlId){const cp=await get("controlPoints",activeControlId),items=(await all("controlPointItems")).filter(x=>x.controlId===activeControlId);$("#cactive").innerHTML=`<h3>${cp.id} • Em conferência</h3>`+items.map(x=>`<div class="controlrow"><span>${esc(x.product)}<br><small>${x.ean}</small></span><span>Previsto <b>${n2(x.predicted)}</b></span><input type="number" min="0" step=".01" value="${x.observed}" onchange="updateControlObserved('${x.id}',this.value)"><span>Dif. <b>${n2(x.observed-x.predicted)}</b></span><span>${money((x.observed-x.predicted)*x.avgCost)}</span></div>`).join("")}else $("#cactive").innerHTML='<p class="muted">Nenhum ponto de controle em andamento.</p>';
+  const hist=cps.filter(x=>x.status==="APPROVED").slice(0,50).map(x=>`<div class="row"><span><b>${x.id}</b><br><small>${new Date(x.approvedAt).toLocaleString("pt-BR")} • ${esc(x.owner||"")}</small></span><span>Concluído</span></div>`).join("");
+  $("#chistory").innerHTML="<h3>Histórico</h3>"+hist
+}
+async function updateControlObserved(idv,v){const x=await get("controlPointItems",idv);if(!x)return;x.observed=Math.max(0,+v||0);x.difference=x.observed-x.predicted;x.valueDifference=x.difference*(+x.avgCost||0);x.updatedAt=new Date().toISOString();await localPut("controlPointItems",x);renderControlPoint()}
+async function approveControlPoint(){
+  if(!activeControlId)return alert("Nenhum ponto de controle em andamento.");if(!confirm("Aprovar? O estoque observado passará a ser a nova referência."))return;
+  const cp=await get("controlPoints",activeControlId),items=(await all("controlPointItems")).filter(x=>x.controlId===activeControlId),now=new Date().toISOString();
+  for(const x of items){const s=await get("stock",cp.unitId+"|"+x.ean),p=await prod(x.ean);if(!p)continue;await localPut("stock",{...(s||{}),id:cp.unitId+"|"+x.ean,unitId:cp.unitId,ean:x.ean,product:p.name,qty:x.observed,physicalQty:x.observed,baselineAt:now,lastCountAt:now,avgCost:+(s?.avgCost||x.avgCost||0),lastCost:+(s?.lastCost||0),updatedAt:now});await localPut("moves",{id:id("m"),at:now,type:"PONTO_CONTROLE",to:cp.unitId,ean:x.ean,product:p.name,qty:x.observed,previousQty:x.predicted,difference:x.difference,valueDifference:x.valueDifference,note:"Aprovação "+cp.id})}
+  cp.status="APPROVED";cp.approvedAt=now;cp.updatedAt=now;await localPut("controlPoints",cp);activeControlId="";$("#cmsg").textContent="Ponto de controle aprovado. Novo ciclo iniciado.";renderControlPoint()
+}
+
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
 async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Cadastro local atual: ${p.length} produtos.`;updateSyncState()}
-async function backup(){const o={version:"1.5",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
+async function backup(){const o={version:"2.0",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
