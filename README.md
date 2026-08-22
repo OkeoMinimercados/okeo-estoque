@@ -55,3 +55,13 @@ O cadastro de validade por câmera nesta versão captura/anexa a imagem pelo cel
 - Cadastro assistido pré-preenche EAN, nome, fornecedor, custo/PC e demais dados disponíveis; os demais campos de-para permanecem abertos para completar.
 - Campos operacionais baseados em EAN mostram automaticamente o nome cadastrado (e fornecedor quando disponível).
 - EAN desconhecido em Estoque/Inventário, Compras, Movimentações, Validades, Ponto de Controle e consulta do CD oferece abertura imediata do Cadastro de Produto.
+
+
+## V3.10 — ergonomia, Demanda e Usuários
+- Espaçamento visual padronizado entre botões, linhas, tabelas e blocos.
+- Quantidades operacionais usam números inteiros; campos de custo/preço usam 2 casas decimais.
+- Importação da Base Histórica foi movida para a própria Demanda Inteligente.
+- “Importar e calcular demanda” consolida vários arquivos e recalcula automaticamente.
+- Botão de Demanda possui status de processamento/erro, evitando clique silencioso.
+- Inventário e Ponto de Controle atualizam a demanda operacional da unidade após a contagem.
+- Usuários agora aparecem em tabela de edição direta com nome, perfil, status, observação, nova senha e último acesso.

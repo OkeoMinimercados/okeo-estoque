@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.9.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.10.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -91,7 +91,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.9.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.10.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -180,7 +180,7 @@
 <div class="tabsbar"><button id="purchaseTabManual" class="tabbtn active">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
 <div id="purchaseManualPanel">
 <div class="grid3"><label>Fornecedor<input id="purchaseSupplier" list="supplierOptions"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
-<div class="grid3"><label>EAN<input id="purchaseEAN"><small id="purchaseProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade<input id="purchaseQty" type="number" min=".01" step=".01" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
+<div class="grid3"><label>EAN<input id="purchaseEAN"><small id="purchaseProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade<input id="purchaseQty" type="number" min="1" step="1" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
 <div id="purchaseProductInfo" class="productbox muted">Digite um EAN.</div>
 <div class="grid3"><label>Validade<input id="purchaseExpiry" type="date"></label><label>Lote<input id="purchaseLot"></label><label>Observação<input id="purchaseNote"></label></div>
 <div class="actions"><button id="purchaseSuggest">Calcular distribuição sugerida</button><button id="purchaseAdd" class="secondary">Adicionar item</button></div></div>
@@ -227,7 +227,7 @@
 <p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
 <div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
 <div class="actions"><button id="cstart">Iniciar ponto de controle</button><button id="capprove" class="secondary">Aprovar ponto de controle</button></div>
-<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step=".01" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div id="cactive"></div><div id="chistory"></div>
+<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao ponto de controle</button></label></div><div id="cactive"></div><div id="chistory"></div>
 </section>
 <section id="expiry" class="view card hidden">
 <h2>Validades</h2>
@@ -236,7 +236,7 @@
   <label>Unidade<select id="eunit"></select></label>
   <label>EAN<input id="eean" inputmode="numeric"><small id="eproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
   <label>Validade<input id="edate" type="date"></label>
-  <label>Quantidade<input id="eqty" type="number" value="1"></label>
+  <label>Quantidade<input id="eqty" type="number" min="1" step="1" value="1"></label>
   <label>Lote<input id="elot" placeholder="Opcional"></label>
 </div>
 <label>Foto da validade<input id="ephoto" type="file" accept="image/*" capture="environment"></label>
@@ -279,13 +279,28 @@
 <section id="demand" class="view card hidden">
 <h2>Demanda Inteligente</h2>
 <div id="dgate"></div>
-<div class="grid3">
-  <label>Visão<select id="dunit"></select></label>
-  <label>Período de vendas<select id="dweeks"><option>4</option><option>8</option><option selected>12</option><option>16</option></select></label>
-  <label>Nível de Alerta<input value="50% da demanda semanal média" readonly></label>
-  <label>Estoque Ideal<input value="100% da demanda semanal média" readonly></label>
+
+<div class="subcard demand-import-card">
+  <h3>1. Base histórica</h3>
+  <p class="muted">Selecione vários arquivos JSON de meses/CNPJs diferentes. O sistema consolida a base e já recalcula a Demanda Inteligente.</p>
+  <div class="grid2">
+    <label>Arquivos históricos<input id="demandSnapshotFile" type="file" accept=".json" multiple></label>
+    <div class="actions align-end"><button id="loadDemandSnapshot" type="button">Importar e calcular demanda</button></div>
+  </div>
+  <p id="demandSnapshotMsg" class="muted"></p>
 </div>
-<button id="dcalc">Calcular demanda</button>
+
+<div class="subcard">
+  <h3>2. Cálculo operacional</h3>
+  <div class="grid4">
+    <label>Visão<select id="dunit"></select></label>
+    <label>Período de vendas<select id="dweeks"><option>4</option><option>8</option><option selected>12</option><option>16</option></select></label>
+    <label>Nível de Alerta<input value="50% da demanda semanal média" readonly></label>
+    <label>Estoque Ideal<input value="100% da demanda semanal média" readonly></label>
+  </div>
+  <div class="actions"><button id="dcalc">Calcular / atualizar demanda</button></div>
+  <p id="demandCalcMsg" class="muted"></p>
+</div>
 <div id="dlist"></div>
 </section>
 
@@ -376,12 +391,7 @@
 <p>Produtos e unidades são carregados da Base Central autenticada. Alterações locais são sincronizadas automaticamente.</p>
 <div class="actions"><button id="loadMaster">Atualizar produtos da Base Central</button></div>
 <p id="masterMsg" class="muted"></p>
-<hr>
-<h3>Base Histórica de Demanda</h3>
-<p>Depois de confirmar os grupos, importe um ou vários arquivos históricos calculados fora do sistema (meses/CNPJs diferentes). Os arquivos são consolidados em uma única base histórica; depois disso o OKEO trata apenas vendas e movimentações novas.</p>
-<input id="demandSnapshotFile" type="file" accept=".json" multiple>
-<button id="loadDemandSnapshot">Importar snapshot de demanda</button>
-<p id="demandSnapshotMsg" class="muted"></p>
+
 <hr>
 <p><b>VM Pay:</b> backend preparado; credenciais permanecem fora do GitHub.</p>
 <button id="backup">Exportar backup</button>
@@ -411,5 +421,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.9.0.js"></script>
+<script src="app-v3.10.0.js"></script>
 </body></html>
