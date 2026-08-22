@@ -34,7 +34,7 @@
       <label class="remember"><input id="remember" type="checkbox"> Manter conectado</label>
       <button id="enter" class="login-submit">Entrar no sistema</button>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>Sistema online e seguro <b>v2.1</b></div>
+      <div class="secure-status"><span></span>Sistema online e seguro <b>v2.2</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -66,7 +66,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Local</span><div class="user-badge"><span>●</span><div><b>Administrador</b><small>OKEO Minimercados</small></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Local</span><div class="user-badge"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">OKEO Minimercados</small></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -272,6 +272,26 @@
 
 <section id="settings" class="view card hidden">
 <h2>Configurações</h2>
+<div id="userAdminPanel" class="admin-only">
+<h3>Usuários e Permissões</h3>
+<p class="muted">Crie e gerencie os acessos do Administrador e do Funcionário.</p>
+<div class="grid3">
+<label>Usuário<input id="newUsername" placeholder="Ex.: braulio"></label>
+<label>Senha<input id="newUserPassword" type="password" placeholder="Mínimo 8 caracteres"></label>
+<label>Perfil<select id="newUserRole"><option value="ADMIN">Administrador</option><option value="EMPLOYEE">Funcionário</option></select></label>
+</div>
+<div class="permission-box"><b>Permissões do funcionário</b>
+<div class="perm-grid">
+<label><input type="checkbox" class="permcheck" value="inventory" checked> Estoque / Inventário</label>
+<label><input type="checkbox" class="permcheck" value="control" checked> Ponto de Controle</label>
+<label><input type="checkbox" class="permcheck" value="entries" checked> Entrada / NF</label>
+<label><input type="checkbox" class="permcheck" value="moves" checked> Movimentações</label>
+<label><input type="checkbox" class="permcheck" value="expiry" checked> Validades</label>
+<label><input type="checkbox" class="permcheck" value="sales"> Vendas</label>
+<label><input type="checkbox" class="permcheck" value="replenishment"> Central de Reposição</label>
+</div></div>
+<div class="actions"><button id="createUser">Criar / atualizar usuário</button><button id="changeMyPassword" class="secondary">Alterar minha senha</button></div>
+<div id="usersList"></div><hr></div>
 <label>URL Base Central /exec<input id="backend"></label>
 <div class="actions">
 <button id="backsave">Salvar URL</button>

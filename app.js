@@ -27,12 +27,12 @@ function bind(){
   $("#salesimport").onclick=importSales;$("#dcalc").onclick=calcDemand;
   $("#backsave").onclick=saveBackend;$("#testBackend").onclick=testBackend;$("#syncNow").onclick=syncAll;$("#backup").onclick=backup;$("#loadDemandSnapshot").onclick=loadDemandSnapshot;
   $("#repDraft").onclick=generateReplenishmentDraft;$("#repApprove").onclick=approveReplenishment;$("#cstart").onclick=startControlPoint;$("#capprove").onclick=approveControlPoint;$("#cadd").onclick=addControlItem;
-  $("#repUnitsToggle").onclick=()=>$("#repUnitsPanel").classList.toggle("hidden");$("#repSelectAll").onclick=()=>selectAllRepUnits();$("#repClearUnits").onclick=()=>{repSelectedUnits.clear();renderRepUnitChecks()};$("#repUnitSearch").oninput=renderRepUnitChecks;
+  $("#repUnitsToggle").onclick=()=>$("#repUnitsPanel").classList.toggle("hidden");$("#repSelectAll").onclick=()=>selectAllRepUnits();$("#repClearUnits").onclick=()=>{repSelectedUnits.clear();renderRepUnitChecks()};$("#repUnitSearch").oninput=renderRepUnitChecks;if($("#createUser"))$("#createUser").onclick=saveUserAdmin;if($("#changeMyPassword"))$("#changeMyPassword").onclick=changeOwnPassword;
 }
 function showLogin(){$("#loginPage").classList.remove("hidden");$("#shell").classList.add("hidden")}
 async function showApp(){
   $("#loginPage").classList.add("hidden");$("#shell").classList.remove("hidden");
-  await bootstrapFromCentral();await syncAll(false);await selectors();view("home");updateSyncState();setTimeout(()=>processQueue(),1200)
+  await bootstrapFromCentral();await syncAll(false);await selectors();applyAccessProfile();view(firstAllowedView());updateSyncState();setTimeout(()=>processQueue(),1200)
 }
 async function login(){
   const u=$("#user").value.trim(),p=$("#pass").value,m=$("#loginMsg");if(!u||!p){m.textContent="Informe usuário e senha.";return}
@@ -52,13 +52,19 @@ async function validateSession(token){
   if(!getBackendUrl())return false;
   try{const r=await authPost("validate_session",{token});return !!r.valid}catch(e){return false}
 }
-function view(v){
+function view(v){if(!canView(v)){const fallback=firstAllowedView();if(v!==fallback)return view(fallback);}
   $$(".view").forEach(x=>x.classList.add("hidden"));$("#"+v).classList.remove("hidden");
   $$("[data-v]").forEach(b=>b.classList.toggle("active",b.dataset.v===v));
   const titles={home:["Dashboard","Resumo operacional"],products:["Produtos","Cadastro Mestre"],units:["Unidades","Condomínios, mercados e CD"],inventory:["Estoque / Inventário","Contagem e saldo"],control:["Ponto de Controle","Conferência física e divergências"],entries:["Entrada / NF","Recebimentos e custos"],moves:["Movimentações","Transferências e ajustes"],expiry:["Validades","Produtos próximos do vencimento"],groups:["Grupos","Produtos substituíveis"],sales:["Vendas","Importação e histórico"],demand:["Demanda Inteligente","Estoque ideal e alertas"],replenishment:["Central de Reposição","Planeje e gerencie os abastecimentos"],settings:["Configurações","Base Central e integrações"]};
   $("#pageTitle").textContent=titles[v]?.[0]||"OKEO";$("#pageSubtitle").textContent=titles[v]?.[1]||"";
   ({home,products:renderProducts,units:renderUnits,inventory:renderStock,control:renderControlPoint,entries:renderEntries,moves:renderMoves,expiry:renderExpiry,groups:renderGroups,sales:renderSales,demand:gate,replenishment:renderReplenishment,settings:renderSettings}[v]||(()=>{}))()
 }
+const ADMIN_VIEWS=["home","sales","inventory","control","entries","moves","replenishment","expiry","groups","products","units","demand","settings"];
+const DEFAULT_EMPLOYEE_VIEWS=["inventory","control","entries","moves","expiry"];
+function allowedViews(){if(!currentSession)return[];if(currentSession.role==="ADMIN")return ADMIN_VIEWS;return Array.isArray(currentSession.permissions)&&currentSession.permissions.length?currentSession.permissions:DEFAULT_EMPLOYEE_VIEWS}
+function firstAllowedView(){const a=allowedViews();return a.includes("home")?"home":(a[0]||"inventory")}
+function applyAccessProfile(){const allowed=new Set(allowedViews());$$("[data-v]").forEach(b=>b.classList.toggle("hidden",!allowed.has(b.dataset.v)));if($("#currentUserName"))$("#currentUserName").textContent=currentSession?.username||"Usuário";if($("#currentUserRole"))$("#currentUserRole").textContent=currentSession?.role==="ADMIN"?"Administrador":"Funcionário";if($("#userAdminPanel"))$("#userAdminPanel").classList.toggle("hidden",currentSession?.role!=="ADMIN")}
+function canView(v){return allowedViews().includes(v)}
 const esc=s=>String(s??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
 const money=n=>(+n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const n2=n=>(+n||0).toLocaleString("pt-BR",{maximumFractionDigits:2});
@@ -459,7 +465,13 @@ async function calcDemand(){
 // ---------- Base Mestre ----------
 async function loadMaster(){alert("A Base Mestre agora é carregada pela Base Central autenticada. Não há mais arquivo público no GitHub.")}
 
+// ---------- usuários / permissões ----------
+async function renderUsersAdmin(){if(currentSession?.role!=="ADMIN"||!$("#usersList"))return;try{const r=await apiGet("list_users");$("#usersList").innerHTML=(r.users||[]).map(u=>`<div class="user-row"><span><b>${esc(u.username)}</b><br><small>${u.role==="ADMIN"?"Administrador":"Funcionário"}${u.permissions?.length?" • "+u.permissions.join(", "):""}</small></span><span class="mini"><span class="role-badge">${u.role}</span>${u.username!==currentSession.username?`<button class="secondary" onclick="disableUser('${u.username}',${u.active!==false})">${u.active===false?"Ativar":"Inativar"}</button>`:""}</span></div>`).join("")}catch(e){$("#usersList").innerHTML='<p class="muted">Não foi possível carregar os usuários.</p>'}}
+async function saveUserAdmin(){if(currentSession?.role!=="ADMIN")return;const username=$("#newUsername").value.trim(),password=$("#newUserPassword").value,role=$("#newUserRole").value,permissions=$$(".permcheck:checked").map(x=>x.value);if(!username)return alert("Informe o usuário.");if(password&&password.length<8)return alert("A senha precisa ter pelo menos 8 caracteres.");try{await apiPost("save_user",{username,password,role,permissions:JSON.stringify(role==="ADMIN"?ADMIN_VIEWS:permissions)});$("#newUsername").value="";$("#newUserPassword").value="";await renderUsersAdmin();alert("Usuário salvo.")}catch(e){alert("Falha ao salvar usuário: "+e.message)}}
+async function disableUser(username,currentlyActive){if(currentSession?.role!=="ADMIN")return;await apiPost("set_user_active",{username,active:String(!currentlyActive)});renderUsersAdmin()}
+async function changeOwnPassword(){const current=prompt("Digite sua senha atual:");if(current===null)return;const next=prompt("Digite a nova senha (mínimo 8 caracteres):");if(!next||next.length<8)return alert("Senha inválida.");try{await apiPost("change_password",{currentPassword:current,newPassword:next});alert("Senha alterada com sucesso.")}catch(e){alert("Não foi possível alterar a senha: "+e.message)}}
+
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
-async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Cadastro local atual: ${p.length} produtos.`;updateSyncState()}
-async function backup(){const o={version:"2.1",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
+async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Cadastro local atual: ${p.length} produtos.`;updateSyncState();if(currentSession?.role==="ADMIN")await renderUsersAdmin()}
+async function backup(){const o={version:"2.2",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
