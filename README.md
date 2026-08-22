@@ -65,3 +65,15 @@ O cadastro de validade por câmera nesta versão captura/anexa a imagem pelo cel
 - Botão de Demanda possui status de processamento/erro, evitando clique silencioso.
 - Inventário e Ponto de Controle atualizam a demanda operacional da unidade após a contagem.
 - Usuários agora aparecem em tabela de edição direta com nome, perfil, status, observação, nova senha e último acesso.
+
+
+## V3.11 — correção da importação de Demanda
+- Importador identifica arquivos ZIP/XLSX e informa claramente que devem ser convertidos para CSV ou JSON.
+- Importação aceita vários JSON e CSV no mesmo lote.
+- Um arquivo inválido não interrompe os demais.
+- A base anterior só é substituída depois que existe ao menos um arquivo válido, evitando perda acidental.
+- Mensagens mostram arquivos válidos, ignorados e registros não mapeados.
+- Fonte geral aumentada em aproximadamente 1 px para melhorar legibilidade.
+
+## V3.12 — Snapshot enxuto de Demanda
+Os históricos são processados em memória. O Core persiste somente o snapshot consolidado Unidade+EAN e a demanda operacional. A base bruta não é armazenada. O snapshot é verificado antes da conclusão e são mantidos metadados do processamento.

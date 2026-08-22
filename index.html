@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.10.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.12.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -91,7 +91,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.10.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.12.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -282,9 +282,9 @@
 
 <div class="subcard demand-import-card">
   <h3>1. Base histórica</h3>
-  <p class="muted">Selecione vários arquivos JSON de meses/CNPJs diferentes. O sistema consolida a base e já recalcula a Demanda Inteligente.</p>
+  <p class="muted">Selecione vários arquivos JSON ou CSV de meses/CNPJs diferentes. O sistema valida cada arquivo, ignora arquivos incompatíveis sem apagar a base existente e recalcula a Demanda Inteligente.</p>
   <div class="grid2">
-    <label>Arquivos históricos<input id="demandSnapshotFile" type="file" accept=".json" multiple></label>
+    <label>Arquivos históricos<input id="demandSnapshotFile" type="file" accept=".json,.csv" multiple></label>
     <div class="actions align-end"><button id="loadDemandSnapshot" type="button">Importar e calcular demanda</button></div>
   </div>
   <p id="demandSnapshotMsg" class="muted"></p>
@@ -299,7 +299,7 @@
     <label>Estoque Ideal<input value="100% da demanda semanal média" readonly></label>
   </div>
   <div class="actions"><button id="dcalc">Calcular / atualizar demanda</button></div>
-  <p id="demandCalcMsg" class="muted"></p>
+  <p id="demandCalcMsg" class="muted"></p><div id="demandStorageStatus" class="storage-status"></div>
 </div>
 <div id="dlist"></div>
 </section>
@@ -421,5 +421,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.10.0.js"></script>
+<script src="app-v3.12.0.js"></script>
 </body></html>
