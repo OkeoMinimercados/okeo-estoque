@@ -124,3 +124,10 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - Backend: autenticação, perfis, permissões e migração de perfis antigos aprovados.
 - Gestão de Estoque testada com ~60.000 saldos.
 - Zero pageerror e zero console error na suíte prática.
+
+## V3.19 — Correção de autenticação
+- Corrigido login automático indevido quando "Manter conectado" não está marcado.
+- Sessão temporária agora permanece somente em memória durante a página atual.
+- Ao recarregar/abrir novamente sem "Manter conectado", o sistema exige usuário, senha e clique em "Entrar no sistema".
+- Login automático é permitido somente quando "Manter conectado" foi marcado explicitamente.
+- Sessões temporárias antigas gravadas por versões anteriores são apagadas no início.
