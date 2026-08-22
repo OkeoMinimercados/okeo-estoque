@@ -6,7 +6,7 @@ let currentSession=null,repSelectedUnits=new Set();
 
 async function init(){
   if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
-  bind();
+  bind();await checkBootstrapStatus();
   const saved=localStorage.getItem("okeo_session")||sessionStorage.getItem("okeo_session");
   if(saved){
     try{const s=JSON.parse(saved);if(await validateSession(s.token)){currentSession=s;await showApp();return}}catch(e){}
@@ -21,13 +21,37 @@ function bind(){
   $("#iean").oninput=invProd;$("#iean").onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();invProd(true)}};$("#iunit").onchange=renderStock;$("#istocksearch").oninput=renderStock;
   $("#isave").onclick=saveInventory;$("#iplus").onclick=()=>$("#iqty").value=+$("#iqty").value+1;$("#iminus").onclick=()=>$("#iqty").value=Math.max(0,+$("#iqty").value-1);
   $("#scan").onclick=startScan;$("#stopscan").onclick=stopScan;
-  $("#enean").oninput=entryProd;$("#ensave").onclick=saveEntry;$("#mean").oninput=moveProd;$("#mtype").onchange=moveTypeUI;$("#msave").onclick=saveMove;
+  $("#mean").oninput=moveProd;$("#mtype").onchange=moveTypeUI;$("#msave").onclick=saveMove;
   $("#esave").onclick=saveExpiry;$("#expiryReport").onclick=renderExpiry;$("#expiryFilter").onchange=renderExpiry;$("#expiryRange").onchange=renderExpiry;
   $("#gsave").onclick=saveGroup;$("#gsearch").oninput=renderGroups;$("#gfilter").onchange=renderGroups;$("#gselectall").onclick=selectVisibleGroups;$("#gclear").onclick=()=>{groupSelection.clear();renderGroups()};$("#gindividual").onclick=()=>assignSelectedGroup("I");$("#gsuggest").onclick=generateGroupSuggestions;
   $("#salesimport").onclick=importSales;$("#dcalc").onclick=calcDemand;
   $("#backsave").onclick=saveBackend;$("#testBackend").onclick=testBackend;$("#syncNow").onclick=syncAll;$("#backup").onclick=backup;$("#loadDemandSnapshot").onclick=loadDemandSnapshot;
   $("#repDraft").onclick=generateReplenishmentDraft;$("#repApprove").onclick=approveReplenishment;$("#cstart").onclick=startControlPoint;$("#capprove").onclick=approveControlPoint;$("#cadd").onclick=addControlItem;
   $("#repUnitsToggle").onclick=()=>$("#repUnitsPanel").classList.toggle("hidden");$("#repSelectAll").onclick=()=>selectAllRepUnits();$("#repClearUnits").onclick=()=>{repSelectedUnits.clear();renderRepUnitChecks()};$("#repUnitSearch").oninput=renderRepUnitChecks;if($("#createUser"))$("#createUser").onclick=saveUserAdmin;if($("#changeMyPassword"))$("#changeMyPassword").onclick=changeOwnPassword;
+  if($("#openBootstrap"))$("#openBootstrap").onclick=()=>$("#bootstrapForm").classList.toggle("hidden");
+  if($("#createBootstrap"))$("#createBootstrap").onclick=createFirstAdmin;
+  if($("#tabUsers"))$("#tabUsers").onclick=()=>showUserAdminTab("users");
+  if($("#tabProfiles"))$("#tabProfiles").onclick=()=>showUserAdminTab("profiles");
+  if($("#saveProfile"))$("#saveProfile").onclick=saveProfileAdmin;if($("#purchaseTabManual"))$("#purchaseTabManual").onclick=()=>showPurchaseTab("manual");if($("#purchaseTabNF"))$("#purchaseTabNF").onclick=()=>showPurchaseTab("nf");if($("#purchaseEAN"))$("#purchaseEAN").oninput=purchaseProductLookup;if($("#purchaseSuggest"))$("#purchaseSuggest").onclick=suggestPurchaseDistribution;if($("#purchaseAdd"))$("#purchaseAdd").onclick=addPurchaseItem;if($("#purchaseAttachNF"))$("#purchaseAttachNF").onclick=attachPurchaseNF;if($("#purchaseSave"))$("#purchaseSave").onclick=savePurchase;if($("#purchaseClear"))$("#purchaseClear").onclick=clearPurchaseDraft;if($("#accountToggle"))$("#accountToggle").onclick=()=>$("#accountMenu").classList.toggle("hidden");if($("#myPassword"))$("#myPassword").onclick=changeOwnPassword;if($("#accountLogout"))$("#accountLogout").onclick=logout;
+  if($("#clearProfile"))$("#clearProfile").onclick=clearProfileForm;
+}
+async function checkBootstrapStatus(){
+  try{
+    const base=getBackendUrl();if(!base)return;
+    const u=new URL(base);u.searchParams.set("action","bootstrap_status");u.searchParams.set("_",Date.now());
+    const r=await fetch(u.toString(),{cache:"no-store",redirect:"follow"}),j=await r.json();
+    if($("#bootstrapBox"))$("#bootstrapBox").classList.toggle("hidden",!!j.configured)
+  }catch(e){}
+}
+async function createFirstAdmin(){
+  const username=$("#bootstrapUser").value.trim()||"admin",p1=$("#bootstrapPass").value,p2=$("#bootstrapPass2").value,m=$("#loginMsg");
+  if(p1.length<8)return m.textContent="A senha precisa ter pelo menos 8 caracteres.";
+  if(p1!==p2)return m.textContent="As senhas não conferem.";
+  try{
+    const r=await authPost("bootstrap_admin",{username,password:p1});
+    if(!r.ok)throw new Error(r.error||"Falha ao criar administrador");
+    $("#bootstrapBox").classList.add("hidden");$("#user").value=username;$("#pass").value="";m.textContent="Administrador criado. Faça o primeiro login."
+  }catch(e){m.textContent="Falha: "+e.message}
 }
 function showLogin(){$("#loginPage").classList.remove("hidden");$("#shell").classList.add("hidden")}
 async function showApp(){
@@ -55,7 +79,7 @@ async function validateSession(token){
 function view(v){if(!canView(v)){const fallback=firstAllowedView();if(v!==fallback)return view(fallback);}
   $$(".view").forEach(x=>x.classList.add("hidden"));$("#"+v).classList.remove("hidden");
   $$("[data-v]").forEach(b=>b.classList.toggle("active",b.dataset.v===v));
-  const titles={home:["Dashboard","Resumo operacional"],products:["Produtos","Cadastro Mestre"],units:["Unidades","Condomínios, mercados e CD"],inventory:["Estoque / Inventário","Contagem e saldo"],control:["Ponto de Controle","Conferência física e divergências"],entries:["Entrada / NF","Recebimentos e custos"],moves:["Movimentações","Transferências e ajustes"],expiry:["Validades","Produtos próximos do vencimento"],groups:["Grupos","Produtos substituíveis"],sales:["Vendas","Importação e histórico"],demand:["Demanda Inteligente","Estoque ideal e alertas"],replenishment:["Central de Reposição","Planeje e gerencie os abastecimentos"],settings:["Configurações","Base Central e integrações"]};
+  const titles={home:["Dashboard","Resumo operacional"],products:["Produtos","Cadastro Mestre"],units:["Unidades","Condomínios, mercados e CD"],inventory:["Estoque / Inventário","Contagem e saldo"],control:["Ponto de Controle","Conferência física e divergências"],entries:["Compras / NF","Compra, distribuição e abastecimento"],moves:["Movimentações","Transferências e ajustes"],expiry:["Validades","Produtos próximos do vencimento"],groups:["Grupos","Produtos substituíveis"],sales:["Vendas","Importação e histórico"],demand:["Demanda Inteligente","Estoque ideal e alertas"],replenishment:["Central de Reposição","Planeje e gerencie os abastecimentos"],settings:["Configurações","Base Central e integrações"]};
   $("#pageTitle").textContent=titles[v]?.[0]||"OKEO";$("#pageSubtitle").textContent=titles[v]?.[1]||"";
   ({home,products:renderProducts,units:renderUnits,inventory:renderStock,control:renderControlPoint,entries:renderEntries,moves:renderMoves,expiry:renderExpiry,groups:renderGroups,sales:renderSales,demand:gate,replenishment:renderReplenishment,settings:renderSettings}[v]||(()=>{}))()
 }
@@ -153,7 +177,7 @@ async function selectors(){
   const units=(await all("units")).filter(x=>x.active!==false).sort((a,b)=>(a.type==="CD"?-1:b.type==="CD"?1:a.name.localeCompare(b.name)));
   const options=units.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
   const set=(id,html,preserve=true)=>{const e=$("#"+id);if(!e)return;const old=preserve?e.value:"";e.innerHTML=html;if(old&&[...e.options].some(o=>o.value===old))e.value=old};
-  ["iunit","enunit","eunit","cunit"].forEach(id=>set(id,options));set("mfrom",'<option value="">Selecione</option>'+options);set("mto",'<option value="">Selecione</option>'+options);
+  ["iunit","eunit","cunit"].forEach(id=>set(id,options));set("mfrom",'<option value="">Selecione</option>'+options);set("mto",'<option value="">Selecione</option>'+options);
   set("expiryFilter",'<option value="ALL">Todas as unidades</option>'+options);set("dunit",'<option value="TOTAL_CONSOLIDADO">Consolidado total (CD + mercados)</option><option value="TOTAL_MERCADOS">Consolidado mercados (sem CD)</option>'+options);
   if($("#repDate")&&!$("#repDate").value)$("#repDate").value=new Date().toISOString().slice(0,10);
   renderRepUnitChecks()
@@ -245,17 +269,40 @@ async function adjustStock(unitId,e,delta,p,cost=0){
 }
 
 // ---------- Entrada / NF ----------
-async function entryProd(){const e=$("#enean").value.replace(/\D/g,"");$("#enean").value=e;const p=await prod(e);$("#enprod").innerHTML=p?`<b>${esc(p.name)}</b><br><small>${e} • ${esc(p.supplier||"")} • ${esc(p.segment||"")}</small>`:(e.length>=8?"EAN não cadastrado":"Informe o EAN")}
-async function fileData(f){if(!f)return"";return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)})}
-async function saveEntry(){
-  const u=$("#enunit").value,e=$("#enean").value.replace(/\D/g,""),q=+$("#enqty").value,cost=+$("#encost").value||0,p=await prod(e);if(!u||!p||q<=0)return alert("Unidade, EAN e quantidade são obrigatórios.");
-  const now=new Date().toISOString(),adj=await adjustStock(u,e,q,p,cost),invoiceId=id("nf");
-  const inv={id:invoiceId,at:now,unitId:u,type:$("#entype").value,invoiceNo:$("#ennf").value.trim(),replenishmentId:$("#enrep").value||"",ean:e,product:p.name,qty:q,unitCost:cost,totalCost:q*cost,note:$("#ennote").value.trim(),photo:await fileData($("#enphoto").files[0]),updatedAt:now};
-  await localPut("invoices",inv);await localPut("moves",{id:id("m"),at:now,type:$("#entype").value,from:"",to:u,ean:e,product:p.name,qty:q,unitCost:cost,totalCost:q*cost,note:inv.note,invoiceId});
-  $("#enmsg").textContent=`Entrada registrada: ${p.name} +${n2(q)} • custo médio ${money(adj.avgCost)} • estoque ${n2(adj.after)}`;
-  if(inv.replenishmentId)await markReplenishmentReceived(inv.replenishmentId,e,u,q);$("#enean").value="";$("#enqty").value=1;$("#encost").value=0;$("#ennote").value="";$("#enphoto").value="";$("#enprod").textContent="Informe o EAN";renderEntries()
+
+// ---------- Compras / NF ----------
+let purchaseDraftItems=[],purchaseCurrentDistribution=[],purchaseNFData=null,nfParsedDraft=[];
+function showPurchaseTab(t){$("#purchaseManualPanel").classList.toggle("hidden",t!=="manual");$("#purchaseNFPanel").classList.toggle("hidden",t!=="nf");$("#purchaseTabManual").classList.toggle("active",t==="manual");$("#purchaseTabNF").classList.toggle("active",t==="nf")}
+async function purchaseProductLookup(){const e=$("#purchaseEAN").value.replace(/\D/g,""),p=e?await prod(e):null;$("#purchaseProductInfo").innerHTML=p?`<b>${esc(p.name)}</b><br><small>EAN ${p.ean} • ${esc(p.supplier||"")}</small>`:"EAN não localizado."}
+async function unitNeed(unitId,ean){
+  const [baseRows,s,reps]=await Promise.all([all("demandBase"),get("stock",unitId+"|"+ean),all("replenishments")]);const d=baseRows.find(x=>x.unitId===unitId&&x.ean===ean),stock=Math.max(0,+s?.qty||0);let inbound=0;
+  for(const r of reps.filter(x=>["APPROVED","IN_PROGRESS"].includes(x.status)))for(const it of(r.items||[]))if(it.unitId===unitId&&it.ean===ean)inbound+=Math.max(0,(+it.finalQty||0)-(+it.receivedQty||0)-(+it.executedQty||0));
+  if(!d)return {stock,inbound,ideal:0,alert:0,need:0,status:"SEM DEMANDA"};const ideal=Math.ceil(+d.idealStock||+d.averageWeekly||0),alert=Math.ceil(+d.alertLevel||ideal*.5),projected=stock+inbound,status=projected<=0?"RUPTURA":projected<=alert?"REPOSIÇÃO":"OK";return {stock,inbound,ideal,alert,status,need:status==="OK"?0:Math.max(0,ideal-projected)}
 }
-async function renderEntries(){const reps=(await all("replenishments")).filter(x=>["APPROVED","IN_PROGRESS"].includes(x.status)).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));$("#enrep").innerHTML='<option value="">Nenhum</option>'+reps.map(x=>`<option value="${x.id}">${x.id}</option>`).join("");const r=(await all("invoices")).sort((a,b)=>b.at.localeCompare(a.at)).slice(0,80);$("#enlist").innerHTML=r.map(x=>`<div class="row"><span><b>${esc(x.product)}</b><br><small>${x.type} • NF ${esc(x.invoiceNo||"-")} • ${new Date(x.at).toLocaleString("pt-BR")}${x.photo?" • 📷":""}</small></span><span>${n2(x.qty)} × ${money(x.unitCost)} = <b>${money(x.totalCost)}</b></span></div>`).join("")}
+
+async function suggestPurchaseDistribution(){const e=$("#purchaseEAN").value.replace(/\D/g,""),qty=Math.max(0,+$("#purchaseQty").value||0),p=await prod(e);if(!p)return alert("EAN não cadastrado.");const units=(await all("units")).filter(x=>x.active!==false),cd=units.find(x=>x.type==="CD"),rows=[];for(const u of units.filter(x=>x.type!=="CD"))rows.push({...await unitNeed(u.id,e),unitId:u.id,unit:u.name});const rank={RUPTURA:0,"REPOSIÇÃO":1,OK:2,"SEM DEMANDA":3};rows.sort((a,b)=>rank[a.status]-rank[b.status]||b.need-a.need);let rem=qty;purchaseCurrentDistribution=rows.map(x=>{const q=Math.min(rem,x.need);rem-=q;return {...x,qty:q}});if(cd)purchaseCurrentDistribution.push({unitId:cd.id,unit:cd.name,stock:+((await get("stock",cd.id+"|"+e))?.qty||0),ideal:0,alert:0,need:rem,status:"CD",qty:rem});renderPurchaseDistribution()}
+function renderPurchaseDistribution(){if(!purchaseCurrentDistribution.length)return $("#purchaseDistribution").innerHTML='<p class="muted">Calcule a distribuição.</p>';$("#purchaseDistribution").innerHTML=`<div class="purchase-dist"><table><tr><th>Destino</th><th>Estoque</th><th>Em aberto</th><th>Alerta</th><th>Ideal</th><th>Status</th><th>Necessidade</th><th>Distribuir</th></tr>${purchaseCurrentDistribution.map((x,i)=>`<tr class="${x.status==="RUPTURA"?"need-high":x.status==="REPOSIÇÃO"?"need-mid":x.status==="CD"?"need-cd":""}"><td>${esc(x.unit)}</td><td>${n2(x.stock||0)}</td><td>${n2(x.inbound||0)}</td><td>${x.alert||0}</td><td>${x.ideal||0}</td><td>${x.status}</td><td>${n2(x.need||0)}</td><td><input type="number" min="0" step=".01" value="${x.qty||0}" onchange="purchaseCurrentDistribution[${i}].qty=Math.max(0,+this.value||0)"></td></tr>`).join("")}</table></div>`}
+async function addPurchaseItem(){const e=$("#purchaseEAN").value.replace(/\D/g,""),qty=Math.max(0,+$("#purchaseQty").value||0),cost=Math.max(0,+$("#purchaseCost").value||0),p=await prod(e);if(!p)return alert("EAN inválido.");const distributed=purchaseCurrentDistribution.reduce((s,x)=>s+(+x.qty||0),0);if(Math.abs(distributed-qty)>.001)return alert("A distribuição precisa somar a quantidade comprada.");purchaseDraftItems.push({id:id("pi"),ean:e,product:p.name,supplier:$("#purchaseSupplier").value.trim()||p.supplier||"",qty,cost,total:qty*cost,expiry:$("#purchaseExpiry").value||"",lot:$("#purchaseLot").value.trim(),note:$("#purchaseNote").value.trim(),distribution:structuredClone(purchaseCurrentDistribution)});purchaseCurrentDistribution=[];$("#purchaseEAN").value="";$("#purchaseQty").value=1;renderPurchaseItems();renderPurchaseDistribution()}
+function renderPurchaseItems(){$("#purchaseItems").innerHTML=purchaseDraftItems.length?purchaseDraftItems.map((x,i)=>`<div class="purchase-item-card"><div class="row"><span><b>${esc(x.product)}</b><br><small>${n2(x.qty)} un • ${money(x.cost)}/un${x.expiry?" • validade "+x.expiry:""}</small></span><button class="secondary" onclick="purchaseDraftItems.splice(${i},1);renderPurchaseItems()">Remover</button></div><div class="muted">${x.distribution.filter(d=>+d.qty>0).map(d=>`${esc(d.unit)}: ${n2(d.qty)}`).join(" • ")}</div></div>`).join(""):'<p class="muted">Nenhum item.</p>'}
+function xmlText(node,tag){const el=node.getElementsByTagName(tag)[0];return el?String(el.textContent||"").trim():""}
+function nfeNodes(root,name){return Array.from(root.getElementsByTagName(name))}
+async function parseNFeXml(text){
+  const xml=new DOMParser().parseFromString(text,"application/xml");if(xml.getElementsByTagName("parsererror").length)throw new Error("XML inválido.");
+  const inf=xml.getElementsByTagName("infNFe")[0]||xml,ide=xml.getElementsByTagName("ide")[0],emit=xml.getElementsByTagName("emit")[0],items=[];
+  const supplier=emit?xmlText(emit,"xNome"):"",doc=ide?xmlText(ide,"nNF"):"",dateRaw=ide?(xmlText(ide,"dhEmi")||xmlText(ide,"dEmi")):"";
+  for(const det of nfeNodes(inf,"det")){const pn=det.getElementsByTagName("prod")[0];if(!pn)continue;let ean=xmlText(pn,"cEANTrib")||xmlText(pn,"cEAN");if(ean==="SEM GTIN")ean="";const r=det.getElementsByTagName("rastro")[0];items.push({ean:String(ean).replace(/\D/g,""),name:xmlText(pn,"xProd"),qty:+(xmlText(pn,"qTrib")||xmlText(pn,"qCom")||0),cost:+(xmlText(pn,"vUnTrib")||xmlText(pn,"vUnCom")||0),expiry:r?xmlText(r,"dVal"):"",lot:r?xmlText(r,"nLote"):""})}
+  return {supplier,doc,date:dateRaw?dateRaw.slice(0,10):"",items}
+}
+async function attachPurchaseNF(){
+  const f=$("#purchaseNFFile").files[0];if(!f)return alert("Selecione um arquivo.");purchaseNFData={name:f.name,type:f.type||"",data:await fileData(f)};$("#purchaseNFStatus").textContent="Arquivo anexado: "+f.name;nfParsedDraft=[];
+  if(/xml/i.test(f.type)||f.name.toLowerCase().endsWith(".xml")){try{const parsed=await parseNFeXml(await f.text());if(parsed.supplier)$("#purchaseSupplier").value=parsed.supplier;if(parsed.doc)$("#purchaseDoc").value=parsed.doc;if(parsed.date)$("#purchaseDate").value=parsed.date;nfParsedDraft=parsed.items;renderNfParsedItems();$("#purchaseNFStatus").textContent=`XML lido: ${parsed.items.length} item(ns). Confira antes de adicionar.`}catch(e){$("#nfParsedItems").innerHTML=`<div class="nf-error">Não foi possível interpretar o XML: ${esc(e.message)}</div>`}}else $("#nfParsedItems").innerHTML='<p class="muted">PDF/foto anexado. Cadastre os itens manualmente.</p>'
+}
+function renderNfParsedItems(){$("#nfParsedItems").innerHTML=nfParsedDraft.length?`<h3>Itens identificados na NF</h3>${nfParsedDraft.map((x,i)=>`<div class="nf-item"><strong>${esc(x.name||"Produto")}</strong><div class="nf-grid"><label>EAN<input value="${esc(x.ean)}" onchange="nfParsedDraft[${i}].ean=this.value.replace(/\\D/g,'')"></label><label>Quantidade<input type="number" value="${x.qty||0}" onchange="nfParsedDraft[${i}].qty=+this.value||0"></label><label>Custo unit.<input type="number" step=".01" value="${x.cost||0}" onchange="nfParsedDraft[${i}].cost=+this.value||0"></label><label>Validade<input type="date" value="${x.expiry||""}" onchange="nfParsedDraft[${i}].expiry=this.value"></label></div><div class="actions"><button onclick="loadNfItem(${i})">Carregar para distribuir</button></div></div>`).join("")}`:""}
+async function loadNfItem(i){const x=nfParsedDraft[i];if(!x)return;$("#purchaseEAN").value=x.ean||"";$("#purchaseQty").value=x.qty||1;$("#purchaseCost").value=x.cost||0;$("#purchaseExpiry").value=x.expiry||"";$("#purchaseLot").value=x.lot||"";showPurchaseTab("manual");await purchaseProductLookup();await suggestPurchaseDistribution()}
+
+async function clearPurchaseDraft(){purchaseDraftItems=[];purchaseCurrentDistribution=[];purchaseNFData=null;nfParsedDraft=[];if($("#nfParsedItems"))$("#nfParsedItems").innerHTML="";renderPurchaseItems();renderPurchaseDistribution()}
+async function savePurchase(){if(!purchaseDraftItems.length)return alert("Adicione itens.");const now=new Date().toISOString(),pid="COMP-"+now.slice(0,10).replaceAll("-","")+"-"+String(Date.now()).slice(-5),purchase={id:pid,at:now,date:$("#purchaseDate").value||now.slice(0,10),supplier:$("#purchaseSupplier").value.trim(),document:$("#purchaseDoc").value.trim(),items:purchaseDraftItems,nf:purchaseNFData,status:"RECEIVED_AND_DISTRIBUTED",updatedAt:now};for(const it of purchaseDraftItems){const p=await prod(it.ean);for(const d of it.distribution.filter(x=>+x.qty>0)){const q=+d.qty;await adjustStock(d.unitId,it.ean,q,p,+it.cost||0);await localPut("moves",{id:id("m"),at:now,type:d.status==="CD"?"COMPRA_CD":"COMPRA_DISTRIBUIDA",to:d.unitId,ean:it.ean,product:p.name,qty:q,unitCost:it.cost,purchaseId:pid});if(it.expiry)await localPut("expiries",{id:id("e"),unitId:d.unitId,ean:it.ean,product:p.name,qty:q,date:it.expiry,lot:it.lot,purchaseId:pid,updatedAt:now})}}await localPut("purchases",purchase);await syncAll(false);$("#purchaseMsg").textContent=`${pid} registrada; estoques atualizados.`;await clearPurchaseDraft();renderEntries()}
+async function renderEntries(){if(!$("#purchaseDate").value)$("#purchaseDate").value=new Date().toISOString().slice(0,10);renderPurchaseItems();renderPurchaseDistribution();const rows=(await all("purchases")).sort((a,b)=>b.at.localeCompare(a.at)).slice(0,50);$("#purchaseHistory").innerHTML=rows.map(x=>`<div class="row"><span><b>${x.id}</b><br><small>${new Date(x.at).toLocaleString("pt-BR")} • ${esc(x.supplier||"")} • ${(x.items||[]).length} itens</small></span><span>${esc(x.document||"")}</span></div>`).join("")||'<p class="muted">Nenhuma compra.</p>'}
 
 // ---------- Movimentações ----------
 async function moveProd(){const e=$("#mean").value.replace(/\D/g,"");$("#mean").value=e;const p=await prod(e);$("#mprod").innerHTML=p?`<b>${esc(p.name)}</b><br><small>${e}</small>`:(e.length>=8?"EAN não cadastrado":"Informe o EAN")}
@@ -465,13 +512,56 @@ async function calcDemand(){
 // ---------- Base Mestre ----------
 async function loadMaster(){alert("A Base Mestre agora é carregada pela Base Central autenticada. Não há mais arquivo público no GitHub.")}
 
-// ---------- usuários / permissões ----------
-async function renderUsersAdmin(){if(currentSession?.role!=="ADMIN"||!$("#usersList"))return;try{const r=await apiGet("list_users");$("#usersList").innerHTML=(r.users||[]).map(u=>`<div class="user-row"><span><b>${esc(u.username)}</b><br><small>${u.role==="ADMIN"?"Administrador":"Funcionário"}${u.permissions?.length?" • "+u.permissions.join(", "):""}</small></span><span class="mini"><span class="role-badge">${u.role}</span>${u.username!==currentSession.username?`<button class="secondary" onclick="disableUser('${u.username}',${u.active!==false})">${u.active===false?"Ativar":"Inativar"}</button>`:""}</span></div>`).join("")}catch(e){$("#usersList").innerHTML='<p class="muted">Não foi possível carregar os usuários.</p>'}}
-async function saveUserAdmin(){if(currentSession?.role!=="ADMIN")return;const username=$("#newUsername").value.trim(),password=$("#newUserPassword").value,role=$("#newUserRole").value,permissions=$$(".permcheck:checked").map(x=>x.value);if(!username)return alert("Informe o usuário.");if(password&&password.length<8)return alert("A senha precisa ter pelo menos 8 caracteres.");try{await apiPost("save_user",{username,password,role,permissions:JSON.stringify(role==="ADMIN"?ADMIN_VIEWS:permissions)});$("#newUsername").value="";$("#newUserPassword").value="";await renderUsersAdmin();alert("Usuário salvo.")}catch(e){alert("Falha ao salvar usuário: "+e.message)}}
+// ---------- usuários / perfis ----------
+let editingProfileId="";
+function showUserAdminTab(tab){
+  $("#usersPanel").classList.toggle("hidden",tab!=="users");$("#profilesPanel").classList.toggle("hidden",tab!=="profiles");
+  $("#tabUsers").classList.toggle("active",tab==="users");$("#tabProfiles").classList.toggle("active",tab==="profiles");
+  if(tab==="profiles")renderProfilesAdmin()
+}
+async function renderUsersAdmin(){
+  if(currentSession?.role!=="ADMIN"||!$("#usersList"))return;
+  try{const [r,p]=await Promise.all([apiGet("list_users"),apiGet("list_profiles")]),profiles=p.profiles||[];$("#newUserRole").innerHTML=profiles.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join("");
+  $("#usersList").innerHTML=(r.users||[]).map(u=>`<div class="user-row"><span><b>${esc(u.displayName||u.username)}</b><br><small>@${esc(u.username)} • ${esc(u.profileName||u.role||"")}</small><div class="user-meta"><span>${u.active===false?"Inativo":"Ativo"}</span>${u.lastLogin?`<span>Último acesso: ${new Date(u.lastLogin).toLocaleString("pt-BR")}</span>`:""}</div></span><span class="mini"><button onclick="editUserAdmin('${u.username}')">Editar</button>${u.username!==currentSession.username?`<button class="secondary" onclick="disableUser('${u.username}',${u.active!==false})">${u.active===false?"Ativar":"Inativar"}</button>`:""}</span></div>`).join("")}catch(e){$("#usersList").innerHTML='<p class="muted">Não foi possível carregar os usuários.</p>'}
+}
+
+async function saveUserAdmin(){
+  if(currentSession?.role!=="ADMIN")return;const username=$("#newUsername").value.trim(),displayName=$("#newUserDisplayName").value.trim(),password=$("#newUserPassword").value,profileId=$("#newUserRole").value,note=$("#newUserNote").value.trim();
+  if(!username)return alert("Informe o usuário.");if(password&&password.length<8)return alert("A senha precisa ter pelo menos 8 caracteres.");
+  try{await apiPost("save_user",{username,displayName,password,profileId,note});$("#newUsername").value="";$("#newUserDisplayName").value="";$("#newUserPassword").value="";$("#newUserNote").value="";$("#newUsername").readOnly=false;await renderUsersAdmin();alert("Usuário salvo.")}catch(e){alert("Falha ao salvar usuário: "+e.message)}
+}
+async function editUserAdmin(username){const r=await apiGet("list_users"),u=(r.users||[]).find(x=>x.username===username);if(!u)return;$("#newUsername").value=u.username;$("#newUsername").readOnly=true;$("#newUserDisplayName").value=u.displayName||"";$("#newUserRole").value=u.profileId||"EMPLOYEE";$("#newUserNote").value=u.note||"";$("#newUserPassword").value="";window.scrollTo({top:0,behavior:"smooth"})}
+
 async function disableUser(username,currentlyActive){if(currentSession?.role!=="ADMIN")return;await apiPost("set_user_active",{username,active:String(!currentlyActive)});renderUsersAdmin()}
-async function changeOwnPassword(){const current=prompt("Digite sua senha atual:");if(current===null)return;const next=prompt("Digite a nova senha (mínimo 8 caracteres):");if(!next||next.length<8)return alert("Senha inválida.");try{await apiPost("change_password",{currentPassword:current,newPassword:next});alert("Senha alterada com sucesso.")}catch(e){alert("Não foi possível alterar a senha: "+e.message)}}
+async function changeOwnPassword(){
+  const current=prompt("Digite sua senha atual:");if(current===null)return;
+  const next=prompt("Digite a nova senha (mínimo 8 caracteres):");if(!next||next.length<8)return alert("Senha inválida.");
+  try{await apiPost("change_password",{currentPassword:current,newPassword:next});alert("Senha alterada com sucesso.")}catch(e){alert("Não foi possível alterar a senha: "+e.message)}
+}
+function clearProfileForm(){editingProfileId="";$("#profileName").value="";$("#profileDescription").value="";$$(".profileperm").forEach(x=>x.checked=false)}
+async function renderProfilesAdmin(){
+  if(currentSession?.role!=="ADMIN")return;
+  try{
+    const r=await apiGet("list_profiles");
+    $("#profilesList").innerHTML=(r.profiles||[]).map(p=>`<div class="profile-card"><div class="row"><span><b>${esc(p.name)}</b><br><small>${esc(p.description||"")}</small><div class="perms">${(p.permissions||[]).join(" • ")}</div></span><span class="mini">${p.system?'<span class="role-badge">Sistema</span>':`<button onclick="editProfileAdmin('${p.id}')">Editar</button><button class="secondary" onclick="deleteProfileAdmin('${p.id}')">Excluir</button>`}</span></div></div>`).join("")
+  }catch(e){$("#profilesList").innerHTML='<p class="muted">Não foi possível carregar os perfis.</p>'}
+}
+async function editProfileAdmin(idv){
+  const r=await apiGet("list_profiles"),p=(r.profiles||[]).find(x=>x.id===idv);if(!p)return;
+  editingProfileId=p.id;$("#profileName").value=p.name||"";$("#profileDescription").value=p.description||"";$$(".profileperm").forEach(x=>x.checked=(p.permissions||[]).includes(x.value))
+}
+async function saveProfileAdmin(){
+  if(currentSession?.role!=="ADMIN")return;
+  const name=$("#profileName").value.trim(),description=$("#profileDescription").value,permissions=$$(".profileperm:checked").map(x=>x.value);
+  if(!name)return alert("Informe o nome do perfil.");
+  await apiPost("save_profile",{id:editingProfileId,name,description,permissions:JSON.stringify(permissions)});clearProfileForm();await renderProfilesAdmin();await renderUsersAdmin();alert("Perfil salvo.")
+}
+async function deleteProfileAdmin(idv){
+  if(!confirm("Excluir este perfil?"))return;
+  try{await apiPost("delete_profile",{id:idv});await renderProfilesAdmin();await renderUsersAdmin()}catch(e){alert("Não foi possível excluir: "+e.message)}
+}
 
 // ---------- settings / backup ----------
 async function saveBackend(){const u=$("#backend").value.trim();localStorage.setItem("okeo_backend_url",u);await put("settings",{id:"backend",url:u});$("#syncMsg").textContent="URL salva.";updateSyncState()}
 async function renderSettings(){const s=await get("settings","backend");$("#backend").value=getBackendUrl()||s?.url||"";const p=await all("products");$("#masterMsg").textContent=`Cadastro local atual: ${p.length} produtos.`;updateSyncState();if(currentSession?.role==="ADMIN")await renderUsersAdmin()}
-async function backup(){const o={version:"2.2",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}
+async function backup(){const o={version:"2.5",createdAt:new Date().toISOString(),stores:{}};for(const s of SYNC_STORES)o.stores[s]=await all(s);const b=new Blob([JSON.stringify(o,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="OKEO_Estoque_Backup_V1_4.json";a.click()}

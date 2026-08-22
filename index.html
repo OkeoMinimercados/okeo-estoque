@@ -33,8 +33,19 @@
       <label>Senha<div class="password-wrap"><input id="pass" type="password" autocomplete="current-password" placeholder="Senha"><button id="togglePass" type="button">◉</button></div></label>
       <label class="remember"><input id="remember" type="checkbox"> Manter conectado</label>
       <button id="enter" class="login-submit">Entrar no sistema</button>
+<div id="bootstrapBox" class="bootstrap-box hidden">
+  <div class="orline"><span>Primeiro acesso</span></div>
+  <p>Nenhum administrador foi configurado ainda.</p>
+  <button id="openBootstrap" type="button" class="outline-login">Criar primeiro administrador</button>
+  <div id="bootstrapForm" class="hidden">
+    <label>Usuário administrador<input id="bootstrapUser" placeholder="admin"></label>
+    <label>Senha<input id="bootstrapPass" type="password" placeholder="Mínimo 8 caracteres"></label>
+    <label>Confirmar senha<input id="bootstrapPass2" type="password" placeholder="Repita a senha"></label>
+    <button id="createBootstrap" type="button" class="login-submit">Criar administrador</button>
+  </div>
+</div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>Sistema online e seguro <b>v2.2</b></div>
+      <div class="secure-status"><span></span>Sistema online e seguro <b>v2.5</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -48,7 +59,7 @@
       <button data-v="sales" data-icon="▥">Vendas</button>
       <button data-v="inventory" data-icon="▣">Estoque / Inventário</button>
       <button data-v="control" data-icon="✓">Ponto de Controle</button>
-      <button data-v="entries" data-icon="▤">Entrada / NF</button>
+      <button data-v="entries" data-icon="▤">Compras / NF</button>
       <button data-v="moves" data-icon="⇄">Movimentações</button>
       <button data-v="replenishment" data-icon="🛒">Central de Reposição</button>
       <button data-v="expiry" data-icon="□">Validades</button>
@@ -66,7 +77,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Local</span><div class="user-badge"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">OKEO Minimercados</small></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Local</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">OKEO Minimercados</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -139,22 +150,19 @@
 </section>
 
 <section id="entries" class="view card hidden">
-<h2>Entradas / Incrementos / Nota Fiscal</h2>
-<div class="grid3">
-  <label>Unidade recebedora<select id="enunit"></select></label>
-  <label>Tipo<select id="entype"><option value="COMPRA_NF">Compra / NF</option><option value="INCREMENTO_MANUAL">Incremento manual</option></select></label>
-  <label>Nº NF<input id="ennf" placeholder="Opcional"></label><label>Reposição/Pedido relacionado<select id="enrep"><option value="">Nenhum</option></select></label>
-  <label>EAN<input id="enean" inputmode="numeric"></label>
-  <label>Quantidade<input id="enqty" type="number" min="0" step=".01" value="1"></label>
-  <label>Preço unitário pago<input id="encost" type="number" min="0" step=".01" value="0"></label>
-</div>
-<div id="enprod" class="productbox">Informe o EAN</div>
-<label>Foto da NF / comprovante<input id="enphoto" type="file" accept="image/*,.pdf" capture="environment"></label>
-<label>Observação<input id="ennote"></label>
-<button id="ensave">Registrar entrada</button>
-<p id="enmsg" class="muted"></p>
-<h3>Últimas entradas</h3><div id="enlist"></div>
-</section>
+<h2>Compras / NF</h2><p class="muted">Lance a compra, distribua por condomínio/CD e atualize estoque e validade em um único fluxo.</p>
+<div class="tabsbar"><button id="purchaseTabManual" class="tabbtn active">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
+<div id="purchaseManualPanel">
+<div class="grid3"><label>Fornecedor<input id="purchaseSupplier"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
+<div class="grid3"><label>EAN<input id="purchaseEAN"></label><label>Quantidade<input id="purchaseQty" type="number" min=".01" step=".01" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
+<div id="purchaseProductInfo" class="productbox muted">Digite um EAN.</div>
+<div class="grid3"><label>Validade<input id="purchaseExpiry" type="date"></label><label>Lote<input id="purchaseLot"></label><label>Observação<input id="purchaseNote"></label></div>
+<div class="actions"><button id="purchaseSuggest">Calcular distribuição sugerida</button><button id="purchaseAdd" class="secondary">Adicionar item</button></div></div>
+<div id="purchaseNFPanel" class="hidden"><div class="upload-card"><label>Arquivo da NF<input id="purchaseNFFile" type="file" accept="image/*,.pdf,.xml,text/xml,application/xml"></label><p class="muted"><b>XML NF-e:</b> leitura automática de fornecedor, número da NF, EAN, quantidade, custo e, quando existir, lote e validade. PDF/foto ficam anexados para conferência manual.</p><div class="actions"><button id="purchaseAttachNF">Ler / anexar NF</button></div><span id="purchaseNFStatus" class="muted"></span></div><div id="nfParsedItems"></div></div>
+<hr><h3>Distribuição sugerida</h3><p class="muted">Ruptura e reposição têm prioridade; completa até o Estoque Ideal; a sobra vai para o CD. Tudo é editável.</p><div id="purchaseDistribution"></div>
+<hr><h3>Itens da compra</h3><div id="purchaseItems"></div>
+<div class="actions"><button id="purchaseSave">Confirmar compra e abastecimento</button><button id="purchaseClear" class="secondary">Limpar</button></div><p id="purchaseMsg" class="muted"></p>
+<hr><h3>Histórico de compras</h3><div id="purchaseHistory"></div></section>
 
 <section id="moves" class="view card hidden">
 <h2>Movimentação de Estoque</h2>
@@ -273,13 +281,13 @@
 <section id="settings" class="view card hidden">
 <h2>Configurações</h2>
 <div id="userAdminPanel" class="admin-only">
-<h3>Usuários e Permissões</h3>
-<p class="muted">Crie e gerencie os acessos do Administrador e do Funcionário.</p>
-<div class="grid3">
-<label>Usuário<input id="newUsername" placeholder="Ex.: braulio"></label>
-<label>Senha<input id="newUserPassword" type="password" placeholder="Mínimo 8 caracteres"></label>
-<label>Perfil<select id="newUserRole"><option value="ADMIN">Administrador</option><option value="EMPLOYEE">Funcionário</option></select></label>
+<h3>Usuários e Perfis</h3>
+<p class="muted">Crie usuários, cadastre perfis reutilizáveis e defina as permissões de cada perfil.</p>
+<div class="tabsbar">
+  <button id="tabUsers" class="tabbtn active" type="button">Usuários</button>
+  <button id="tabProfiles" class="tabbtn" type="button">Perfis de Acesso</button>
 </div>
+<div id="usersPanel"><div class="grid3"><label>Usuário<input id="newUsername" placeholder="Ex.: braulio"></label><label>Nome<input id="newUserDisplayName" placeholder="Ex.: Braulio"></label><label>Perfil<select id="newUserRole"></select></label></div><div class="grid2"><label>Senha / nova senha<input id="newUserPassword" type="password" placeholder="Mínimo 8 caracteres"></label><label>Observação<input id="newUserNote" placeholder="Opcional"></label></div>
 <div class="permission-box"><b>Permissões do funcionário</b>
 <div class="perm-grid">
 <label><input type="checkbox" class="permcheck" value="inventory" checked> Estoque / Inventário</label>
@@ -291,7 +299,38 @@
 <label><input type="checkbox" class="permcheck" value="replenishment"> Central de Reposição</label>
 </div></div>
 <div class="actions"><button id="createUser">Criar / atualizar usuário</button><button id="changeMyPassword" class="secondary">Alterar minha senha</button></div>
-<div id="usersList"></div><hr></div>
+<div id="usersList"></div>
+</div>
+<div id="profilesPanel" class="hidden">
+  <div class="grid2">
+    <label>Nome do perfil<input id="profileName" placeholder="Ex.: Estoquista"></label>
+    <label>Descrição<input id="profileDescription" placeholder="Ex.: Inventário e movimentações"></label>
+  </div>
+  <div class="permission-box">
+    <b>Permissões do perfil</b>
+    <div class="perm-grid" id="profilePermissions">
+      <label><input type="checkbox" class="profileperm" value="home"> Dashboard</label>
+      <label><input type="checkbox" class="profileperm" value="sales"> Vendas</label>
+      <label><input type="checkbox" class="profileperm" value="inventory"> Estoque / Inventário</label>
+      <label><input type="checkbox" class="profileperm" value="control"> Ponto de Controle</label>
+      <label><input type="checkbox" class="profileperm" value="entries"> Entrada / NF</label>
+      <label><input type="checkbox" class="profileperm" value="moves"> Movimentações</label>
+      <label><input type="checkbox" class="profileperm" value="replenishment"> Central de Reposição</label>
+      <label><input type="checkbox" class="profileperm" value="expiry"> Validades</label>
+      <label><input type="checkbox" class="profileperm" value="groups"> Grupos</label>
+      <label><input type="checkbox" class="profileperm" value="products"> Produtos</label>
+      <label><input type="checkbox" class="profileperm" value="units"> Unidades</label>
+      <label><input type="checkbox" class="profileperm" value="demand"> Demanda Inteligente</label>
+      <label><input type="checkbox" class="profileperm" value="settings"> Configurações</label>
+    </div>
+  </div>
+  <div class="actions">
+    <button id="saveProfile" type="button">Salvar perfil</button>
+    <button id="clearProfile" type="button" class="secondary">Limpar</button>
+  </div>
+  <div id="profilesList"></div>
+</div>
+<hr></div>
 <label>URL Base Central /exec<input id="backend"></label>
 <div class="actions">
 <button id="backsave">Salvar URL</button>
