@@ -133,3 +133,33 @@ table{font-size:12px}
 
 .expiry-plan-row{display:block;width:100%;text-align:left;background:#fff;color:inherit;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:9px 10px}.expiry-plan-row:hover{background:#f5faf6}.expiry-plan-row span{display:grid;gap:2px}
 #stockMgmtUnitTable .dtable{max-height:560px;overflow:auto}
+
+/* V3.31 — filtros do Controle de Estoque por Condomínio */
+.stock-unit-filters{display:grid;grid-template-columns:minmax(220px,1.25fr) minmax(220px,1.25fr) repeat(3,minmax(150px,.8fr));gap:10px;align-items:end;margin-bottom:12px}
+.stock-unit-filters label{margin:0}.stock-unit-filters select,.stock-unit-filters input{width:100%}
+.compact-metrics{margin:8px 0 12px}.row-note{font-weight:400;color:var(--muted,#667085);white-space:nowrap}
+@media(max-width:1050px){.stock-unit-filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.stock-unit-filters{grid-template-columns:1fr}}
+
+
+/* V3.32 — tabelas operacionais, checklist e integração visual */
+.selector-list{max-height:440px;overflow:auto;border:1px solid var(--line,#dbe6df);border-radius:10px;background:#fff}
+.selector-table-wrap{margin:0;max-height:440px;overflow:auto}
+.selector-table{width:100%;border-collapse:collapse}
+.selector-table th{position:sticky;top:0;z-index:2;background:#f1f8f4}
+.selector-table th,.selector-table td{padding:8px 10px;border-bottom:1px solid #e1ebe5;vertical-align:middle;text-align:left}
+.selector-table tr.selector-selected{background:#f0faf4}
+.expiry-plan-table{max-height:460px;overflow:auto;margin-top:10px}
+.expiry-plan-table th{position:sticky;top:0;background:#f1f8f4;z-index:2}
+.rep-priority-note{margin:10px 0}
+.rep-inline-filters{margin:12px 0}
+.rep-check-table th{position:sticky;top:0;background:#eef7f1;z-index:2}
+.rep-check-table td{vertical-align:middle}
+.rep-check-table input[type=checkbox]{width:18px;height:18px}
+.rep-removed-row{opacity:.6;background:#fff5f5}
+.danger-soft{background:#fff1f1!important;color:#b42318!important;border:1px solid #f4b8b8!important}
+.physical-count-product-list .dtable th{position:sticky;top:0;background:#eef7f1;z-index:2}
+
+
+/* V3.33 — Planejamento semanal de compras */
+.purchase-main-tabs{flex-wrap:wrap}.purchase-weekly-head{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.75fr);gap:16px;align-items:start;margin-bottom:14px}.purchase-weekly-head h3{margin:0 0 4px}.weekly-formula{border:1px solid #cfe6d6;background:#f5fbf7;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:3px;font-size:12px}.weekly-formula b{color:#08783a}.weekly-formula span{color:#42534a}.weekly-purchase-filters{margin:12px 0}.weekly-summary{margin:14px 0}.weekly-purchase-table{margin-top:12px}.weekly-purchase-table th{position:sticky;top:0;z-index:1}.weekly-purchase-table td,.weekly-purchase-table th{white-space:nowrap}.weekly-preventive-row{background:#fff9ea}.weekly-preventive-row td:first-child{box-shadow:inset 4px 0 #d99a00}.weekly-preventive-note{display:block;color:#9a6a00;margin-top:3px}.weekly-buy-row{background:#fffdf4}.purchase-replenishment-embed{border:1px solid #d8e5dc;border-radius:14px;padding:16px;background:#fbfdfb}.purchase-replenishment-embed h3{margin-top:0}@media(max-width:900px){.purchase-weekly-head{grid-template-columns:1fr}.weekly-purchase-table{overflow:auto}.weekly-purchase-filters{grid-template-columns:1fr}}

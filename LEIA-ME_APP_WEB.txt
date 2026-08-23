@@ -1,0 +1,15 @@
+OKEO Core V3.33 — APP WEB
+
+Este pacote contém somente os arquivos necessários para executar/publicar o aplicativo web/PWA.
+Não contém o backend Google Apps Script nem documentação de desenvolvimento.
+
+Arquivos principais:
+- index.html
+- app-v3.33.0.js
+- db.js
+- styles.css
+- sw.js
+- manifest.webmanifest
+- okeo-logo.png
+
+Para publicar no GitHub Pages, envie o conteúdo deste pacote para a raiz do site/repositório publicado.

@@ -233,3 +233,34 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - Validades exibe somente produtos do planograma da unidade selecionada.
 - Base Mestre: exportação CSV/XLSX e importação XLSX/CSV/JSON.
 - Exportação do histórico corrigida para função global.
+
+
+## V3.31 — Controle por condomínio operacional
+- Controle de Estoque por Condomínio passa a exibir todos os produtos pertinentes à unidade (planograma, saldo físico ou demanda vinculada).
+- Exibe quantidade atual, existência de validade cadastrada, próxima validade, status de abastecimento e quantidade sugerida para reposição.
+- Filtros combináveis por pesquisa, estoque, validade e status de abastecimento.
+- Resumo imediato de produtos pertinentes, produtos com/sem validade e itens que precisam abastecimento/estão em ruptura.
+- Itens com saldo/demanda mas fora do planograma permanecem visíveis e sinalizados para evitar estoque oculto.
+
+
+## V3.32 — Contagem, listas em tabela e reposição por checklist
+- “Controle de Estoque” renomeado na interface para “Contagem de Estoque”. A chave interna `controlstock` foi preservada para não quebrar perfis e permissões existentes.
+- Integração bidirecional reforçada: lançamento manual superior, digitação na tabela, botões +/−, câmera e editor do ponto de controle passam a refletir o mesmo `controlPointItem`.
+- Seletor reutilizável de produtos alterado de cartões/linhas soltas para tabela com Produto, EAN, fornecedor, segmento, estoque e status.
+- Validades → Produtos do planograma da unidade agora retorna tabela com estoque atual, validade cadastrada, próxima validade e ação.
+- Relatório de Reposição agora possui checklist operacional: itens podem ser desmarcados/retirados e restaurados antes da aprovação. Itens retirados não entram na aprovação nem nos PDFs e são auditados.
+- Rascunho de reposição ganhou busca e filtros por selecionados, retirados, origem CD e compra.
+- A prioridade CD → fornecedor foi preservada e explicitada: o saldo disponível no CD é consumido primeiro; somente a falta residual vira sugestão de compra.
+- Resumo da reposição diferencia itens ativos, origem CD, compra e removidos.
+
+
+## V3.33 — Compras semanais preventivas e Reposição dentro de Compras
+- O módulo Compras passa a abrir pelo Planejamento de Compra Semanal.
+- Fornecedores são tratados, por padrão, com horizonte de 7 dias entre entregas.
+- Compra mínima para evitar ruptura = demanda do horizonte - estoque projetado - quantidade disponível no CD.
+- Compra recomendada = demanda do horizonte + nível de alerta - estoque projetado - quantidade disponível no CD.
+- Produtos que estão com status OK na reposição imediata podem aparecer como compra preventiva da semana.
+- O CD continua sendo consumido primeiro antes de sugerir compra externa.
+- Relatório por condomínio e consolidado por produto/fornecedor, com exportação CSV compatível com Excel.
+- Compras ganhou acesso interno ao resumo da Reposição Operacional, mantendo o checklist completo existente.
+- Exemplo validado: estoque 10, média semanal 40, alerta 4, CD 0 -> compra mínima 30 e recomendada 34.

@@ -1,0 +1,7 @@
+OKEO Core V3.33 — GITHUB
+
+Pacote pronto para manter no repositório GitHub.
+Inclui o App Web/PWA e a documentação da versão.
+Não inclui credenciais nem o backend Apps Script.
+
+Para GitHub Pages, mantenha index.html e os demais arquivos web na raiz da branch publicada.

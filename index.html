@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.30.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.33.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -71,7 +71,7 @@
     <nav id="menu">
       <button data-v="home" data-icon="⌂">Dashboard</button>
       <button data-v="stockmgmt" data-icon="▦">Gestão de Estoque</button>
-      <button data-v="controlstock" data-icon="✓">Controle de Estoque</button>
+      <button data-v="controlstock" data-icon="✓">Contagem de Estoque</button>
       <button data-v="sales" data-icon="▥">Vendas</button>
       <button data-v="entries" data-icon="▤">Compras / NF</button>
       <button data-v="moves" data-icon="±">Ajuste de Estoque</button>
@@ -92,7 +92,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.30.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.33.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -205,7 +205,7 @@
 </section>
 
 <section id="controlstock" class="view card hidden">
-<h2>Controle de Estoque</h2>
+<h2>Contagem de Estoque</h2>
 <p class="muted">Contagem de Estoque Física por unidade, com pesquisa, lista completa, checklist e leitura por câmera.</p>
 <div class="subcard control-physical-only">
   
@@ -216,9 +216,9 @@
 <p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
 <div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<select id="cowner"></select></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
 <div class="actions"><button id="cstart">Iniciar contagem de estoque física</button><button id="capprove" class="secondary">Aprovar contagem de estoque física</button></div>
-<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao contagem de estoque física</button></label></div><div class="selector-toggle-row"><button id="controlSelectorBtn" type="button" class="secondary">Selecionar vários produtos para conferência</button></div>
+<p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar à contagem de estoque física</button></label></div><div class="selector-toggle-row"><button id="controlSelectorBtn" type="button" class="secondary">Selecionar vários produtos para conferência</button></div>
 <div id="controlProductSelector" class="hidden"></div>
-<div class="actions"><button id="controlAddSelected" type="button" class="secondary hidden">Adicionar selecionados ao Contagem de Estoque Física</button></div>
+<div class="actions"><button id="controlAddSelected" type="button" class="secondary hidden">Adicionar selecionados à Contagem de Estoque Física</button></div>
 <div class="physical-count-list-card">
   <div class="section-head">
     <div>
@@ -252,9 +252,33 @@
 </section>
 
 <section id="entries" class="view card hidden">
-<h2>Compras / NF</h2><p class="muted">Lance a compra, distribua por condomínio/CD e atualize estoque e validade em um único fluxo.</p>
-<div class="tabsbar"><button id="purchaseTabManual" class="tabbtn active">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
-<div id="purchaseManualPanel">
+<h2>Compras</h2><p class="muted">Planeje a compra da semana, consulte a reposição operacional, receba NF e distribua mercadorias sem perder a prioridade do CD.</p>
+<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" class="tabbtn active">Compra semanal</button><button id="purchaseTabReplenishment" class="tabbtn">Reposição operacional</button><button id="purchaseTabManual" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
+<div id="purchaseWeeklyPanel">
+  <div class="purchase-weekly-head">
+    <div><h3>Planejamento de compras da semana</h3><p class="muted">Projeta o consumo até a próxima entrega do fornecedor. O CD é consumido primeiro; somente a falta remanescente vira compra externa.</p></div>
+    <div class="weekly-formula"><b>Regra principal</b><span>Compra mínima = demanda do período − estoque projetado − CD disponível</span><span>Compra recomendada = demanda do período + alerta − estoque projetado − CD disponível</span></div>
+  </div>
+  <div class="grid4 weekly-purchase-filters">
+    <label>Cobertura até próxima entrega<select id="weeklyCoverageDays"><option value="7" selected>7 dias (1 entrega/semana)</option><option value="6">6 dias</option><option value="5">5 dias</option><option value="4">4 dias</option><option value="3">3 dias</option><option value="2">2 dias</option><option value="1">1 dia</option><option value="14">14 dias</option></select></label>
+    <label>Relatório por condomínio<select id="weeklyUnitFilter"><option value="ALL">Todos os condomínios</option></select></label>
+    <label>Fornecedor<select id="weeklySupplierFilter"><option value="ALL">Todos os fornecedores</option></select></label>
+    <label>Pesquisar produto<input id="weeklyPurchaseSearch" placeholder="Produto ou EAN"></label>
+  </div>
+  <div class="actions"><button id="weeklyPurchaseCalc">Gerar / atualizar compra semanal</button><button id="weeklyPurchaseByUnit" class="secondary">Visão por condomínio</button><button id="weeklyPurchaseByProduct" class="secondary">Consolidado por produto</button><button id="weeklyPurchaseExport" class="secondary">Exportar para Excel (CSV)</button></div>
+  <div class="alert-card alert-info"><b>Importante:</b> este relatório é preventivo. Um produto pode aparecer como <b>“não precisa reposição” hoje</b> e, mesmo assim, exigir compra para atravessar a semana sem ruptura.</div>
+  <div id="weeklyPurchaseSummary"></div>
+  <div id="weeklyPurchaseReport"></div>
+</div>
+<div id="purchaseReplenishmentPanel" class="hidden">
+  <div class="purchase-replenishment-embed">
+    <h3>Reposição operacional</h3>
+    <p class="muted">A reposição imediata continua baseada em ruptura/alerta e prioriza transferência do CD antes de compra. Ela complementa — e não substitui — o planejamento semanal.</p>
+    <div id="purchaseReplenishmentSummary"></div>
+    <div class="actions"><button id="purchaseOpenReplenishment">Abrir checklist completo de reposição</button><button id="purchaseRefreshReplenishment" class="secondary">Atualizar resumo</button></div>
+  </div>
+</div>
+<div id="purchaseManualPanel" class="hidden">
 <div class="grid3"><label>Fornecedor<input id="purchaseSupplier" list="supplierOptions"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
 <div class="grid3"><label>EAN<input id="purchaseEAN"><div class="selector-toggle-row"><button id="purchaseSelectorBtn" type="button" class="secondary">Procurar produto cadastrado</button></div><div id="purchaseProductSelector" class="hidden"></div><small id="purchaseProductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade<input id="purchaseQty" type="number" min="1" step="1" value="1"></label><label>Custo unitário<input id="purchaseCost" type="number" min="0" step=".01" value="0"></label></div>
 <div id="purchaseProductInfo" class="productbox muted">Digite um EAN.</div>
@@ -367,7 +391,7 @@
 
 
 <section id="stockmgmt" class="view card hidden">
-<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary">Controle de Estoque por Condomínio</button></div><div id="stockMgmtGeneralPanel">
+<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary">Gestão de Estoque por Condomínio</button></div><div id="stockMgmtGeneralPanel">
 <p class="muted">Fotografia operacional do estoque atual, independente da próxima importação de vendas.</p>
 <div id="stockMgmtMetrics" class="metriccards"></div>
 <div class="stock-meta-row">
@@ -392,7 +416,16 @@
 </div>
 <div id="stockMgmtMoveSummary"></div><div id="stockMgmtMoves"></div>
 </div>
-</div><div id="stockMgmtUnitPanel" class="hidden"><div class="subcard"><div class="grid2"><label>Condomínio / CD<select id="stockMgmtUnitSelect"></select></label><label>Pesquisar produto<input id="stockMgmtUnitSearch" placeholder="Produto ou EAN"></label></div><div id="stockMgmtUnitTable"></div></div></div></section>
+</div><div id="stockMgmtUnitPanel" class="hidden"><div class="subcard">
+<div class="stock-unit-filters">
+  <label>Condomínio / CD<select id="stockMgmtUnitSelect"></select></label>
+  <label>Pesquisar produto<input id="stockMgmtUnitSearch" placeholder="Produto ou EAN"></label>
+  <label>Estoque<select id="stockMgmtUnitStockFilter"><option value="ALL">Todos</option><option value="WITH">Com estoque</option><option value="ZERO">Estoque zerado</option></select></label>
+  <label>Validade<select id="stockMgmtUnitExpiryFilter"><option value="ALL">Todos</option><option value="YES">Com validade cadastrada</option><option value="NO">Sem validade cadastrada</option></select></label>
+  <label>Abastecimento<select id="stockMgmtUnitStatusFilter"><option value="ALL">Todos</option><option value="RUPTURA">Ruptura</option><option value="REPOSIÇÃO">Precisa reposição</option><option value="OK">Não precisa reposição</option><option value="SEM DEMANDA">Sem demanda calculada</option></select></label>
+</div>
+<div id="stockMgmtUnitSummary" class="metriccards compact-metrics"></div>
+<div id="stockMgmtUnitTable"></div></div></div></section>
 <section id="sales" class="view card hidden">
 <h2>Vendas / VM Pay</h2>
 <p><b>VM Pay:</b> estrutura preparada. Até a API ser disponibilizada, use CSV.</p>
@@ -450,7 +483,10 @@
   <div class="field"><label>Agrupar PDF por</label><select id="repMode"><option value="BOTH">Ambos — Fornecedor e Condomínio</option><option value="SUPPLIER">Fornecedor</option><option value="UNIT">Condomínio</option></select></div>
 </div>
 <div class="actions"><button id="repDraft">Gerar / recalcular rascunho</button><button id="repApprove">Aprovar reposição e gerar PDF</button></div>
-<p id="repMsg" class="muted"></p><div id="repSummary"></div><div class="selector-toggle-row"><button id="repProductSelectorBtn" type="button" class="secondary">Filtrar produtos da reposição</button></div>
+<div class="alert-card alert-info rep-priority-note"><b>Prioridade de origem:</b> o sistema consulta primeiro o saldo disponível no CD. Somente a quantidade que faltar no CD é sugerida para compra do fornecedor.</div>
+<p id="repMsg" class="muted"></p><div id="repSummary"></div>
+<div class="grid2 rep-inline-filters"><label>Pesquisar no rascunho<input id="repDraftSearch" placeholder="Produto, EAN, unidade ou fornecedor"></label><label>Exibir<select id="repDraftStatus"><option value="ACTIVE">Selecionados para abastecer</option><option value="ALL">Todos</option><option value="REMOVED">Retirados da lista</option><option value="CD">Somente origem CD</option><option value="COMPRA">Somente compra</option></select></label></div>
+<div class="selector-toggle-row"><button id="repProductSelectorBtn" type="button" class="secondary">Filtro avançado de produtos</button></div>
 <div id="repProductSelector" class="hidden"></div>
 <div id="repEditor"></div><hr><h3>Reposições registradas</h3><div id="repHistory"></div>
 </section>
@@ -468,7 +504,7 @@
 <div class="permission-box"><b>Permissões do funcionário</b>
 <div class="perm-grid">
 <label><input type="checkbox" class="permcheck" value="stockmgmt"> Gestão de Estoque</label>
-<label><input type="checkbox" class="permcheck" value="controlstock" checked> Controle de Estoque</label>
+<label><input type="checkbox" class="permcheck" value="controlstock" checked> Contagem de Estoque</label>
 <label><input type="checkbox" class="permcheck" value="entries" checked> Compras / NF</label>
 <label><input type="checkbox" class="permcheck" value="moves" checked> Ajuste de Estoque</label>
 <label><input type="checkbox" class="permcheck" value="cdmove" checked> Movimentação Estoque CD</label>
@@ -490,7 +526,7 @@
       <label><input type="checkbox" class="profileperm" value="home"> Dashboard</label>
       <label><input type="checkbox" class="profileperm" value="sales"> Vendas</label>
       <label><input type="checkbox" class="profileperm" value="stockmgmt"> Gestão de Estoque</label>
-      <label><input type="checkbox" class="profileperm" value="controlstock"> Controle de Estoque</label>
+      <label><input type="checkbox" class="profileperm" value="controlstock"> Contagem de Estoque</label>
       <label><input type="checkbox" class="profileperm" value="entries"> Entrada / NF</label>
       <label><input type="checkbox" class="profileperm" value="moves"> Ajuste de Estoque</label>
       <label><input type="checkbox" class="profileperm" value="cdmove"> Movimentação Estoque CD</label>
@@ -552,5 +588,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.30.0.js"></script>
+<script src="app-v3.33.0.js"></script>
 </body></html>
