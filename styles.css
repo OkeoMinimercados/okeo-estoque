@@ -204,7 +204,7 @@ table{font-size:12px}
 
 .cd-tabs{margin-bottom:12px}.optional-second-expiry{margin-top:8px;padding-top:8px;border-top:1px dashed #d7dee7}#cdInboundList input{min-width:120px}.hidden[style*="block"]{display:block!important}
 
-/* V3.51 - leitura mais confortável */
+/* V3.52 - leitura mais confortável */
 .dtable th,.dtable td{padding-top:9px!important;padding-bottom:9px!important;line-height:1.35}
 .row{padding-top:10px!important;padding-bottom:10px!important}
 .compact-checklist label,.checklist-list label{padding-top:7px;padding-bottom:7px}
@@ -212,3 +212,18 @@ table{font-size:12px}
 .weekly-master-select{margin-top:4px;min-width:130px;font-size:10px}
 .clear-test-history-btn{float:right;margin-top:-34px;margin-bottom:10px}
 #cdInboundList .dtable td{vertical-align:top}
+
+/* V3.52 - legibilidade e navegação */
+.purchase-main-tabs{display:flex;gap:14px;flex-wrap:wrap;padding:8px 0 12px}
+.purchase-main-tabs .tabbtn{padding:10px 15px;line-height:1.25;white-space:nowrap}
+.weekly-purchase-filters{display:grid!important;grid-template-columns:repeat(2,minmax(260px,1fr))!important;gap:16px 22px!important;margin:14px 0 18px}
+.weekly-purchase-filters label,.weekly-purchase-filters .field{line-height:1.45}
+.weekly-purchase-filters select,.weekly-purchase-filters input,.weekly-purchase-filters .multiselect-toggle{margin-top:6px;min-height:38px}
+#weeklyPurchaseReport .dtable th,#weeklyPurchaseReport .dtable td{padding:10px 8px!important;line-height:1.4}
+#cdInboundList{margin-top:14px;min-height:80px}
+#cdInboundList table{width:100%}
+.supplier-product-panel{position:static!important;display:block!important;margin-top:12px;border:1px solid #dfe7e2;border-radius:10px;padding:12px;background:#fff;max-height:520px;overflow:auto}
+#supplierProductList table{width:100%}
+#supplierRegistryAdminList .row{min-height:48px;align-items:center}
+#supplierRegistryAdminList .mini{display:flex;gap:8px}
+@media(max-width:900px){.weekly-purchase-filters{grid-template-columns:1fr!important}}

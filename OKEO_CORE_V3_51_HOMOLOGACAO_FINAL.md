@@ -1,4 +1,4 @@
-# OKEO V3.51 — Homologação Final
+# OKEO V3.52 — Homologação Final
 
 ## Alterações desta versão
 
@@ -19,7 +19,7 @@
 Foram executadas **51/51 verificações aprovadas**, cobrindo:
 - sintaxe JavaScript;
 - IDs HTML;
-- Service Worker V3.51;
+- Service Worker V3.52;
 - destino por linha e seleção em massa;
 - persistência do destino no item comprado;
 - abas e filtros do CD;
@@ -34,4 +34,4 @@ O backend Apps Script também passou na verificação de sintaxe.
 
 ## Limitação de homologação
 
-O ambiente local valida código, estrutura e regras, mas não substitui o teste do PWA publicado. Após publicar V3.51, faça um ciclo com compra semanal de teste, marque alguns itens como CD, feche a compra, abra Pré-Separado em Compras, teste os quatro filtros, registre 3 validades em um produto e confirme a abertura de “Ver produtos” em um fornecedor.
+O ambiente local valida código, estrutura e regras, mas não substitui o teste do PWA publicado. Após publicar V3.52, faça um ciclo com compra semanal de teste, marque alguns itens como CD, feche a compra, abra Pré-Separado em Compras, teste os quatro filtros, registre 3 validades em um produto e confirme a abertura de “Ver produtos” em um fornecedor.

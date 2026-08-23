@@ -1,4 +1,4 @@
-# OKEO V3.51 — Homologação Final Local
+# OKEO V3.52 — Homologação Final Local
 
 ## Resultado
 
@@ -6,7 +6,7 @@
 
 ## Falha raiz corrigida
 
-Foi identificado que `bind()` ainda tentava ligar diretamente controles antigos de Reposição (`repDraft`, `repApprove`, `repUnitsToggle` e outros) que já não existiam no HTML. Isso gerava exceção durante a inicialização e impedia que handlers posteriores fossem instalados. Essa única falha explicava diversos sintomas simultâneos: abas de Gestão vazias, pesquisas sem filtrar e listas de fornecedores/produtos sem atualizar. Na V3.51 todos esses controles legados são opcionais/guardados e os filtros críticos possuem uma camada independente de binding.
+Foi identificado que `bind()` ainda tentava ligar diretamente controles antigos de Reposição (`repDraft`, `repApprove`, `repUnitsToggle` e outros) que já não existiam no HTML. Isso gerava exceção durante a inicialização e impedia que handlers posteriores fossem instalados. Essa única falha explicava diversos sintomas simultâneos: abas de Gestão vazias, pesquisas sem filtrar e listas de fornecedores/produtos sem atualizar. Na V3.52 todos esses controles legados são opcionais/guardados e os filtros críticos possuem uma camada independente de binding.
 
 ## Correções principais
 
@@ -26,7 +26,7 @@ Foi identificado que `bind()` ainda tentava ligar diretamente controles antigos 
 
 - Inicialização e regressão do `bind()` com controles removidos.
 - Estrutura HTML, IDs duplicados e sintaxe JavaScript.
-- Service Worker e arquivos versionados V3.51.
+- Service Worker e arquivos versionados V3.52.
 - 18 pesquisas de texto e 13 filtros/selects críticos com ligação efetiva.
 - Gestão por Condomínio e Divergências.
 - Fornecedor único, troca de fornecedor, renomeação e propagação.
@@ -41,4 +41,4 @@ Foi identificado que `bind()` ainda tentava ligar diretamente controles antigos 
 
 ## Limitação de homologação
 
-O Chromium headless deste ambiente não inicializa corretamente por dependências de DBus, portanto não é possível afirmar que câmera, IndexedDB real do navegador, Service Worker publicado e latência real do Apps Script foram homologados aqui. A V3.51 passou na bateria local de código, estrutura, regressão, estado e performance, mas ainda deve receber um smoke test no endereço publicado após o deploy.
+O Chromium headless deste ambiente não inicializa corretamente por dependências de DBus, portanto não é possível afirmar que câmera, IndexedDB real do navegador, Service Worker publicado e latência real do Apps Script foram homologados aqui. A V3.52 passou na bateria local de código, estrutura, regressão, estado e performance, mas ainda deve receber um smoke test no endereço publicado após o deploy.

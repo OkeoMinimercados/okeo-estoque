@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.51.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.52.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.51.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.52.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -135,16 +135,8 @@
   <label>Nomes alternativos / aliases<textarea id="palias" rows="3" placeholder="Separe os nomes por ponto e vírgula, vírgula ou linha"></textarea></label>
 </div>
 <input id="pid" type="hidden"><div id="productAssistBanner" class="hidden assist-banner"></div>
-<div class="subcard product-unit-assignment dropdown-card">
-  <div class="section-head"><div><h4>Adicionar produto aos condomínios</h4><p class="muted">Use a mesma relação Produto × Condomínio utilizada por Contagem, Gestão, Validades, Reposição e Compras.</p></div></div>
-  <button type="button" id="productUnitToggle" class="multiselect-toggle"><span id="productUnitCount">Nenhum condomínio selecionado</span><span>⌄</span></button>
-  <div id="productUnitDropdown" class="dropdown-panel hidden">
-    <div class="grid2"><label>Pesquisar condomínio<input id="productUnitSearch" placeholder="Nome do condomínio"></label><div class="actions align-end"><button id="productUnitSelectAll" type="button" class="secondary">Selecionar todos</button><button id="productUnitClearAll" type="button" class="secondary">Limpar seleção</button></div></div>
-    <div id="productUnitChecklist" class="planogram-unit-checklist compact-expand-list"></div>
-  </div>
-</div>
-<div class="actions"><button id="psave">Salvar produto e condomínios</button><button id="pcancel" class="secondary">Limpar</button></div>
-<p class="muted">EAN é a chave única. O produto é salvo uma única vez na Base Mestre; os condomínios marcados são vínculos do mesmo produto no Planograma.</p>
+<div class="actions"><button id="psave">Salvar produto</button><button id="pcancel" class="secondary">Limpar</button></div>
+<p class="muted">EAN é a chave única. O produto é salvo na Base Mestre. A distribuição por condomínio/CD é administrada exclusivamente em Planograma por Condomínio / CD.</p>
 <input id="psearch" placeholder="Pesquisar produto, EAN, fornecedor ou segmento">
 
 <div id="plist"></div>
@@ -236,9 +228,9 @@
     <div class="grid3">
       <label>Fornecedor<select id="supplierRegistryFilter" onchange="Promise.resolve(loadSupplierProductSelection()).catch(console.error)"></select></label>
       <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto, EAN ou fornecedor principal" oninput="Promise.resolve(renderSupplierProductList()).catch(console.error)"></label>
-      <label>&nbsp;<button id="supplierProductToggle" type="button" class="multiselect-toggle">Abrir lista de produtos <span>⌄</span></button></label>
+      <label>&nbsp;<button id="supplierProductToggle" type="button" class="secondary">Atualizar lista de produtos</button></label>
     </div>
-    <div id="supplierProductDropdown" class="dropdown-panel hidden">
+    <div id="supplierProductDropdown" class="supplier-product-panel">
       <div class="actions"><button id="supplierProductSelectVisible" class="secondary" type="button">Selecionar visíveis</button><button id="supplierProductClearVisible" class="secondary" type="button">Desmarcar visíveis</button><button id="supplierProductSave" type="button">Salvar produtos atendidos</button></div>
       <div id="supplierProductList" class="dtable compact-expand-list"></div>
     </div>
@@ -301,7 +293,7 @@
 
 <section id="entries" class="view card hidden">
 <h2>Compras</h2><p class="muted">Planeje a compra da semana, faça lançamentos, importe NF e gere o Relatório de Abastecimento sem perder a prioridade do CD.</p>
-<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" class="tabbtn active">Compra semanal</button><button id="purchaseTabManual" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button><button id="purchaseTabReplenishment" class="tabbtn">Conferência e abastecimento</button></div>
+<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" data-purchase-tab="weekly" onclick="showPurchaseTab('weekly')" class="tabbtn active">Compra semanal</button><button id="purchaseTabManual" data-purchase-tab="manual" onclick="showPurchaseTab('manual')" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" data-purchase-tab="nf" onclick="showPurchaseTab('nf')" class="tabbtn">Importar NF</button><button id="purchaseTabReplenishment" data-purchase-tab="replenishment" onclick="showPurchaseTab('replenishment')" class="tabbtn">Conferência e abastecimento</button></div>
 <div id="purchaseWeeklyPanel">
   <div class="purchase-weekly-head">
     <div><h3>Planejamento de compras da semana</h3><p class="muted">Projeta o consumo até a próxima entrega do fornecedor. O CD é consumido primeiro; somente a falta remanescente vira compra externa.</p></div>
@@ -403,8 +395,14 @@
 </div>
 <div id="cdInboundPanel" class="hidden">
   <div class="subcard">
-    <div class="section-head"><div><h3>Mercadorias pré-separadas em Compras</h3><p class="muted">Exibe todas as mercadorias do Relatório de Compra Semanal marcadas como <b>CD</b>. Faça a conferência da quantidade recebida, registre validade(s)/lote(s) e finalize em Abastecer.</p></div><div id="cdInboundSummary" class="planogram-summary"></div></div>
-    <div class="grid4"><label>Fornecedor<select id="cdInboundSupplier"><option value="">Todos</option></select></label><label>Condomínio<select id="cdInboundUnit"><option value="">Todos</option></select></label><label>Status<select id="cdInboundStatus"><option value="">Todos</option><option value="CONFERENCE">Conferência</option><option value="AWAITING_EXPIRY">Validade pendente</option><option value="READY">Pronto para abastecer</option></select></label><label>Pesquisar<input id="cdInboundSearch" placeholder="Produto ou EAN"></label></div>
+    <div class="section-head"><div><h3>Mercadorias pré-separadas em Compras</h3><p class="muted">Exibe os itens marcados como <b>Pré-Separado no CD</b> na Compra Semanal. Itens do rascunho aparecem como “Pré-selecionado”; após fechar a compra passam para Conferência.</p></div><div id="cdInboundSummary" class="planogram-summary"></div></div>
+    <div class="grid4"><label>Fornecedor<select id="cdInboundSupplier"><option value="">Todos</option></select></label><label>Condomínio<select id="cdInboundUnit"><option value="">Todos</option></select></label><label>Status<select id="cdInboundStatus">
+      <option value="">Todos</option>
+      <option value="DRAFT">Pré-selecionado em Compras</option>
+      <option value="CONFERENCE">Conferência</option>
+      <option value="AWAITING_EXPIRY">Validade pendente</option>
+      <option value="READY">Pronto para abastecer</option>
+    </select></label><label>Pesquisar<input id="cdInboundSearch" placeholder="Produto ou EAN"></label></div>
     <div id="cdInboundList"></div>
   </div>
 </div>
@@ -665,5 +663,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.51.0.js"></script>
+<script src="app-v3.52.0.js"></script>
 </body></html>
