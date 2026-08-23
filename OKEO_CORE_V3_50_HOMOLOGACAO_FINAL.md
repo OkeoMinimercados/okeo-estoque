@@ -1,4 +1,4 @@
-# OKEO V3.50 — Homologação Final
+# OKEO V3.51 — Homologação Final
 
 ## Fluxo operacional aprovado
 **Compra aprovada → Conferência → Validade(s)/Lote(s) → Abastecer → Estoque do condomínio.**
@@ -21,7 +21,7 @@
 - OK — Sintaxe frontend
 - OK — Sintaxe backend
 - OK — Zero IDs duplicados
-- OK — Service Worker V3.50
+- OK — Service Worker V3.51
 - OK — Compra inicia em Conferência
 - OK — Quantidade pedida preservada
 - OK — Quantidade recebida editável
