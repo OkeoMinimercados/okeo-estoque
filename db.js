@@ -34,6 +34,9 @@ function op(){
 async function all(s){const d=await op();return new Promise((ok,no)=>{const r=d.transaction(s).objectStore(s).getAll();r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
 async function get(s,id){const d=await op();return new Promise((ok,no)=>{const r=d.transaction(s).objectStore(s).get(id);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}
 async function put(s,o){const d=await op();return new Promise((ok,no)=>{const r=d.transaction(s,"readwrite").objectStore(s).put(o);r.onsuccess=()=>ok(o);r.onerror=()=>no(r.error)})}
+async function putMany(s,rows){
+  if(!Array.isArray(rows)||!rows.length)return 0;const d=await op();return new Promise((ok,no)=>{const tx=d.transaction(s,"readwrite"),os=tx.objectStore(s);for(const o of rows)os.put(o);tx.oncomplete=()=>ok(rows.length);tx.onerror=()=>no(tx.error);tx.onabort=()=>no(tx.error||new Error("Transação abortada"))})
+}
 async function del(s,id){const d=await op();return new Promise((ok,no)=>{const r=d.transaction(s,"readwrite").objectStore(s).delete(id);r.onsuccess=()=>ok();r.onerror=()=>no(r.error)})}
 async function clearStore(s){const d=await op();return new Promise((ok,no)=>{const r=d.transaction(s,"readwrite").objectStore(s).clear();r.onsuccess=()=>ok();r.onerror=()=>no(r.error)})}
 async function byIndex(store,index,value){const d=await op();return new Promise((ok,no)=>{const tx=d.transaction(store),os=tx.objectStore(store);if(!os.indexNames.contains(index)){const r=os.getAll();r.onsuccess=()=>ok(r.result.filter(x=>x[index]===value));r.onerror=()=>no(r.error);return}const r=os.index(index).getAll(value);r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)})}

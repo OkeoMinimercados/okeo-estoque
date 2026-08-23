@@ -1,4 +1,16 @@
-OKEO V3.41 — GITHUB
-Extraia o conteúdo deste ZIP na raiz do repositório publicado pelo GitHub Pages.
-Arquivos principais: index.html, app-v3.41.0.js, db.js, styles.css, sw.js, manifest.webmanifest, okeo-logo.png e seed-planograms-v3.41.json.
-Publique também o Apps Script V3.41. Após publicar, faça atualização forçada/limpeza do cache do PWA para ativar o Service Worker V3.41.
+OKEO V3.43 — GITHUB
+
+Extraia TODO o conteúdo deste pacote na raiz do repositório publicado no GitHub Pages.
+
+Arquivos principais:
+- index.html
+- app-v3.43.0.js
+- db.js
+- styles.css
+- sw.js
+- manifest.webmanifest
+- okeo-logo.png
+- seed-planograms-v3.43.json
+
+Publique também o Apps Script V3.43 correspondente e atualize a implantação do Web App.
+Depois da publicação, faça atualização forçada/limpeza do cache do PWA para remover versões antigas do Service Worker.

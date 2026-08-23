@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.41.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.43.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.41.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.43.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -151,21 +151,15 @@
 </div>
 <div id="productsPlanogramPanel" class="products-panel hidden">
   <div class="subcard">
-    <div class="section-head"><div><h3>Planograma por Condomínio / CD</h3><p class="muted">Trabalhe por condomínio, por produto ou importe a base de uma unidade.</p></div><div id="planogramSummary" class="planogram-summary"></div></div>
+    <div class="section-head"><div><h3>Planograma por Condomínio / CD</h3><p class="muted">Trabalhe por condomínio ou importe a base de uma unidade.</p></div><div id="planogramSummary" class="planogram-summary"></div></div>
     <div class="planogram-mode-tabs">
       <button id="planogramModeUnit" type="button" class="active" onclick="setPlanogramMode('unit')">Produtos por condomínio</button>
-      <button id="planogramModeProduct" type="button" class="secondary" onclick="setPlanogramMode('product')">Condomínios por produto</button>
       <button id="planogramModeImport" type="button" class="secondary" onclick="setPlanogramMode('import')">Importar base do condomínio</button>
     </div>
     <div id="planogramByUnitPanel">
       <div class="grid2"><label>Condomínio / CD<select id="planogramUnit"></select></label><label>Pesquisar na Base Mestre<input id="planogramSearch" placeholder="Nome, EAN, alias, VM Pay, fornecedor ou segmento"></label></div>
       <div class="actions"><button id="planogramSelectVisible" class="secondary" type="button">Selecionar visíveis</button><button id="planogramClearVisible" class="secondary" type="button">Desmarcar visíveis</button><button id="planogramSave" type="button">Salvar planograma da unidade</button></div>
       <div id="planogramProductList" class="planogram-list"></div><p id="planogramMsg" class="muted"></p>
-    </div>
-    <div id="planogramByProductPanel" class="hidden">
-      <div class="grid2"><label>Pesquisar produto<input id="planogramProductSearch" placeholder="Nome, EAN, alias, VM Pay, fornecedor ou segmento"></label><label>Produto<select id="planogramProductSelect"></select></label></div>
-      <div class="actions"><button id="planogramProductSelectAll" class="secondary" type="button">Marcar todos</button><button id="planogramProductClearAll" class="secondary" type="button">Desmarcar todos</button><button id="planogramProductSave" type="button">Salvar condomínios do produto</button></div>
-      <div id="planogramUnitChecklist" class="planogram-unit-checklist"></div><p id="planogramProductMsg" class="muted"></p>
     </div>
     <div id="planogramImportPanel" class="hidden">
       <div class="grid2"><label>Condomínio / CD de destino<select id="planogramImportUnit"></select></label><label>Arquivo da base do condomínio<input id="planogramImportFile" type="file" accept=".xlsx,.csv,.json"><small>Prioridade: EAN. Sem EAN, cruza por nome/alias exato normalizado.</small></label></div>
@@ -385,7 +379,7 @@
 <div id="cdMoveMetrics" class="metriccards"></div>
 <div class="grid2 cd-move-layout">
   <div class="subcard">
-    <div class="section-head"><div><h3>Base Mestre / produtos do CD</h3><p class="muted">Lista completa da Base Mestre. O saldo atual do CD aparece em cada produto; pesquise e marque itens para calcular destinos.</p></div><div class="actions"><button id="cdSelectAll" type="button" class="secondary">Selecionar visíveis</button><button id="cdClearSelection" type="button" class="secondary">Limpar</button></div></div>
+    <div class="section-head"><div><h3>Base Mestre / produtos do CD</h3><p class="muted">Exibe somente produtos com saldo disponível no CD. Se todo o CD estiver zerado, exibe a Base Mestre completa para conferência.</p></div><div class="actions"><button id="cdSelectAll" type="button" class="secondary">Selecionar visíveis</button><button id="cdClearSelection" type="button" class="secondary">Limpar</button></div></div>
     <input id="cdMoveSearch" placeholder="Pesquisar produto ou EAN">
     <div id="cdMoveProductList" class="checklist-list"></div>
   </div>
@@ -461,6 +455,11 @@
 <div class="selector-toggle-row"><button id="stockMgmtSelectorBtn" type="button" class="secondary">Abrir lista de produtos</button></div>
 <div id="stockMgmtProductSelector" class="hidden"></div></div>
   <div class="subcard"><h3>Validades — próximos 7 dias</h3><div id="stockMgmtExpiry"></div></div>
+</div>
+<div class="subcard">
+  <div class="section-head"><div><h3>Diferenças de contagem por produto</h3><p class="muted">Compara a última contagem manual registrada com o estoque esperado, por produto e condomínio.</p></div><div class="actions"><button id="exportStockDiffReport" type="button" class="secondary">Exportar diferenças CSV</button></div></div>
+  <div class="grid3"><label>Condomínio<select id="stockDiffUnit"><option value="ALL">Todos os condomínios</option></select></label><label>Pesquisar produto<input id="stockDiffSearch" placeholder="Produto ou EAN"></label><label>Exibir<select id="stockDiffOnly"><option value="DIFF">Somente com diferença</option><option value="ALL">Todos contados</option></select></label></div>
+  <div id="stockDiffSummary"></div><div id="stockDiffReport"></div>
 </div>
 <div class="subcard">
   <div class="section-head"><div><h3>Histórico recente de movimentos</h3><p class="muted">Análise das últimas movimentações para conferência operacional.</p></div>
@@ -634,5 +633,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.41.0.js"></script>
+<script src="app-v3.43.0.js"></script>
 </body></html>
