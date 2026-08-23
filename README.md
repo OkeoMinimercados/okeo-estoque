@@ -219,3 +219,10 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - Responsável da Contagem Física usa usuários/perfis cadastrados.
 - Base Mestre pode ser exportada para CSV, editada e reimportada por EAN em XLSX/CSV/JSON.
 - A reimportação mostra prévia com NOVO / ALTERAR / SEM ALTERAÇÃO antes de aplicar.
+
+## V3.29
+- Contagem manual e lista/checklist usam o mesmo registro.
+- Alterar em cima atualiza a linha; alterar +/−/digitação na linha atualiza os campos superiores.
+- Câmera usa o mesmo registro.
+- Histórico de estoque guarda posição completa por unidade/produto/EAN/quantidade/custo/valor.
+- Histórico exportável em CSV para Excel.

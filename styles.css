@@ -128,3 +128,5 @@ table{font-size:12px}
 .stock-meta-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}.compact-status{margin:0}.compact-status h4{margin:0 0 6px}.compact-status b{display:block;font-size:15px}.compact-status small{display:block;margin-top:4px;color:var(--muted)}
 .master-bulk-tools{margin-bottom:16px}.align-end{align-items:end;justify-content:flex-end}#masterProductsImportPreview{max-height:480px;overflow:auto;margin-top:10px}
 @media(max-width:800px){.stock-meta-row{grid-template-columns:1fr}}
+
+#stockHistoryTable .dtable{max-height:460px;overflow:auto}
