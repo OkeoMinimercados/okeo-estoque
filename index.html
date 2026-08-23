@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.48.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.50.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.48.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.50.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -234,8 +234,8 @@
   <div class="subcard">
     <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor e marque os produtos atendidos. Cada produto pode ter somente um fornecedor ativo; ao trocar, o vínculo anterior é removido automaticamente.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
     <div class="grid3">
-      <label>Fornecedor<select id="supplierRegistryFilter"></select></label>
-      <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto, EAN ou fornecedor principal"></label>
+      <label>Fornecedor<select id="supplierRegistryFilter" onchange="Promise.resolve(loadSupplierProductSelection()).catch(console.error)"></select></label>
+      <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto, EAN ou fornecedor principal" oninput="Promise.resolve(renderSupplierProductList()).catch(console.error)"></label>
       <label>&nbsp;<button id="supplierProductToggle" type="button" class="multiselect-toggle">Abrir lista de produtos <span>⌄</span></button></label>
     </div>
     <div id="supplierProductDropdown" class="dropdown-panel hidden">
@@ -301,7 +301,7 @@
 
 <section id="entries" class="view card hidden">
 <h2>Compras</h2><p class="muted">Planeje a compra da semana, faça lançamentos, importe NF e gere o Relatório de Abastecimento sem perder a prioridade do CD.</p>
-<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" class="tabbtn active">Compra semanal</button><button id="purchaseTabManual" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button><button id="purchaseTabReplenishment" class="tabbtn">Validade e abastecimento</button></div>
+<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" class="tabbtn active">Compra semanal</button><button id="purchaseTabManual" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button><button id="purchaseTabReplenishment" class="tabbtn">Conferência e abastecimento</button></div>
 <div id="purchaseWeeklyPanel">
   <div class="purchase-weekly-head">
     <div><h3>Planejamento de compras da semana</h3><p class="muted">Projeta o consumo até a próxima entrega do fornecedor. O CD é consumido primeiro; somente a falta remanescente vira compra externa.</p></div>
@@ -329,13 +329,20 @@
 </div>
 <div id="purchaseReplenishmentPanel" class="hidden">
 <div class="embedded-replenishment">
-<h3>Controle de validade e abastecimento</h3>
-<p class="muted">A Compra Semanal é o documento de origem. Aqui você apenas acompanha o recebimento, registra validade/lote e libera a mercadoria para abastecimento, sem gerar um segundo relatório de compra.</p>
+<h3>Conferência, validade e abastecimento</h3>
+<p class="muted">A Compra Semanal é o documento de origem. Confira a quantidade realmente recebida, registre todas as validades/lotes e finalize em Abastecer.</p>
 <div class="grid4">
 <label>Condomínio<select id="purchaseFlowUnit"><option value="">Todos</option></select></label>
 <label>Fornecedor<select id="purchaseFlowSupplier"><option value="">Todos</option></select></label>
 <label>Fluxo<select id="purchaseFlowRoute"><option value="">Todos</option><option value="IMMEDIATE">Abastecimento imediato</option><option value="CD">Passar pelo CD</option></select></label>
-<label>Status<select id="purchaseFlowStatus"><option value="">Todos</option><option value="AWAITING_RECEIPT">Aguardando recebimento</option><option value="AWAITING_EXPIRY">Aguardando validade</option><option value="READY">Pronto para abastecer</option><option value="CD_RESERVED">Reservado no CD</option><option value="DISPATCHED">Despachado / pendente</option><option value="SUPPLIED">Abastecido</option></select></label>
+<label>Status<select id="purchaseFlowStatus">
+<option value="">Todos</option>
+<option value="CONFERENCE">Conferência</option>
+<option value="AWAITING_EXPIRY">Validade pendente</option>
+<option value="READY">Pronto para abastecer</option>
+<option value="SUPPLIED">Abastecido</option>
+<option value="CUT">Cortado</option>
+</select></label>
 </div>
 <label>Pesquisar produto / EAN<input id="purchaseFlowSearch" placeholder="Produto ou EAN"></label>
 <div id="purchaseFlowSummary"></div>
@@ -388,6 +395,8 @@
 <section id="cdmove" class="view card hidden">
 <h2>Movimentação de Estoque CD</h2>
 <p class="muted">Selecione produtos disponíveis no CD e veja as sugestões de alocação calculadas pela Demanda Inteligente.</p>
+<div class="products-tabs cd-tabs"><button id="cdTabStock" type="button" class="active" onclick="showCdTab('stock')">Estoque e alocação</button><button id="cdTabInbound" type="button" class="secondary" onclick="showCdTab('inbound')">Conferência de mercadorias</button></div>
+<div id="cdStockPanel">
 <div id="cdMoveMetrics" class="metriccards"></div>
 <div class="grid2 cd-move-layout">
   <div class="subcard">
@@ -398,6 +407,14 @@
   <div class="subcard">
     <h3>Estoque do CD e sugestões de alocação</h3>
     <div id="cdMoveSuggestions"><p class="muted">Selecione um produto à esquerda.</p></div>
+  </div>
+</div>
+</div>
+<div id="cdInboundPanel" class="hidden">
+  <div class="subcard">
+    <div class="section-head"><div><h3>Mercadorias pré-registradas para o CD</h3><p class="muted">Itens marcados como <b>Passar pelo CD</b> no Relatório de Compra Semanal. Registre a validade no recebimento, mantenha a reserva por condomínio e despache quando a separação estiver pronta.</p></div><div id="cdInboundSummary" class="planogram-summary"></div></div>
+    <div class="grid4"><label>Fornecedor<select id="cdInboundSupplier"><option value="">Todos</option></select></label><label>Condomínio<select id="cdInboundUnit"><option value="">Todos</option></select></label><label>Status<select id="cdInboundStatus"><option value="">Todos</option><option value="CONFERENCE">Conferência</option><option value="CD_RESERVED">Recebido / reservado</option></select></label><label>Pesquisar<input id="cdInboundSearch" placeholder="Produto ou EAN"></label></div>
+    <div id="cdInboundList"></div>
   </div>
 </div>
 </section>
@@ -415,10 +432,16 @@
 <div class="alert-card alert-info"><b>Importante:</b> este módulo <b>não incrementa estoque</b>. Ele apenas associa validade/lote a estoque físico já existente. Se o saldo estiver zerado, corrija primeiro pela Contagem de Estoque Física. Mercadoria comprada recebe validade no momento do recebimento/conferência.</div><div class="grid3">
   <label>Unidade<select id="eunit"></select></label>
   <label>EAN<input id="eean" inputmode="numeric"><small id="eproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
-  <label>Validade<input id="edate" type="date"></label>
-  <label>Quantidade<input id="eqty" type="number" min="1" step="1" value="1"></label>
-  <label>Lote<input id="elot" placeholder="Opcional"></label>
+  <label>1ª validade<input id="edate" type="date"></label>
+  <label>Qtd. 1ª validade<input id="eqty" type="number" min="1" step="1" value="1"></label>
+  <label>Lote 1<input id="elot" placeholder="Opcional"></label>
 </div>
+<div class="grid3 optional-second-expiry">
+  <label>2ª validade (opcional)<input id="edate2" type="date"></label>
+  <label>Qtd. 2ª validade<input id="eqty2" type="number" min="0" step="1" value="0"></label>
+  <label>Lote 2<input id="elot2" placeholder="Opcional"></label>
+</div>
+<p class="muted">O mesmo produto pode ter várias validades/lotes simultâneos. Cada lote aparece separadamente na análise.</p>
 <div class="grid2">
 <label>Foto da validade<input id="ephoto" type="file" accept="image/*" capture="environment"></label>
 <label>Foto do produto<input id="eproductphoto" type="file" accept="image/*" capture="environment"></label>
@@ -455,7 +478,7 @@
 
 
 <section id="stockmgmt" class="view card hidden">
-<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary">Gestão de Estoque por Condomínio</button><button id="stockMgmtTabDiff" type="button" class="secondary">Análise de divergências</button></div><div id="stockMgmtGeneralPanel">
+<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active" onclick="Promise.resolve(setStockMgmtMode('general')).catch(console.error)">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary" onclick="Promise.resolve(setStockMgmtMode('unit')).catch(console.error)">Gestão de Estoque por Condomínio</button><button id="stockMgmtTabDiff" type="button" class="secondary" onclick="Promise.resolve(setStockMgmtMode('diff')).catch(console.error)">Análise de divergências</button></div><div id="stockMgmtGeneralPanel">
 <p class="muted">Fotografia operacional do estoque atual, independente da próxima importação de vendas.</p>
 <div id="stockMgmtMetrics" class="metriccards"></div>
 <div class="stock-meta-row">
@@ -646,5 +669,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.48.0.js"></script>
+<script src="app-v3.50.0.js"></script>
 </body></html>

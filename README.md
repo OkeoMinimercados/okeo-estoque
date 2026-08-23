@@ -1,20 +1,24 @@
-# OKEO Core V3.48
+# OKEO Core V3.50
 
-Versão final corrigida após revisão ponta a ponta da V3.43.
+Versão final corrigida após revisão ponta a ponta da V3.50.
 
 ## Correções principais
 - Reposição operacional volta a abrir corretamente dentro de Compras.
-- Histórico de reposições de homologação é limpo uma única vez na migração V3.48 (perfil Administrador).
+- Histórico de reposições de homologação é limpo uma única vez na migração V3.50 (perfil Administrador).
 - Gestão de Estoque possui aba própria **Análise de divergências**, comparando estoque esperado x contagem física/manual.
 - Cada produto pode ter somente **um fornecedor ativo**; atribuição a novo fornecedor desativa o vínculo anterior e atualiza a Base Mestre.
 - Cadastro de fornecedores exibe apenas o **total de fornecedores ativos** como indicador agregado.
-- Mantidas as correções V3.43 de Produto × Condomínio, planogramas oficiais, desempenho e cache.
+- Mantidas as correções V3.50 de Produto × Condomínio, planogramas oficiais, desempenho e cache.
 - Service Worker usa cache exclusivo `okeo-core-v3-46-final`.
 
 ## Publicação
-Publique todo o conteúdo do pacote GitHub, inclusive `seed-planograms-v3.48.json`, e publique o Apps Script V3.48. Depois, atualize forçadamente o navegador/PWA para substituir o cache anterior.
+Publique todo o conteúdo do pacote GitHub, inclusive `seed-planograms-v3.50.json`, e publique o Apps Script V3.50. Depois, atualize forçadamente o navegador/PWA para substituir o cache anterior.
 
 
-## V3.48 — correção crítica de Gestão de Estoque
+## V3.50 — correção crítica de Gestão de Estoque
 - Corrigida estrutura HTML: Controle Geral, Gestão por Condomínio e Análise de divergências agora são painéis irmãos independentes.
-- Na V3.44 os dois últimos painéis estavam aninhados dentro de Controle Geral e eram ocultados junto com ele.
+- Na V3.50 os dois últimos painéis estavam aninhados dentro de Controle Geral e eram ocultados junto com ele.
+
+
+## V3.50
+Correção de inicialização/bind, filtros robustos, fornecedor canônico, CD aguardando recebimento e múltiplas validades.

@@ -201,3 +201,5 @@ table{font-size:12px}
 .weekly-routing-box{margin:12px 0;padding:12px;border:1px solid #dfe6ee;border-radius:10px;background:#fafcfe}
 .weekly-routing-box>b{display:block;margin-bottom:4px}
 #purchaseFlowList input,#purchaseFlowList select{min-width:115px}
+
+.cd-tabs{margin-bottom:12px}.optional-second-expiry{margin-top:8px;padding-top:8px;border-top:1px dashed #d7dee7}#cdInboundList input{min-width:120px}.hidden[style*="block"]{display:block!important}
