@@ -130,3 +130,6 @@ table{font-size:12px}
 @media(max-width:800px){.stock-meta-row{grid-template-columns:1fr}}
 
 #stockHistoryTable .dtable{max-height:460px;overflow:auto}
+
+.expiry-plan-row{display:block;width:100%;text-align:left;background:#fff;color:inherit;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:9px 10px}.expiry-plan-row:hover{background:#f5faf6}.expiry-plan-row span{display:grid;gap:2px}
+#stockMgmtUnitTable .dtable{max-height:560px;overflow:auto}

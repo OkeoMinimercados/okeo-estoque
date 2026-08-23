@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.29.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.30.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -92,7 +92,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.29.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.30.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -123,7 +123,7 @@
 <div class="subcard master-bulk-tools">
   <div class="section-head">
     <div><h3>Base Mestre — exportar / atualizar em lote</h3><p class="muted">Exporte, edite no Excel e reimporte. O EAN é a chave da atualização.</p></div>
-    <div class="actions"><button id="exportMasterProducts" type="button" class="secondary">Exportar Base Mestre CSV</button></div>
+    <div class="actions"><button id="exportMasterProducts" type="button" class="secondary">Exportar Base Mestre CSV</button><button id="exportMasterProductsXlsx" type="button" class="secondary">Exportar Base Mestre XLSX</button></div>
   </div>
   <div class="grid2">
     <label>Reimportar Base Mestre atualizada<input id="masterProductsImportFile" type="file" accept=".xlsx,.csv,.json"></label>
@@ -323,7 +323,7 @@
   <div id="expiryCoverageByUnit"></div>
 </div>
 <div class="grid3"><label>Relatório por unidade<select id="expiryFilter"></select></label><label>Faixa<select id="expiryRange"><option value="ALL">Todas</option><option value="OVERDUE">Vencidos</option><option value="7">Até 7 dias</option><option value="15">8–15 dias</option><option value="30">16–30 dias</option></select></label><label>&nbsp;<button id="expiryReport" class="primarywide">Atualizar relatório</button></label></div>
-<hr><h3>Registrar validade</h3>
+<div class="subcard"><h3>Produtos do planograma da unidade</h3><p class="muted">Depois de selecionar o condomínio/CD, são mostrados somente os produtos cadastrados no planograma da unidade.</p><input id="expiryPlanogramSearch" placeholder="Pesquisar produto ou EAN"><div id="expiryPlanogramProducts" class="planogram-list"></div></div><hr><h3>Registrar validade</h3>
 <div class="alert-card alert-info"><b>Importante:</b> este módulo <b>não incrementa estoque</b>. Ele apenas associa validade/lote a estoque físico já existente. Se o saldo estiver zerado, corrija primeiro pela Contagem de Estoque Física. Mercadoria em trânsito mantém validade pendente até o recebimento.</div><div class="grid3">
   <label>Unidade<select id="eunit"></select></label>
   <label>EAN<input id="eean" inputmode="numeric"><small id="eproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
@@ -367,7 +367,7 @@
 
 
 <section id="stockmgmt" class="view card hidden">
-<h2>Gestão de Estoque</h2>
+<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary">Controle de Estoque por Condomínio</button></div><div id="stockMgmtGeneralPanel">
 <p class="muted">Fotografia operacional do estoque atual, independente da próxima importação de vendas.</p>
 <div id="stockMgmtMetrics" class="metriccards"></div>
 <div class="stock-meta-row">
@@ -392,7 +392,7 @@
 </div>
 <div id="stockMgmtMoveSummary"></div><div id="stockMgmtMoves"></div>
 </div>
-</section>
+</div><div id="stockMgmtUnitPanel" class="hidden"><div class="subcard"><div class="grid2"><label>Condomínio / CD<select id="stockMgmtUnitSelect"></select></label><label>Pesquisar produto<input id="stockMgmtUnitSearch" placeholder="Produto ou EAN"></label></div><div id="stockMgmtUnitTable"></div></div></div></section>
 <section id="sales" class="view card hidden">
 <h2>Vendas / VM Pay</h2>
 <p><b>VM Pay:</b> estrutura preparada. Até a API ser disponibilizada, use CSV.</p>
@@ -552,5 +552,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.29.0.js"></script>
+<script src="app-v3.30.0.js"></script>
 </body></html>

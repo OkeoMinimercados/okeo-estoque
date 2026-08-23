@@ -226,3 +226,10 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - Câmera usa o mesmo registro.
 - Histórico de estoque guarda posição completa por unidade/produto/EAN/quantidade/custo/valor.
 - Histórico exportável em CSV para Excel.
+
+## V3.30
+- Gestão de Estoque: Controle Geral + Controle de Estoque por Condomínio.
+- Controle por Condomínio usa somente produtos do planograma e mostra estoque atual, pico, recomendado, alerta e status.
+- Validades exibe somente produtos do planograma da unidade selecionada.
+- Base Mestre: exportação CSV/XLSX e importação XLSX/CSV/JSON.
+- Exportação do histórico corrigida para função global.
