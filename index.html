@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.33.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.36.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -76,7 +76,6 @@
       <button data-v="entries" data-icon="▤">Compras / NF</button>
       <button data-v="moves" data-icon="±">Ajuste de Estoque</button>
       <button data-v="cdmove" data-icon="⇄">Movimentação Estoque CD</button>
-      <button data-v="replenishment" data-icon="🛒">Relatório de Reposição</button>
       <button data-v="expiry" data-icon="□">Validades</button>
       <button data-v="groups" data-icon="⌘">Grupos</button>
       <button data-v="products" data-icon="◇">Produtos</button>
@@ -92,7 +91,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.33.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.36.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -147,8 +146,13 @@
   <label>Nomes alternativos / aliases<textarea id="palias" rows="3" placeholder="Separe os nomes por ponto e vírgula, vírgula ou linha"></textarea></label>
 </div>
 <input id="pid" type="hidden"><div id="productAssistBanner" class="hidden assist-banner"></div>
-<div class="actions"><button id="psave">Salvar produto</button><button id="pcancel" class="secondary">Limpar</button></div>
-<p class="muted">EAN é a chave única. Produto novo deve preservar todos os campos cadastrais da Base Mestre.</p>
+<div class="subcard product-unit-assignment">
+  <div class="section-head"><div><h4>Adicionar produto aos condomínios</h4><p class="muted">Marque os condomínios onde este produto fará parte do mix. Ao salvar, os vínculos são gravados diretamente no Planograma oficial.</p></div><div id="productUnitCount" class="planogram-summary">0 selecionado(s)</div></div>
+  <div class="grid2"><label>Pesquisar condomínio<input id="productUnitSearch" placeholder="Nome do condomínio"></label><div class="actions align-end"><button id="productUnitSelectAll" type="button" class="secondary">Selecionar todos</button><button id="productUnitClearAll" type="button" class="secondary">Limpar seleção</button></div></div>
+  <div id="productUnitChecklist" class="planogram-unit-checklist"></div>
+</div>
+<div class="actions"><button id="psave">Salvar produto e condomínios</button><button id="pcancel" class="secondary">Limpar</button></div>
+<p class="muted">EAN é a chave única. O produto é salvo uma única vez na Base Mestre; os condomínios marcados são vínculos do mesmo produto no Planograma.</p>
 <input id="psearch" placeholder="Pesquisar produto, EAN, fornecedor ou segmento">
 
 <div id="plist"></div>
@@ -242,7 +246,7 @@
       <small id="physicalCountEANHint" class="ean-product-hint">Ao ler um EAN cadastrado, a contagem observada soma 1.</small>
     </label>
   </div>
-  <div id="physicalCountProductList" class="physical-count-product-list"></div>
+  <div id="physicalCountPlanogramNotice"></div><div id="physicalCountProductList" class="physical-count-product-list"></div>
 </div>
 <div id="cactive"></div><div id="chistory"></div>
 
@@ -261,8 +265,8 @@
   </div>
   <div class="grid4 weekly-purchase-filters">
     <label>Cobertura até próxima entrega<select id="weeklyCoverageDays"><option value="7" selected>7 dias (1 entrega/semana)</option><option value="6">6 dias</option><option value="5">5 dias</option><option value="4">4 dias</option><option value="3">3 dias</option><option value="2">2 dias</option><option value="1">1 dia</option><option value="14">14 dias</option></select></label>
-    <label>Relatório por condomínio<select id="weeklyUnitFilter"><option value="ALL">Todos os condomínios</option></select></label>
-    <label>Fornecedor<select id="weeklySupplierFilter"><option value="ALL">Todos os fornecedores</option></select></label>
+    <div class="field weekly-check-filter"><label>Condomínios</label><input id="weeklyUnitSearch" placeholder="Pesquisar condomínio"><div class="check-filter-actions"><button id="weeklyUnitAll" type="button" class="linkbtn">Todos</button><button id="weeklyUnitNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklyUnitChecks" class="compact-checklist"></div><small id="weeklyUnitSelectionSummary">Todos os condomínios</small></div>
+    <div class="field weekly-check-filter"><label>Fornecedores</label><input id="weeklySupplierSearch" placeholder="Pesquisar fornecedor"><div class="check-filter-actions"><button id="weeklySupplierAll" type="button" class="linkbtn">Todos</button><button id="weeklySupplierNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklySupplierChecks" class="compact-checklist"></div><small id="weeklySupplierSelectionSummary">Todos os fornecedores</small></div>
     <label>Pesquisar produto<input id="weeklyPurchaseSearch" placeholder="Produto ou EAN"></label>
   </div>
   <div class="actions"><button id="weeklyPurchaseCalc">Gerar / atualizar compra semanal</button><button id="weeklyPurchaseByUnit" class="secondary">Visão por condomínio</button><button id="weeklyPurchaseByProduct" class="secondary">Consolidado por produto</button><button id="weeklyPurchaseExport" class="secondary">Exportar para Excel (CSV)</button></div>
@@ -271,12 +275,31 @@
   <div id="weeklyPurchaseReport"></div>
 </div>
 <div id="purchaseReplenishmentPanel" class="hidden">
-  <div class="purchase-replenishment-embed">
-    <h3>Reposição operacional</h3>
-    <p class="muted">A reposição imediata continua baseada em ruptura/alerta e prioriza transferência do CD antes de compra. Ela complementa — e não substitui — o planejamento semanal.</p>
-    <div id="purchaseReplenishmentSummary"></div>
-    <div class="actions"><button id="purchaseOpenReplenishment">Abrir checklist completo de reposição</button><button id="purchaseRefreshReplenishment" class="secondary">Atualizar resumo</button></div>
+<div class="embedded-replenishment">
+<h3>Relatório de Reposição</h3>
+<div class="workflow"><div><b>1</b><span>Vendas<small>Importadas</small></span></div><i>›</i><div><b>2</b><span>Cálculo<small>Demanda e estoque</small></span></div><i>›</i><div><b>3</b><span>Rascunho<small>Editável</small></span></div><i>›</i><div><b>4</b><span>Aprovação<small>Revise e aprove</small></span></div><i>›</i><div><b>5</b><span>PDF<small>Registrado</small></span></div><i>›</i><div><b>6</b><span>Confirmação<small>Física/NF</small></span></div><i>›</i><div><b>7</b><span>Estoque<small>Atualizado</small></span></div></div>
+<div class="filtergrid">
+  <div class="field">
+    <label>Unidades para abastecimento</label>
+    <button type="button" id="repUnitsToggle" class="multiselect-toggle">Selecionar unidades <span>⌄</span></button>
+    <div id="repUnitsPanel" class="multiselect-panel hidden">
+      <div class="multi-actions"><button type="button" id="repSelectAll" class="linkbtn">Selecionar todas</button><button type="button" id="repClearUnits" class="linkbtn">Limpar</button></div>
+      <input id="repUnitSearch" placeholder="Buscar unidades">
+      <div id="repUnitChecks"></div>
+    </div>
+    <div id="repUnitSummary" class="fieldhint">Nenhuma unidade selecionada</div>
   </div>
+  <div class="field"><label>Data do abastecimento</label><input id="repDate" type="date"></div>
+  <div class="field"><label>Agrupar PDF por</label><select id="repMode"><option value="BOTH">Ambos — Fornecedor e Condomínio</option><option value="SUPPLIER">Fornecedor</option><option value="UNIT">Condomínio</option></select></div>
+</div>
+<div class="actions"><button id="repDraft">Gerar / recalcular rascunho</button><button id="repApprove">Aprovar reposição e gerar PDF</button></div>
+<div class="alert-card alert-info rep-priority-note"><b>Prioridade de origem:</b> o sistema consulta primeiro o saldo disponível no CD. Somente a quantidade que faltar no CD é sugerida para compra do fornecedor.</div>
+<p id="repMsg" class="muted"></p><div id="repSummary"></div>
+<div class="grid2 rep-inline-filters"><label>Pesquisar no rascunho<input id="repDraftSearch" placeholder="Produto, EAN, unidade ou fornecedor"></label><label>Exibir<select id="repDraftStatus"><option value="ACTIVE">Selecionados para abastecer</option><option value="ALL">Todos</option><option value="REMOVED">Retirados da lista</option><option value="CD">Somente origem CD</option><option value="COMPRA">Somente compra</option></select></label></div>
+<div class="selector-toggle-row"><button id="repProductSelectorBtn" type="button" class="secondary">Filtro avançado de produtos</button></div>
+<div id="repProductSelector" class="hidden"></div>
+<div id="repEditor"></div><hr><h3>Reposições registradas</h3><div id="repHistory"></div>
+</div>
 </div>
 <div id="purchaseManualPanel" class="hidden">
 <div class="grid3"><label>Fornecedor<input id="purchaseSupplier" list="supplierOptions"></label><label>Nº NF / Pedido<input id="purchaseDoc"></label><label>Data<input id="purchaseDate" type="date"></label></div>
@@ -424,7 +447,19 @@
   <label>Validade<select id="stockMgmtUnitExpiryFilter"><option value="ALL">Todos</option><option value="YES">Com validade cadastrada</option><option value="NO">Sem validade cadastrada</option></select></label>
   <label>Abastecimento<select id="stockMgmtUnitStatusFilter"><option value="ALL">Todos</option><option value="RUPTURA">Ruptura</option><option value="REPOSIÇÃO">Precisa reposição</option><option value="OK">Não precisa reposição</option><option value="SEM DEMANDA">Sem demanda calculada</option></select></label>
 </div>
+<div class="actions stock-unit-import-actions"><button id="stockMgmtDeparaToggle" type="button" class="secondary">Importar DE/PARA Produto × Condomínio</button><button id="stockMgmtDeparaTemplate" type="button" class="secondary">Baixar modelo CSV</button></div>
+<div id="stockMgmtDeparaPanel" class="subcard hidden">
+  <div class="section-head"><div><h3>Importar DE/PARA Produto × Condomínio</h3><p class="muted">Aceita XLSX, CSV ou JSON. Colunas recomendadas: Condomínio, Produto e EAN. O EAN é a chave preferencial; nomes e aliases são usados como segunda opção.</p></div></div>
+  <div class="grid3">
+    <label>Arquivo DE/PARA<input id="stockMgmtDeparaFile" type="file" accept=".xlsx,.csv,.json"></label>
+    <label>Modo de importação<select id="stockMgmtDeparaMode"><option value="MERGE">Adicionar / atualizar vínculos</option><option value="REPLACE">Substituir lista das unidades presentes no arquivo</option></select></label>
+    <label>Unidade padrão (se arquivo não tiver condomínio)<select id="stockMgmtDeparaDefaultUnit"></select></label>
+  </div>
+  <div class="actions"><button id="stockMgmtDeparaAnalyze" type="button">Analisar DE/PARA</button><button id="stockMgmtDeparaApply" type="button" class="secondary" disabled>Aplicar vínculos encontrados</button></div>
+  <div id="stockMgmtDeparaSummary"></div><div id="stockMgmtDeparaPreview"></div>
+</div>
 <div id="stockMgmtUnitSummary" class="metriccards compact-metrics"></div>
+<div id="stockMgmtUnitNotice"></div>
 <div id="stockMgmtUnitTable"></div></div></div></section>
 <section id="sales" class="view card hidden">
 <h2>Vendas / VM Pay</h2>
@@ -465,31 +500,7 @@
 </section>
 
 
-<section id="replenishment" class="view card hidden">
-<h2>Relatório de Reposição</h2>
-<div class="workflow"><div><b>1</b><span>Vendas<small>Importadas</small></span></div><i>›</i><div><b>2</b><span>Cálculo<small>Demanda e estoque</small></span></div><i>›</i><div><b>3</b><span>Rascunho<small>Editável</small></span></div><i>›</i><div><b>4</b><span>Aprovação<small>Revise e aprove</small></span></div><i>›</i><div><b>5</b><span>PDF<small>Registrado</small></span></div><i>›</i><div><b>6</b><span>Confirmação<small>Física/NF</small></span></div><i>›</i><div><b>7</b><span>Estoque<small>Atualizado</small></span></div></div>
-<div class="filtergrid">
-  <div class="field">
-    <label>Unidades para abastecimento</label>
-    <button type="button" id="repUnitsToggle" class="multiselect-toggle">Selecionar unidades <span>⌄</span></button>
-    <div id="repUnitsPanel" class="multiselect-panel hidden">
-      <div class="multi-actions"><button type="button" id="repSelectAll" class="linkbtn">Selecionar todas</button><button type="button" id="repClearUnits" class="linkbtn">Limpar</button></div>
-      <input id="repUnitSearch" placeholder="Buscar unidades">
-      <div id="repUnitChecks"></div>
-    </div>
-    <div id="repUnitSummary" class="fieldhint">Nenhuma unidade selecionada</div>
-  </div>
-  <div class="field"><label>Data do abastecimento</label><input id="repDate" type="date"></div>
-  <div class="field"><label>Agrupar PDF por</label><select id="repMode"><option value="BOTH">Ambos — Fornecedor e Condomínio</option><option value="SUPPLIER">Fornecedor</option><option value="UNIT">Condomínio</option></select></div>
-</div>
-<div class="actions"><button id="repDraft">Gerar / recalcular rascunho</button><button id="repApprove">Aprovar reposição e gerar PDF</button></div>
-<div class="alert-card alert-info rep-priority-note"><b>Prioridade de origem:</b> o sistema consulta primeiro o saldo disponível no CD. Somente a quantidade que faltar no CD é sugerida para compra do fornecedor.</div>
-<p id="repMsg" class="muted"></p><div id="repSummary"></div>
-<div class="grid2 rep-inline-filters"><label>Pesquisar no rascunho<input id="repDraftSearch" placeholder="Produto, EAN, unidade ou fornecedor"></label><label>Exibir<select id="repDraftStatus"><option value="ACTIVE">Selecionados para abastecer</option><option value="ALL">Todos</option><option value="REMOVED">Retirados da lista</option><option value="CD">Somente origem CD</option><option value="COMPRA">Somente compra</option></select></label></div>
-<div class="selector-toggle-row"><button id="repProductSelectorBtn" type="button" class="secondary">Filtro avançado de produtos</button></div>
-<div id="repProductSelector" class="hidden"></div>
-<div id="repEditor"></div><hr><h3>Reposições registradas</h3><div id="repHistory"></div>
-</section>
+
 
 <section id="settings" class="view card hidden">
 <h2>Configurações</h2>
@@ -588,5 +599,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.33.0.js"></script>
+<script src="app-v3.36.0.js"></script>
 </body></html>

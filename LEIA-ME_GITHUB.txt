@@ -1,7 +1,5 @@
-OKEO Core V3.33 — GITHUB
+OKEO V3.36 — GITHUB
 
-Pacote pronto para manter no repositório GitHub.
-Inclui o App Web/PWA e a documentação da versão.
-Não inclui credenciais nem o backend Apps Script.
-
-Para GitHub Pages, mantenha index.html e os demais arquivos web na raiz da branch publicada.
+Publique todos os arquivos desta pasta na raiz do repositório GitHub Pages.
+Este pacote contém somente o frontend/PWA.
+O backend Google Apps Script NÃO deve ser enviado ao GitHub.
