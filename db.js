@@ -1,7 +1,8 @@
-const STORES=["products","units","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents","demandBase","demandCurrent","replenishments","controlPoints","controlPointItems","purchases","lots","auditLog","supplierOffers","suppliers","meta","settings","syncQueue"];
+const STORES=["products","units","planograms","stock","expiries","moves","groups","salesWeekly","salesImports","invoices","ruptureEvents","demandBase","demandCurrent","replenishments","controlPoints","controlPointItems","purchases","lots","auditLog","supplierOffers","suppliers","meta","settings","syncQueue"];
 const INDEXES={
   products:[["ean","ean",{unique:false}],["active","active",{unique:false}],["supplierId","supplierId",{unique:false}],["groupId","groupId",{unique:false}]],
   units:[["type","type",{unique:false}],["active","active",{unique:false}],["normalizedName","normalizedName",{unique:false}]],
+  planograms:[["unitId","unitId",{unique:false}],["ean","ean",{unique:false}]],
   stock:[["unitId","unitId",{unique:false}],["ean","ean",{unique:false}]],
   lots:[["unitId","unitId",{unique:false}],["ean","ean",{unique:false}],["expiry","expiry",{unique:false}]],
   moves:[["at","at",{unique:false}],["from","from",{unique:false}],["to","to",{unique:false}],["ean","ean",{unique:false}]],
@@ -18,7 +19,7 @@ let dbp;
 function op(){
   if(dbp)return dbp;
   dbp=new Promise((ok,no)=>{
-    const r=indexedDB.open("okeo-estoque-v1",12);
+    const r=indexedDB.open("okeo-estoque-v1",13);
     r.onupgradeneeded=()=>{
       const db=r.result,tx=r.transaction;
       for(const name of STORES){

@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.21.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.23.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -92,7 +92,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.21.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.23.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -113,7 +113,14 @@
 </section>
 
 <section id="products" class="view card hidden">
-<h2>Cadastro Mestre de Produtos</h2>
+<h2>Produtos</h2>
+<p class="muted">A Base Mestre é o catálogo único. O Planograma define em quais condomínios/CD cada produto existe.</p>
+<div class="products-tabs">
+  <button id="productsTabMaster" type="button" class="active">Cadastro de Produtos Novos</button>
+  <button id="productsTabPlanogram" type="button" class="secondary">Planograma por Condomínio / CD</button>
+</div>
+<div id="productsMasterPanel" class="products-panel">
+  <div class="subcard"><h3>Cadastro de Produtos Novos / Base Mestre</h3>
 <div class="grid3">
   <label>Produto<input id="pname"></label>
   <label>Subproduto<input id="psub"></label>
@@ -131,30 +138,35 @@
 <div class="actions"><button id="psave">Salvar produto</button><button id="pcancel" class="secondary">Limpar</button></div>
 <p class="muted">EAN é a chave única. Produto novo deve preservar todos os campos cadastrais da Base Mestre.</p>
 <input id="psearch" placeholder="Pesquisar produto, EAN, fornecedor ou segmento">
-<div class="subcard product-increment-card">
-  <div class="section-head">
-    <div>
-      <h3>Incremento Manual de Estoque</h3>
-      <p class="muted">Use para adicionar manualmente unidades de um produto já cadastrado a um condomínio ou CD.</p>
+
+<div id="plist"></div>
+</div>
+</div>
+<div id="productsPlanogramPanel" class="products-panel hidden">
+  <div class="subcard">
+    <div class="section-head"><div><h3>Planograma por Condomínio / CD</h3><p class="muted">Trabalhe por condomínio, por produto ou importe a base de uma unidade.</p></div><div id="planogramSummary" class="planogram-summary"></div></div>
+    <div class="planogram-mode-tabs">
+      <button id="planogramModeUnit" type="button" class="active">Produtos por condomínio</button>
+      <button id="planogramModeProduct" type="button" class="secondary">Condomínios por produto</button>
+      <button id="planogramModeImport" type="button" class="secondary">Importar base do condomínio</button>
+    </div>
+    <div id="planogramByUnitPanel">
+      <div class="grid2"><label>Condomínio / CD<select id="planogramUnit"></select></label><label>Pesquisar na Base Mestre<input id="planogramSearch" placeholder="Nome, EAN, alias, VM Pay, fornecedor ou segmento"></label></div>
+      <div class="actions"><button id="planogramSelectVisible" class="secondary" type="button">Selecionar visíveis</button><button id="planogramClearVisible" class="secondary" type="button">Desmarcar visíveis</button><button id="planogramSave" type="button">Salvar planograma da unidade</button></div>
+      <div id="planogramProductList" class="planogram-list"></div><p id="planogramMsg" class="muted"></p>
+    </div>
+    <div id="planogramByProductPanel" class="hidden">
+      <div class="grid2"><label>Pesquisar produto<input id="planogramProductSearch" placeholder="Nome, EAN, alias, VM Pay, fornecedor ou segmento"></label><label>Produto<select id="planogramProductSelect"></select></label></div>
+      <div class="actions"><button id="planogramProductSelectAll" class="secondary" type="button">Marcar todos</button><button id="planogramProductClearAll" class="secondary" type="button">Desmarcar todos</button><button id="planogramProductSave" type="button">Salvar condomínios do produto</button></div>
+      <div id="planogramUnitChecklist" class="planogram-unit-checklist"></div><p id="planogramProductMsg" class="muted"></p>
+    </div>
+    <div id="planogramImportPanel" class="hidden">
+      <div class="grid2"><label>Condomínio / CD de destino<select id="planogramImportUnit"></select></label><label>Arquivo da base do condomínio<input id="planogramImportFile" type="file" accept=".xlsx,.csv,.json"><small>Prioridade: EAN. Sem EAN, cruza por nome/alias exato normalizado.</small></label></div>
+      <div class="actions"><button id="planogramImportAnalyze" type="button">Analisar e cruzar com Base Mestre</button><button id="planogramImportApply" class="secondary" type="button" disabled>Aplicar encontrados ao planograma</button></div>
+      <div id="planogramImportSummary"></div><div id="planogramImportResults"></div>
     </div>
   </div>
-  <div class="grid4">
-    <label>Unidade<select id="prodIncUnit"></select></label>
-    <label>EAN / Produto
-      <input id="prodIncEAN" inputmode="numeric" placeholder="EAN do produto">
-      <small id="prodIncHint" class="ean-product-hint">Digite ou selecione um produto abaixo.</small>
-    </label>
-    <label>Quantidade<input id="prodIncQty" type="number" min="1" step="1" value="1"></label>
-    <label>Observação<input id="prodIncNote" placeholder="Motivo / origem"></label>
-  </div>
-  <div class="actions">
-    <button id="prodIncCamera" type="button" class="secondary">📷 Ler código</button>
-    <button id="prodIncSave" type="button">Lançar incremento</button>
-  </div>
-  <div id="prodIncSelector"></div>
-  <p id="prodIncMsg" class="muted"></p>
 </div>
-<div id="plist"></div>
 </section>
 
 <section id="units" class="view card hidden">
@@ -506,5 +518,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.21.0.js"></script>
+<script src="app-v3.23.0.js"></script>
 </body></html>
