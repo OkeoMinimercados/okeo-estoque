@@ -1,5 +1,4 @@
-OKEO V3.36 — GITHUB
-
-Publique todos os arquivos desta pasta na raiz do repositório GitHub Pages.
-Este pacote contém somente o frontend/PWA.
-O backend Google Apps Script NÃO deve ser enviado ao GitHub.
+OKEO V3.38 — GITHUB
+Extraia todos os arquivos deste ZIP na raiz do repositório publicado no GitHub Pages.
+Não envie o arquivo .gs do Apps Script para o GitHub.
+Após publicar, use Ctrl+F5 e execute o smoke test da validação V3.38.

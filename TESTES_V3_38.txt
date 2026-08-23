@@ -1,0 +1,41 @@
+40/40 checks approved
+PASS HTML sem IDs duplicados 383 IDs
+PASS Referência/arquivo db.js 
+PASS Referência/arquivo app-v3.38.0.js 
+PASS Referência/arquivo manifest.webmanifest 
+PASS Referência/arquivo styles.css 
+PASS Referência/arquivo okeo-logo.png 
+PASS Manifest JSON válido 
+PASS Service Worker cache V3.38 
+PASS Sem funções nomeadas duplicadas []
+PASS Backend cobre stores sincronizadas faltando=[]
+PASS Store crítica sincronizada: products 
+PASS Store crítica sincronizada: units 
+PASS Store crítica sincronizada: planograms 
+PASS Store crítica sincronizada: stock 
+PASS Store crítica sincronizada: demandBase 
+PASS Store crítica sincronizada: demandCurrent 
+PASS Store crítica sincronizada: replenishments 
+PASS Store crítica sincronizada: supplierOffers 
+PASS Store crítica sincronizada: suppliers 
+PASS Fonte canônica Produto × Condomínio 
+PASS Contagem Física usa fonte canônica 
+PASS Gestão Estoque usa fonte canônica 
+PASS Incremento garante vínculo Produto × Condomínio 
+PASS Cadastro novo grava condomínios 
+PASS Fornecedores × Produtos habilitado 
+PASS Seletores recolhíveis e clique fora 
+PASS Compra semanal e reposição incorporada 
+PASS Prioridade CD na compra semanal 
+PASS Parser DE/PARA separado do parser Base Mestre 
+PASS IndexedDB store: products 
+PASS IndexedDB store: units 
+PASS IndexedDB store: planograms 
+PASS IndexedDB store: stock 
+PASS IndexedDB store: suppliers 
+PASS IndexedDB store: supplierOffers 
+PASS IndexedDB store: stockSnapshots 
+PASS DB versão >=14 
+PASS Regra Coca 2L mínimo 30 30
+PASS Regra Coca 2L recomendado 34 34
+PASS Performance sintética reconciliação < 1500 ms 46.3 ms / 68055 relações / 57679 vínculos lógicos

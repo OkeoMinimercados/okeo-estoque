@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.36.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.38.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
       <button data-v="expiry" data-icon="□">Validades</button>
       <button data-v="groups" data-icon="⌘">Grupos</button>
       <button data-v="products" data-icon="◇">Produtos</button>
-      <button data-v="units" data-icon="▦">Unidades</button>
+      <button data-v="units" data-icon="▦">Condomínios e Fornecedores</button>
       <button data-v="demand" data-icon="◉">Demanda Inteligente</button>
       <button data-v="settings" data-icon="⚙">Configurações</button>
     </nav>
@@ -91,7 +91,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.36.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.38.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -146,10 +146,13 @@
   <label>Nomes alternativos / aliases<textarea id="palias" rows="3" placeholder="Separe os nomes por ponto e vírgula, vírgula ou linha"></textarea></label>
 </div>
 <input id="pid" type="hidden"><div id="productAssistBanner" class="hidden assist-banner"></div>
-<div class="subcard product-unit-assignment">
-  <div class="section-head"><div><h4>Adicionar produto aos condomínios</h4><p class="muted">Marque os condomínios onde este produto fará parte do mix. Ao salvar, os vínculos são gravados diretamente no Planograma oficial.</p></div><div id="productUnitCount" class="planogram-summary">0 selecionado(s)</div></div>
-  <div class="grid2"><label>Pesquisar condomínio<input id="productUnitSearch" placeholder="Nome do condomínio"></label><div class="actions align-end"><button id="productUnitSelectAll" type="button" class="secondary">Selecionar todos</button><button id="productUnitClearAll" type="button" class="secondary">Limpar seleção</button></div></div>
-  <div id="productUnitChecklist" class="planogram-unit-checklist"></div>
+<div class="subcard product-unit-assignment dropdown-card">
+  <div class="section-head"><div><h4>Adicionar produto aos condomínios</h4><p class="muted">Use a mesma relação Produto × Condomínio utilizada por Contagem, Gestão, Validades, Reposição e Compras.</p></div></div>
+  <button type="button" id="productUnitToggle" class="multiselect-toggle"><span id="productUnitCount">Nenhum condomínio selecionado</span><span>⌄</span></button>
+  <div id="productUnitDropdown" class="dropdown-panel hidden">
+    <div class="grid2"><label>Pesquisar condomínio<input id="productUnitSearch" placeholder="Nome do condomínio"></label><div class="actions align-end"><button id="productUnitSelectAll" type="button" class="secondary">Selecionar todos</button><button id="productUnitClearAll" type="button" class="secondary">Limpar seleção</button></div></div>
+    <div id="productUnitChecklist" class="planogram-unit-checklist compact-expand-list"></div>
+  </div>
 </div>
 <div class="actions"><button id="psave">Salvar produto e condomínios</button><button id="pcancel" class="secondary">Limpar</button></div>
 <p class="muted">EAN é a chave única. O produto é salvo uma única vez na Base Mestre; os condomínios marcados são vínculos do mesmo produto no Planograma.</p>
@@ -186,26 +189,63 @@
 </section>
 
 <section id="units" class="view card hidden">
-<h2>Condomínios / Mercados / CD</h2>
-<div class="grid3">
-  <input id="uid" type="hidden"><label>Nome<input id="uname"></label>
-  <label>Tipo<select id="utype"><option value="CONDOMINIO">Condomínio / Mercado</option><option value="CD">CD</option></select></label>
-  <label>Abastecimentos por semana<select id="ufreq"><option value="1">1x/semana</option><option value="2">2x/semana</option><option value="3">3x/semana</option><option value="5">5x/semana</option><option value="7">Diário</option></select></label>
-  <label>Aliases da unidade<input id="ualias" placeholder="Ex.: VILLE; VILLE DE LEON"></label>
+<h2>Condomínios e Fornecedores</h2>
+<p class="muted">Cadastro operacional único de condomínios e fornecedores. Os vínculos com produtos são compartilhados pelos demais módulos.</p>
+<div class="products-tabs registry-tabs">
+  <button id="registryTabUnits" type="button" class="active">Condomínios</button>
+  <button id="registryTabSuppliers" type="button" class="secondary">Fornecedores</button>
 </div>
-<label>Dias preferenciais de abastecimento</label>
-<div class="weekdaybox">
-<label><input type="checkbox" name="uday" value="1"> Seg</label>
-<label><input type="checkbox" name="uday" value="2"> Ter</label>
-<label><input type="checkbox" name="uday" value="3"> Qua</label>
-<label><input type="checkbox" name="uday" value="4"> Qui</label>
-<label><input type="checkbox" name="uday" value="5"> Sex</label>
-<label><input type="checkbox" name="uday" value="6"> Sáb</label>
-<label><input type="checkbox" name="uday" value="0"> Dom</label>
+
+<div id="registryUnitsPanel">
+  <div class="grid3">
+    <input id="uid" type="hidden"><label>Nome<input id="uname"></label>
+    <label>Tipo<select id="utype"><option value="CONDOMINIO">Condomínio / Mercado</option><option value="CD">CD</option></select></label>
+    <label>Abastecimentos por semana<select id="ufreq"><option value="1">1x/semana</option><option value="2">2x/semana</option><option value="3">3x/semana</option><option value="5">5x/semana</option><option value="7">Diário</option></select></label>
+    <label>Aliases da unidade<input id="ualias" placeholder="Ex.: VILLE; VILLE DE LEON"></label>
+  </div>
+  <label>Dias preferenciais de abastecimento</label>
+  <div class="weekdaybox">
+  <label><input type="checkbox" name="uday" value="1"> Seg</label>
+  <label><input type="checkbox" name="uday" value="2"> Ter</label>
+  <label><input type="checkbox" name="uday" value="3"> Qua</label>
+  <label><input type="checkbox" name="uday" value="4"> Qui</label>
+  <label><input type="checkbox" name="uday" value="5"> Sex</label>
+  <label><input type="checkbox" name="uday" value="6"> Sáb</label>
+  <label><input type="checkbox" name="uday" value="0"> Dom</label>
+  </div>
+  <button id="usave">Salvar condomínio/unidade</button><button id="ucancel" class="secondary">Limpar</button>
+  <p class="muted">Novas unidades entram automaticamente nos inventários, transferências, consolidados e demanda.</p>
+  <div id="ulist"></div>
 </div>
-<button id="usave">Salvar unidade</button><button id="ucancel" class="secondary">Limpar</button>
-<p class="muted">Novas unidades entram automaticamente nos inventários, transferências, consolidados e demanda.</p>
-<div id="ulist"></div>
+
+<div id="registrySuppliersPanel" class="hidden">
+  <div class="subcard">
+    <h3>Cadastro de fornecedores</h3>
+    <div class="grid3">
+      <input id="supplierEditId" type="hidden">
+      <label>Nome do fornecedor<input id="supplierRegistryName" placeholder="Ex.: Fort, Pegoraro, DMuller"></label>
+      <label>Status<select id="supplierRegistryStatus"><option value="ACTIVE">Ativo</option><option value="INACTIVE">Inativo</option></select></label>
+      <label>&nbsp;<button id="supplierRegistrySave" class="primarywide" type="button">Salvar fornecedor</button></label>
+    </div>
+  </div>
+  <div class="subcard">
+    <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor e marque os produtos que ele pode fornecer. Um produto pode ter mais de um fornecedor.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
+    <div class="grid3">
+      <label>Fornecedor<select id="supplierRegistryFilter"></select></label>
+      <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto, EAN ou fornecedor principal"></label>
+      <label>&nbsp;<button id="supplierProductToggle" type="button" class="multiselect-toggle">Abrir lista de produtos <span>⌄</span></button></label>
+    </div>
+    <div id="supplierProductDropdown" class="dropdown-panel hidden">
+      <div class="actions"><button id="supplierProductSelectVisible" class="secondary" type="button">Selecionar visíveis</button><button id="supplierProductClearVisible" class="secondary" type="button">Desmarcar visíveis</button><button id="supplierProductSave" type="button">Salvar produtos atendidos</button></div>
+      <div id="supplierProductList" class="dtable compact-expand-list"></div>
+    </div>
+  </div>
+  <div class="subcard">
+    <h3>Fornecedores cadastrados</h3>
+    <input id="supplierRegistrySearch" placeholder="Pesquisar fornecedor">
+    <div id="supplierRegistryAdminList"></div>
+  </div>
+</div>
 </section>
 
 <section id="controlstock" class="view card hidden">
@@ -265,8 +305,8 @@
   </div>
   <div class="grid4 weekly-purchase-filters">
     <label>Cobertura até próxima entrega<select id="weeklyCoverageDays"><option value="7" selected>7 dias (1 entrega/semana)</option><option value="6">6 dias</option><option value="5">5 dias</option><option value="4">4 dias</option><option value="3">3 dias</option><option value="2">2 dias</option><option value="1">1 dia</option><option value="14">14 dias</option></select></label>
-    <div class="field weekly-check-filter"><label>Condomínios</label><input id="weeklyUnitSearch" placeholder="Pesquisar condomínio"><div class="check-filter-actions"><button id="weeklyUnitAll" type="button" class="linkbtn">Todos</button><button id="weeklyUnitNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklyUnitChecks" class="compact-checklist"></div><small id="weeklyUnitSelectionSummary">Todos os condomínios</small></div>
-    <div class="field weekly-check-filter"><label>Fornecedores</label><input id="weeklySupplierSearch" placeholder="Pesquisar fornecedor"><div class="check-filter-actions"><button id="weeklySupplierAll" type="button" class="linkbtn">Todos</button><button id="weeklySupplierNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklySupplierChecks" class="compact-checklist"></div><small id="weeklySupplierSelectionSummary">Todos os fornecedores</small></div>
+    <div class="field weekly-check-filter dropdown-card"><label>Condomínios</label><button id="weeklyUnitToggle" type="button" class="multiselect-toggle"><span id="weeklyUnitSelectionSummary">Todos os condomínios</span><span>⌄</span></button><div id="weeklyUnitDropdown" class="dropdown-panel hidden"><input id="weeklyUnitSearch" placeholder="Pesquisar condomínio"><div class="check-filter-actions"><button id="weeklyUnitAll" type="button" class="linkbtn">Todos</button><button id="weeklyUnitNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklyUnitChecks" class="compact-checklist"></div></div></div>
+    <div class="field weekly-check-filter dropdown-card"><label>Fornecedores</label><button id="weeklySupplierToggle" type="button" class="multiselect-toggle"><span id="weeklySupplierSelectionSummary">Todos os fornecedores</span><span>⌄</span></button><div id="weeklySupplierDropdown" class="dropdown-panel hidden"><input id="weeklySupplierSearch" placeholder="Pesquisar fornecedor"><div class="check-filter-actions"><button id="weeklySupplierAll" type="button" class="linkbtn">Todos</button><button id="weeklySupplierNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklySupplierChecks" class="compact-checklist"></div></div></div>
     <label>Pesquisar produto<input id="weeklyPurchaseSearch" placeholder="Produto ou EAN"></label>
   </div>
   <div class="actions"><button id="weeklyPurchaseCalc">Gerar / atualizar compra semanal</button><button id="weeklyPurchaseByUnit" class="secondary">Visão por condomínio</button><button id="weeklyPurchaseByProduct" class="secondary">Consolidado por produto</button><button id="weeklyPurchaseExport" class="secondary">Exportar para Excel (CSV)</button></div>
@@ -545,7 +585,7 @@
       <label><input type="checkbox" class="profileperm" value="expiry"> Validades</label>
       <label><input type="checkbox" class="profileperm" value="groups"> Grupos</label>
       <label><input type="checkbox" class="profileperm" value="products"> Produtos</label>
-      <label><input type="checkbox" class="profileperm" value="units"> Unidades</label>
+      <label><input type="checkbox" class="profileperm" value="units"> Condomínios e Fornecedores</label>
       <label><input type="checkbox" class="profileperm" value="demand"> Demanda Inteligente</label>
       <label><input type="checkbox" class="profileperm" value="settings"> Configurações</label>
     </div>
@@ -599,5 +639,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.36.0.js"></script>
+<script src="app-v3.38.0.js"></script>
 </body></html>

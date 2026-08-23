@@ -264,3 +264,51 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - Relatório por condomínio e consolidado por produto/fornecedor, com exportação CSV compatível com Excel.
 - Compras ganhou acesso interno ao resumo da Reposição Operacional, mantendo o checklist completo existente.
 - Exemplo validado: estoque 10, média semanal 40, alerta 4, CD 0 -> compra mínima 30 e recomendada 34.
+
+
+## V3.34 — DE/PARA Produto × Condomínio e lista oficial por unidade
+- Gestão de Estoque por Condomínio passa a usar o planograma/cadastro Produto × Condomínio como lista oficial.
+- Ao selecionar uma unidade, a tabela exibe os produtos cadastrados para aquela unidade com quantidade, validade, status de abastecimento e quantidade sugerida.
+- Se a unidade não tiver lista cadastrada, a tela informa claramente a ausência e oferece importação DE/PARA.
+- Nova importação DE/PARA em XLSX/CSV/JSON, preferencialmente com colunas Condomínio, Produto e EAN.
+- Cruzamento de condomínio por nome/alias e de produto por EAN; nome/alias do produto é fallback.
+- Quando o arquivo não possui coluna de condomínio, pode-se selecionar uma unidade padrão.
+- Modos de importação: adicionar/atualizar vínculos ou substituir a lista das unidades presentes no arquivo.
+- Prévia antes de aplicar informa vínculos válidos, unidades não encontradas e produtos não encontrados.
+- Modelo CSV pode ser baixado diretamente pela tela.
+- Saldos/demandas existentes fora da lista oficial são sinalizados como inconsistência, sem substituir silenciosamente o cadastro do condomínio.
+- Como os módulos de Contagem, Validades, Reposição, Compras e Gestão usam `planograms`, o DE/PARA aplicado passa a ser a referência compartilhada entre eles.
+
+
+## V3.35 — filtros, reposição incorporada e contagem por condomínio
+- Contagem usa exclusivamente o planograma da unidade e mostra o total real por condomínio.
+- Unidade sem planograma exibe aviso para importar/enviar DE/PARA Produto × Condomínio.
+- Compra semanal: condomínio e fornecedor em pesquisa + checklist multiseleção.
+- Relatório de Reposição incorporado integralmente dentro de Compras, sem link externo.
+
+
+## V3.36 — Produto novo com vínculo direto aos condomínios
+- Cadastro de Produto Novo ganhou pesquisa e checklist dos condomínios ativos.
+- Ao salvar, o produto é gravado uma única vez na Base Mestre e os condomínios marcados são gravados no Planograma oficial (`planograms`).
+- Ao editar produto existente, os condomínios já vinculados aparecem previamente marcados e podem ser atualizados.
+- A seleção alimenta automaticamente Contagem, Gestão de Estoque, Validades, Reposição e Compras, sem base paralela.
+- CD permanece separado do checklist de condomínios.
+
+## V3.38 — integração única Produto × Condomínio + Fornecedores
+- `planograms` passa a fazer parte da sincronização CORE: Gestão de Estoque e Contagem Física recebem os vínculos Produto × Condomínio já salvos na Base Central ao entrar no sistema.
+- Relação canônica Produto × Condomínio reconcilia Planograma, `products.unitIds`, estoque e demanda; vínculos válidos ausentes são reparados automaticamente.
+- Gestão de Estoque, Contagem Física, Validades, Reposição e Compras usam a mesma função de vínculo por unidade.
+- Incremento de Estoque exige EAN existente na Base Mestre e, quando lançado em condomínio, garante automaticamente o vínculo Produto × Condomínio no Planograma e em `products.unitIds`.
+- Seletor de condomínios do Cadastro de Produto ficou recolhido por padrão, com pesquisa + checklist; abre ao clicar e fecha ao clicar fora.
+- Filtros de condomínios e fornecedores da Compra Semanal ficaram recolhidos/expansíveis e fecham ao clicar fora.
+- “Unidades” foi renomeado para **Condomínios e Fornecedores**, com abas internas.
+- Aba Fornecedores permite cadastrar/editar fornecedores, filtrar fornecedor, visualizar os produtos atendidos e marcar/desmarcar produtos da Base Mestre. O vínculo é salvo em `supplierOffers`, permitindo vários fornecedores por produto sem apagar o fornecedor principal.
+
+## V3.38 — Homologação, desempenho e integridade
+- Reconciliação Produto × Condomínio otimizada: vínculos já corretos não geram mais leituras/gravações redundantes por produto.
+- Gestão de Estoque e Contagem Física continuam usando a mesma fonte canônica de produtos por unidade.
+- Incremento de estoque garante o vínculo do produto com o condomínio antes de alterar o saldo.
+- Parser CSV da Base Mestre e parser do DE/PARA foram separados, removendo declaração duplicada.
+- Backend operacional identificado como 3.38.0, mantendo o mesmo contrato de dados e stores das versões anteriores.
+- Stores críticas `planograms`, `suppliers` e `supplierOffers` confirmadas na sincronização frontend/backend.
+- Validação estrutural, regressão e carga concluídas antes do empacotamento final.
