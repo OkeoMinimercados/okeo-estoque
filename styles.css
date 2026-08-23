@@ -204,7 +204,7 @@ table{font-size:12px}
 
 .cd-tabs{margin-bottom:12px}.optional-second-expiry{margin-top:8px;padding-top:8px;border-top:1px dashed #d7dee7}#cdInboundList input{min-width:120px}.hidden[style*="block"]{display:block!important}
 
-/* V3.52 - leitura mais confortável */
+/* V3.54 - leitura mais confortável */
 .dtable th,.dtable td{padding-top:9px!important;padding-bottom:9px!important;line-height:1.35}
 .row{padding-top:10px!important;padding-bottom:10px!important}
 .compact-checklist label,.checklist-list label{padding-top:7px;padding-bottom:7px}
@@ -213,7 +213,7 @@ table{font-size:12px}
 .clear-test-history-btn{float:right;margin-top:-34px;margin-bottom:10px}
 #cdInboundList .dtable td{vertical-align:top}
 
-/* V3.52 - legibilidade e navegação */
+/* V3.54 - legibilidade e navegação */
 .purchase-main-tabs{display:flex;gap:14px;flex-wrap:wrap;padding:8px 0 12px}
 .purchase-main-tabs .tabbtn{padding:10px 15px;line-height:1.25;white-space:nowrap}
 .weekly-purchase-filters{display:grid!important;grid-template-columns:repeat(2,minmax(260px,1fr))!important;gap:16px 22px!important;margin:14px 0 18px}
@@ -227,3 +227,25 @@ table{font-size:12px}
 #supplierRegistryAdminList .row{min-height:48px;align-items:center}
 #supplierRegistryAdminList .mini{display:flex;gap:8px}
 @media(max-width:900px){.weekly-purchase-filters{grid-template-columns:1fr!important}}
+
+/* V3.54 - espaçamento dos filtros de Compra Semanal */
+.weekly-purchase-filters{row-gap:24px!important;column-gap:24px!important}
+.weekly-purchase-filters>label,.weekly-purchase-filters>.field{margin-bottom:6px!important}
+.weekly-purchase-filters label{display:block;margin-bottom:7px!important;font-weight:600}
+.weekly-purchase-filters select,.weekly-purchase-filters input,.weekly-purchase-filters .multiselect-toggle{margin-top:8px!important}
+.weekly-purchase-filters .weekly-check-filter{padding-bottom:4px}
+.approval-queue{margin-top:16px;border:1px solid #dfe7e2;border-radius:10px;padding:14px;background:#fff}
+.approval-queue h3{display:flex;gap:8px;align-items:center}
+.count-badge{display:inline-flex;min-width:24px;height:24px;padding:0 7px;align-items:center;justify-content:center;border-radius:12px;background:#eaf6ef;color:#087a37;font-size:12px}
+.approval-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #e6ece8}
+.approval-row:first-of-type{border-top:0}
+
+/* V3.54 - reforço visual de espaçamento */
+.weekly-purchase-filters{display:grid!important;grid-template-columns:1fr!important;gap:0!important}
+.weekly-purchase-filters>label,.weekly-purchase-filters>.weekly-check-filter,.weekly-purchase-filters>.field{display:block!important;margin:0 0 20px!important;padding:0 0 4px!important}
+.weekly-purchase-filters>label+label,.weekly-purchase-filters>.weekly-check-filter+.weekly-check-filter{margin-top:4px!important}
+.weekly-purchase-filters label,.weekly-purchase-filters .field-label{font-weight:700!important;line-height:1.5!important;margin-bottom:8px!important}
+.weekly-purchase-filters input,.weekly-purchase-filters select,.weekly-purchase-filters .multiselect-toggle{margin-top:8px!important;min-height:40px!important}
+.admin-task-alert{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.admin-task-alert button{white-space:nowrap}
+#physicalCountPermissionHint{align-self:center;margin-left:8px}

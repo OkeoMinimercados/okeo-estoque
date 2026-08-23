@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.52.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.54.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.52.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.54.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -255,7 +255,8 @@
     
 <p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
 <div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<select id="cowner"></select></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
-<div class="actions"><button id="cstart">Iniciar contagem de estoque física</button><button id="capprove" class="secondary">Aprovar contagem de estoque física</button></div>
+<div class="actions"><button id="cfinalize">Finalizar contagem física</button><span id="physicalCountPermissionHint" class="muted"></span></div>
+<div class="alert-card alert-info"><b>Fluxo de aprovação:</b> a contagem finalizada é enviada para aprovação. O estoque físico só é atualizado depois da aprovação por um Administrador.</div>
 <p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar à contagem de estoque física</button></label></div><div class="selector-toggle-row"><button id="controlSelectorBtn" type="button" class="secondary">Selecionar vários produtos para conferência</button></div>
 <div id="controlProductSelector" class="hidden"></div>
 <div class="actions"><button id="controlAddSelected" type="button" class="secondary hidden">Adicionar selecionados à Contagem de Estoque Física</button></div>
@@ -284,7 +285,7 @@
   </div>
   <div id="physicalCountPlanogramNotice"></div><div id="physicalCountProductList" class="physical-count-product-list"></div>
 </div>
-<div id="cactive"></div><div id="chistory"></div>
+<div id="cactive"></div><div id="capprovalQueue"></div><div id="chistory"></div>
 
   </div>
 
@@ -662,6 +663,21 @@
     </main>
   </div>
 </div>
-<script src="db.js"></script>
-<script src="app-v3.52.0.js"></script>
+<script>
+(function(){
+  const BUILD="3.54.0", KEY="okeo_ui_build_v2";
+  try{
+    const old=localStorage.getItem(KEY);
+    if(old!==BUILD){
+      localStorage.setItem(KEY,BUILD);
+      Promise.resolve().then(async()=>{
+        try{if("caches" in window){for(const k of await caches.keys())if(k.startsWith("okeo-"))await caches.delete(k)}}catch(e){}
+        try{if("serviceWorker" in navigator){for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister()}}catch(e){}
+      });
+    }
+  }catch(e){}
+})();
+</script>
+<script src="db.js?v=3.54.0"></script>
+<script src="app-v3.54.0.js?v=3.54.0"></script>
 </body></html>
