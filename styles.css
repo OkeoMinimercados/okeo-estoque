@@ -118,3 +118,9 @@ table{font-size:12px}
 .planogram-row:last-child{border-bottom:0}.planogram-row input{width:auto;min-height:auto;margin-top:4px}.planogram-row span{display:grid;gap:2px}
 
 .planogram-mode-tabs{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0 16px}.planogram-mode-tabs button.active{background:#078b3d;color:#fff;border-color:#078b3d}.planogram-unit-checklist{max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}#planogramImportResults{max-height:520px;overflow:auto;margin-top:12px}.success-note{color:#087b38;font-weight:700;margin-top:10px}
+
+.account-wrap{position:relative}.account-menu{position:absolute;right:0;top:calc(100% + 8px);min-width:200px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,.12);padding:7px;z-index:80}.account-menu button{display:block;width:100%;text-align:left;margin:0 0 5px;padding:10px}.account-menu #accountLogout{font-weight:700}.account-menu button:last-child{margin-bottom:0}
+
+.physical-count-product-list .dtable{max-height:600px;overflow:auto}.physical-manual-input{width:84px;text-align:center}.qty-mini{min-width:34px;padding:5px 8px}.cd-stay-row{background:#f1f8f3}.alert-info{border-color:#a9d8b8;background:#f3fbf5;margin:10px 0 14px}
+
+#expiryCoverageByUnit .dtable{max-height:420px;overflow:auto}

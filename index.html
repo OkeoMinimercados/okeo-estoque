@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.23.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.27.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -76,7 +76,7 @@
       <button data-v="entries" data-icon="▤">Compras / NF</button>
       <button data-v="moves" data-icon="±">Ajuste de Estoque</button>
       <button data-v="cdmove" data-icon="⇄">Movimentação Estoque CD</button>
-      <button data-v="replenishment" data-icon="🛒">Central de Reposição</button>
+      <button data-v="replenishment" data-icon="🛒">Relatório de Reposição</button>
       <button data-v="expiry" data-icon="□">Validades</button>
       <button data-v="groups" data-icon="⌘">Grupos</button>
       <button data-v="products" data-icon="◇">Produtos</button>
@@ -92,7 +92,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.23.0</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.27.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -116,8 +116,8 @@
 <h2>Produtos</h2>
 <p class="muted">A Base Mestre é o catálogo único. O Planograma define em quais condomínios/CD cada produto existe.</p>
 <div class="products-tabs">
-  <button id="productsTabMaster" type="button" class="active">Cadastro de Produtos Novos</button>
-  <button id="productsTabPlanogram" type="button" class="secondary">Planograma por Condomínio / CD</button>
+  <button id="productsTabMaster" type="button" class="active" onclick="setProductsPanel('master')">Cadastro de Produtos Novos</button>
+  <button id="productsTabPlanogram" type="button" class="secondary" onclick="setProductsPanel('planogram')">Planograma por Condomínio / CD</button>
 </div>
 <div id="productsMasterPanel" class="products-panel">
   <div class="subcard"><h3>Cadastro de Produtos Novos / Base Mestre</h3>
@@ -146,9 +146,9 @@
   <div class="subcard">
     <div class="section-head"><div><h3>Planograma por Condomínio / CD</h3><p class="muted">Trabalhe por condomínio, por produto ou importe a base de uma unidade.</p></div><div id="planogramSummary" class="planogram-summary"></div></div>
     <div class="planogram-mode-tabs">
-      <button id="planogramModeUnit" type="button" class="active">Produtos por condomínio</button>
-      <button id="planogramModeProduct" type="button" class="secondary">Condomínios por produto</button>
-      <button id="planogramModeImport" type="button" class="secondary">Importar base do condomínio</button>
+      <button id="planogramModeUnit" type="button" class="active" onclick="setPlanogramMode('unit')">Produtos por condomínio</button>
+      <button id="planogramModeProduct" type="button" class="secondary" onclick="setPlanogramMode('product')">Condomínios por produto</button>
+      <button id="planogramModeImport" type="button" class="secondary" onclick="setPlanogramMode('import')">Importar base do condomínio</button>
     </div>
     <div id="planogramByUnitPanel">
       <div class="grid2"><label>Condomínio / CD<select id="planogramUnit"></select></label><label>Pesquisar na Base Mestre<input id="planogramSearch" placeholder="Nome, EAN, alias, VM Pay, fornecedor ou segmento"></label></div>
@@ -291,7 +291,7 @@
 <div id="cdMoveMetrics" class="metriccards"></div>
 <div class="grid2 cd-move-layout">
   <div class="subcard">
-    <div class="section-head"><div><h3>Produtos disponíveis no CD</h3><p class="muted">Lista completa dos produtos com saldo no CD. Pesquise e marque um ou mais itens para calcular destinos.</p></div><div class="actions"><button id="cdSelectAll" type="button" class="secondary">Selecionar visíveis</button><button id="cdClearSelection" type="button" class="secondary">Limpar</button></div></div>
+    <div class="section-head"><div><h3>Base Mestre / produtos do CD</h3><p class="muted">Lista completa da Base Mestre. O saldo atual do CD aparece em cada produto; pesquise e marque itens para calcular destinos.</p></div><div class="actions"><button id="cdSelectAll" type="button" class="secondary">Selecionar visíveis</button><button id="cdClearSelection" type="button" class="secondary">Limpar</button></div></div>
     <input id="cdMoveSearch" placeholder="Pesquisar produto ou EAN">
     <div id="cdMoveProductList" class="checklist-list"></div>
   </div>
@@ -303,15 +303,26 @@
 </section>
 <section id="expiry" class="view card hidden">
 <h2>Validades</h2>
+<p class="muted">Validade nunca cria estoque: ela apenas classifica estoque físico existente ou mercadoria pendente já vinculada a uma movimentação.</p>
+<div id="expiryCoverageSummary" class="metriccards"></div>
+<div class="subcard">
+  <h3>Cobertura de validade por condomínio</h3>
+  <p class="muted">Resumo de SKUs e unidades físicas ainda sem validade registrada em cada unidade.</p>
+  <div id="expiryCoverageByUnit"></div>
+</div>
 <div class="grid3"><label>Relatório por unidade<select id="expiryFilter"></select></label><label>Faixa<select id="expiryRange"><option value="ALL">Todas</option><option value="OVERDUE">Vencidos</option><option value="7">Até 7 dias</option><option value="15">8–15 dias</option><option value="30">16–30 dias</option></select></label><label>&nbsp;<button id="expiryReport" class="primarywide">Atualizar relatório</button></label></div>
-<hr><h3>Registrar validade</h3><div class="grid3">
+<hr><h3>Registrar validade</h3>
+<div class="alert-card alert-info"><b>Importante:</b> este módulo <b>não incrementa estoque</b>. Ele apenas associa validade/lote a estoque físico já existente. Se o saldo estiver zerado, corrija primeiro pela Contagem de Estoque Física. Mercadoria em trânsito mantém validade pendente até o recebimento.</div><div class="grid3">
   <label>Unidade<select id="eunit"></select></label>
   <label>EAN<input id="eean" inputmode="numeric"><small id="eproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
   <label>Validade<input id="edate" type="date"></label>
   <label>Quantidade<input id="eqty" type="number" min="1" step="1" value="1"></label>
   <label>Lote<input id="elot" placeholder="Opcional"></label>
 </div>
+<div class="grid2">
 <label>Foto da validade<input id="ephoto" type="file" accept="image/*" capture="environment"></label>
+<label>Foto do produto<input id="eproductphoto" type="file" accept="image/*" capture="environment"></label>
+</div>
 <button id="esave">Salvar validade</button>
 <div class="selector-toggle-row"><button id="expirySelectorBtn" type="button" class="secondary">Selecionar produtos</button></div>
 <div id="expiryProductSelector" class="hidden"></div>
@@ -386,7 +397,7 @@
   <div class="grid4">
     <label>Visão<select id="dunit"></select></label>
     <label>Período de vendas<select id="dweeks"><option>4</option><option>8</option><option selected>12</option><option>16</option></select></label>
-    <label>Nível de Alerta<input value="50% da demanda semanal média" readonly></label>
+    <label>Nível de Alerta<input value="30% da demanda semanal média" readonly></label>
     <label>Estoque Ideal<input value="100% da demanda semanal média" readonly></label>
   </div>
   <div class="actions"><button id="dcalc">Calcular / atualizar demanda</button></div>
@@ -399,7 +410,7 @@
 
 
 <section id="replenishment" class="view card hidden">
-<h2>Central de Reposição</h2>
+<h2>Relatório de Reposição</h2>
 <div class="workflow"><div><b>1</b><span>Vendas<small>Importadas</small></span></div><i>›</i><div><b>2</b><span>Cálculo<small>Demanda e estoque</small></span></div><i>›</i><div><b>3</b><span>Rascunho<small>Editável</small></span></div><i>›</i><div><b>4</b><span>Aprovação<small>Revise e aprove</small></span></div><i>›</i><div><b>5</b><span>PDF<small>Registrado</small></span></div><i>›</i><div><b>6</b><span>Confirmação<small>Física/NF</small></span></div><i>›</i><div><b>7</b><span>Estoque<small>Atualizado</small></span></div></div>
 <div class="filtergrid">
   <div class="field">
@@ -440,7 +451,7 @@
 <label><input type="checkbox" class="permcheck" value="cdmove" checked> Movimentação Estoque CD</label>
 <label><input type="checkbox" class="permcheck" value="expiry" checked> Validades</label>
 <label><input type="checkbox" class="permcheck" value="sales"> Vendas</label>
-<label><input type="checkbox" class="permcheck" value="replenishment"> Central de Reposição</label>
+<label><input type="checkbox" class="permcheck" value="replenishment"> Relatório de Reposição</label>
 </div></div>
 <div class="actions"><button id="createUser">Criar / atualizar usuário</button><button id="changeMyPassword" class="secondary">Alterar minha senha</button></div>
 <div id="usersList"></div>
@@ -460,7 +471,7 @@
       <label><input type="checkbox" class="profileperm" value="entries"> Entrada / NF</label>
       <label><input type="checkbox" class="profileperm" value="moves"> Ajuste de Estoque</label>
       <label><input type="checkbox" class="profileperm" value="cdmove"> Movimentação Estoque CD</label>
-      <label><input type="checkbox" class="profileperm" value="replenishment"> Central de Reposição</label>
+      <label><input type="checkbox" class="profileperm" value="replenishment"> Relatório de Reposição</label>
       <label><input type="checkbox" class="profileperm" value="expiry"> Validades</label>
       <label><input type="checkbox" class="profileperm" value="groups"> Grupos</label>
       <label><input type="checkbox" class="profileperm" value="products"> Produtos</label>
@@ -518,5 +529,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.23.0.js"></script>
+<script src="app-v3.27.0.js"></script>
 </body></html>
