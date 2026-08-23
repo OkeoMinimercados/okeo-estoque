@@ -212,3 +212,10 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 
 - Autoteste agora verifica Planograma, cobertura de validade, FEFO e regra matemática de 30%/100%.
 - Integridade detecta Planogramas órfãos e snapshots de demanda ainda gravados com regras antigas.
+
+## V3.28
+- Gestão de Estoque informa data/hora da última importação de vendas.
+- Histórico de posições de estoque guarda a posição anterior antes de operações relevantes e mantém as 60 mais recentes.
+- Responsável da Contagem Física usa usuários/perfis cadastrados.
+- Base Mestre pode ser exportada para CSV, editada e reimportada por EAN em XLSX/CSV/JSON.
+- A reimportação mostra prévia com NOVO / ALTERAR / SEM ALTERAÇÃO antes de aplicar.

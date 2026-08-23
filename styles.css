@@ -124,3 +124,7 @@ table{font-size:12px}
 .physical-count-product-list .dtable{max-height:600px;overflow:auto}.physical-manual-input{width:84px;text-align:center}.qty-mini{min-width:34px;padding:5px 8px}.cd-stay-row{background:#f1f8f3}.alert-info{border-color:#a9d8b8;background:#f3fbf5;margin:10px 0 14px}
 
 #expiryCoverageByUnit .dtable{max-height:420px;overflow:auto}
+
+.stock-meta-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}.compact-status{margin:0}.compact-status h4{margin:0 0 6px}.compact-status b{display:block;font-size:15px}.compact-status small{display:block;margin-top:4px;color:var(--muted)}
+.master-bulk-tools{margin-bottom:16px}.align-end{align-items:end;justify-content:flex-end}#masterProductsImportPreview{max-height:480px;overflow:auto;margin-top:10px}
+@media(max-width:800px){.stock-meta-row{grid-template-columns:1fr}}

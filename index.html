@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.27.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.28.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -92,7 +92,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.27.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.28.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -120,6 +120,18 @@
   <button id="productsTabPlanogram" type="button" class="secondary" onclick="setProductsPanel('planogram')">Planograma por Condomínio / CD</button>
 </div>
 <div id="productsMasterPanel" class="products-panel">
+<div class="subcard master-bulk-tools">
+  <div class="section-head">
+    <div><h3>Base Mestre — exportar / atualizar em lote</h3><p class="muted">Exporte, edite no Excel e reimporte. O EAN é a chave da atualização.</p></div>
+    <div class="actions"><button id="exportMasterProducts" type="button" class="secondary">Exportar Base Mestre CSV</button></div>
+  </div>
+  <div class="grid2">
+    <label>Reimportar Base Mestre atualizada<input id="masterProductsImportFile" type="file" accept=".xlsx,.csv,.json"></label>
+    <div class="actions align-end"><button id="analyzeMasterProductsImport" type="button">Analisar atualização</button><button id="applyMasterProductsImport" type="button" class="secondary" disabled>Aplicar atualizações</button></div>
+  </div>
+  <div id="masterProductsImportSummary"></div>
+  <div id="masterProductsImportPreview"></div>
+</div>
   <div class="subcard"><h3>Cadastro de Produtos Novos / Base Mestre</h3>
 <div class="grid3">
   <label>Produto<input id="pname"></label>
@@ -202,7 +214,7 @@
     <p class="muted">Conferência formal da unidade com data/hora, divergências e início de um novo ciclo.</p>
     
 <p>Faça a contagem física quando desejar. O estoque observado só passa a ser o estoque real depois da aprovação.</p>
-<div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<input id="cowner"></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
+<div class="grid3"><label>Unidade<select id="cunit"></select></label><label>Responsável<select id="cowner"></select></label><label>Data/hora da contagem<input id="cdateTime" type="datetime-local"></label></div><div class="grid2"><label>Observação<input id="cnote"></label></div>
 <div class="actions"><button id="cstart">Iniciar contagem de estoque física</button><button id="capprove" class="secondary">Aprovar contagem de estoque física</button></div>
 <p id="cmsg" class="muted"></p><div class="grid3"><label>Adicionar produto à contagem<input id="cean" inputmode="numeric" placeholder="EAN"><small id="cproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label><label>Quantidade observada<input id="cqty" type="number" min="0" step="1" value="0"></label><label>&nbsp;<button id="cadd" class="primarywide">Adicionar ao contagem de estoque física</button></label></div><div class="selector-toggle-row"><button id="controlSelectorBtn" type="button" class="secondary">Selecionar vários produtos para conferência</button></div>
 <div id="controlProductSelector" class="hidden"></div>
@@ -358,6 +370,10 @@
 <h2>Gestão de Estoque</h2>
 <p class="muted">Fotografia operacional do estoque atual, independente da próxima importação de vendas.</p>
 <div id="stockMgmtMetrics" class="metriccards"></div>
+<div class="stock-meta-row">
+  <div id="lastSalesImportCard" class="subcard compact-status"></div>
+  <div id="lastStockSnapshotCard" class="subcard compact-status"></div>
+</div>
 <div class="grid2 stock-analysis-grid">
   <div class="subcard"><h3>Estoque por unidade</h3><div id="stockMgmtUnits"></div>
 <div class="selector-toggle-row"><button id="stockMgmtSelectorBtn" type="button" class="secondary">Abrir lista de produtos</button></div>
@@ -367,7 +383,14 @@
 <div class="subcard">
   <div class="section-head"><div><h3>Histórico recente de movimentos</h3><p class="muted">Análise das últimas movimentações para conferência operacional.</p></div>
   <div class="actions"><select id="stockMovePeriod"><option value="7">7 dias</option><option value="15">15 dias</option><option value="30" selected>30 dias</option><option value="90">90 dias</option></select><button id="exportStockMoveReport" type="button">Exportar relatório CSV</button></div></div>
-  <div id="stockMgmtMoveSummary"></div><div id="stockMgmtMoves"></div>
+  <div class="subcard">
+  <div class="section-head">
+    <div><h3>Histórico de posições de estoque</h3><p class="muted">Guarda a posição anterior antes das principais atualizações do estoque.</p></div>
+    <div class="actions"><button id="captureStockSnapshotNow" type="button" class="secondary">Salvar posição atual</button></div>
+  </div>
+  <div id="stockHistoryTable"></div>
+</div>
+<div id="stockMgmtMoveSummary"></div><div id="stockMgmtMoves"></div>
 </div>
 </section>
 <section id="sales" class="view card hidden">
@@ -529,5 +552,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.27.0.js"></script>
+<script src="app-v3.28.0.js"></script>
 </body></html>
