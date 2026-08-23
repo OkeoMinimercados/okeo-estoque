@@ -1,4 +1,3 @@
-OKEO V3.38 — GITHUB
-Extraia todos os arquivos deste ZIP na raiz do repositório publicado no GitHub Pages.
-Não envie o arquivo .gs do Apps Script para o GitHub.
-Após publicar, use Ctrl+F5 e execute o smoke test da validação V3.38.
+OKEO Core V3.39
+Extraia estes arquivos na raiz do repositório GitHub Pages.
+Não envie o arquivo Google Apps Script para o GitHub Pages.

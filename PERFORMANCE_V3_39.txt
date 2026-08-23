@@ -1,0 +1,3 @@
+Relações simuladas: 200000
+Produtos únicos: 5000
+Tempo de consolidação em memória: 54.18 ms

@@ -59,7 +59,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.38.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.39.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -91,7 +91,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.38.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.39.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -226,6 +226,13 @@
       <label>Nome do fornecedor<input id="supplierRegistryName" placeholder="Ex.: Fort, Pegoraro, DMuller"></label>
       <label>Status<select id="supplierRegistryStatus"><option value="ACTIVE">Ativo</option><option value="INACTIVE">Inativo</option></select></label>
       <label>&nbsp;<button id="supplierRegistrySave" class="primarywide" type="button">Salvar fornecedor</button></label>
+    </div>
+    <div class="supplier-draft-link">
+      <button id="supplierDraftProductToggle" type="button" class="multiselect-toggle"><span id="supplierDraftProductSummary">Selecionar produtos da Base Mestre</span><span>⌄</span></button>
+      <div id="supplierDraftProductDropdown" class="dropdown-panel hidden">
+        <div class="grid2"><label>Pesquisar produto<input id="supplierDraftProductSearch" placeholder="Produto, EAN ou fornecedor principal"></label><div class="actions align-end"><button id="supplierDraftProductSelectVisible" type="button" class="secondary">Selecionar visíveis</button><button id="supplierDraftProductClearVisible" type="button" class="secondary">Limpar seleção</button></div></div>
+        <div id="supplierDraftProductList" class="compact-expand-list"></div>
+      </div>
     </div>
   </div>
   <div class="subcard">
@@ -639,5 +646,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.38.0.js"></script>
+<script src="app-v3.39.0.js"></script>
 </body></html>

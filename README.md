@@ -312,3 +312,14 @@ Na Gestão de Estoque, os cards Ruptura/Reposição/Validade passam a abrir dire
 - Backend operacional identificado como 3.38.0, mantendo o mesmo contrato de dados e stores das versões anteriores.
 - Stores críticas `planograms`, `suppliers` e `supplierOffers` confirmadas na sincronização frontend/backend.
 - Validação estrutural, regressão e carga concluídas antes do empacotamento final.
+
+## V3.39 — Correção estrutural de carga por condomínio
+- Migração força recarga integral de Produtos, Unidades, Planogramas, Estoque, Demanda, Fornecedores e vínculos Fornecedor × Produto, evitando perda histórica por cursor de sincronização de versões anteriores.
+- Gestão de Estoque e Contagem Física usam a mesma relação Produto × Condomínio e fazem recuperação automática se uma unidade abrir com 0 produtos.
+- Registro de estoque com quantidade zero também comprova vínculo Produto × Condomínio.
+- CD usa toda a Base Mestre como catálogo disponível.
+- Checklists de condomínios e fornecedores são repopulados antes de abrir.
+- Catálogo de fornecedores é reconciliado a partir de cadastro, Base Mestre, vínculos, compras e notas.
+- Cadastro de fornecedor permite selecionar produtos da Base Mestre antes de salvar.
+- Movimentação de Estoque CD passa a exibir Produto, EAN, Qtd., custo e valor em colunas.
+- Backend permite persistência de `planograms` pelos módulos operacionais autorizados.
