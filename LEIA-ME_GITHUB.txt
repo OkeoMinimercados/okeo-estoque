@@ -1,16 +1,1 @@
-OKEO V3.43 — GITHUB
-
-Extraia TODO o conteúdo deste pacote na raiz do repositório publicado no GitHub Pages.
-
-Arquivos principais:
-- index.html
-- app-v3.43.0.js
-- db.js
-- styles.css
-- sw.js
-- manifest.webmanifest
-- okeo-logo.png
-- seed-planograms-v3.43.json
-
-Publique também o Apps Script V3.43 correspondente e atualize a implantação do Web App.
-Depois da publicação, faça atualização forçada/limpeza do cache do PWA para remover versões antigas do Service Worker.
+OKEO V3.44 — extrair TODOS os arquivos deste pacote na raiz do repositório GitHub Pages. Não misturar com V3.43 ou anteriores. Após publicar, faça atualização forçada para trocar o Service Worker.

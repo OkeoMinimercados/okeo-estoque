@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.43.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.44.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.43.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.44.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -218,7 +218,7 @@
     </div>
   </div>
   <div class="subcard">
-    <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor e marque os produtos que ele pode fornecer. Um produto pode ter mais de um fornecedor.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
+    <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor e marque os produtos atendidos. Cada produto pode ter somente um fornecedor ativo; ao trocar, o vínculo anterior é removido automaticamente.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
     <div class="grid3">
       <label>Fornecedor<select id="supplierRegistryFilter"></select></label>
       <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto, EAN ou fornecedor principal"></label>
@@ -232,6 +232,7 @@
   <div class="subcard">
     <h3>Fornecedores cadastrados</h3>
     <input id="supplierRegistrySearch" placeholder="Pesquisar fornecedor">
+    <p id="supplierRegistryTotal" class="supplier-total-only"><b>Total de fornecedores ativos: 0</b></p>
     <div id="supplierRegistryAdminList"></div>
   </div>
 </div>
@@ -443,7 +444,7 @@
 
 
 <section id="stockmgmt" class="view card hidden">
-<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary">Gestão de Estoque por Condomínio</button></div><div id="stockMgmtGeneralPanel">
+<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary">Gestão de Estoque por Condomínio</button><button id="stockMgmtTabDiff" type="button" class="secondary">Análise de divergências</button></div><div id="stockMgmtGeneralPanel">
 <p class="muted">Fotografia operacional do estoque atual, independente da próxima importação de vendas.</p>
 <div id="stockMgmtMetrics" class="metriccards"></div>
 <div class="stock-meta-row">
@@ -457,11 +458,6 @@
   <div class="subcard"><h3>Validades — próximos 7 dias</h3><div id="stockMgmtExpiry"></div></div>
 </div>
 <div class="subcard">
-  <div class="section-head"><div><h3>Diferenças de contagem por produto</h3><p class="muted">Compara a última contagem manual registrada com o estoque esperado, por produto e condomínio.</p></div><div class="actions"><button id="exportStockDiffReport" type="button" class="secondary">Exportar diferenças CSV</button></div></div>
-  <div class="grid3"><label>Condomínio<select id="stockDiffUnit"><option value="ALL">Todos os condomínios</option></select></label><label>Pesquisar produto<input id="stockDiffSearch" placeholder="Produto ou EAN"></label><label>Exibir<select id="stockDiffOnly"><option value="DIFF">Somente com diferença</option><option value="ALL">Todos contados</option></select></label></div>
-  <div id="stockDiffSummary"></div><div id="stockDiffReport"></div>
-</div>
-<div class="subcard">
   <div class="section-head"><div><h3>Histórico recente de movimentos</h3><p class="muted">Análise das últimas movimentações para conferência operacional.</p></div>
   <div class="actions"><select id="stockMovePeriod"><option value="7">7 dias</option><option value="15">15 dias</option><option value="30" selected>30 dias</option><option value="90">90 dias</option></select><button id="exportStockMoveReport" type="button">Exportar relatório CSV</button></div></div>
   <div class="subcard">
@@ -473,7 +469,12 @@
 </div>
 <div id="stockMgmtMoveSummary"></div><div id="stockMgmtMoves"></div>
 </div>
-</div><div id="stockMgmtUnitPanel" class="hidden"><div class="subcard">
+<div id="stockMgmtDiffPanel" class="hidden"><div class="subcard">
+  <div class="section-head"><div><h3>Análise de divergências de contagem</h3><p class="muted">Compara a última contagem manual/física aprovada com o estoque esperado por produto e condomínio.</p></div><div class="actions"><button id="exportStockDiffReport" type="button" class="secondary">Exportar diferenças CSV</button></div></div>
+  <div class="grid3"><label>Condomínio<select id="stockDiffUnit"><option value="ALL">Todos os condomínios</option></select></label><label>Pesquisar produto<input id="stockDiffSearch" placeholder="Produto ou EAN"></label><label>Exibir<select id="stockDiffOnly"><option value="DIFF">Somente com diferença</option><option value="ALL">Todos contados</option></select></label></div>
+  <div id="stockDiffSummary"></div><div id="stockDiffReport"></div>
+</div></div>
+<div id="stockMgmtUnitPanel" class="hidden"><div class="subcard">
 <div class="stock-unit-filters">
   <label>Condomínio / CD<select id="stockMgmtUnitSelect"></select></label>
   <label>Pesquisar produto<input id="stockMgmtUnitSearch" placeholder="Produto ou EAN"></label>
@@ -633,5 +634,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.43.0.js"></script>
+<script src="app-v3.44.0.js"></script>
 </body></html>
