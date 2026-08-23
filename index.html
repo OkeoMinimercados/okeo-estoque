@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.44.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.48.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.44.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.48.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -105,6 +105,7 @@
 <div class="products-tabs">
   <button id="productsTabMaster" type="button" class="active" onclick="setProductsPanel('master')">Cadastro de Produtos Novos</button>
   <button id="productsTabPlanogram" type="button" class="secondary" onclick="setProductsPanel('planogram')">Planograma por Condomínio / CD</button>
+  <button id="productsTabSupplier" type="button" class="secondary" onclick="setProductsPanel('supplier')">Produtos por fornecedor</button>
 </div>
 <div id="productsMasterPanel" class="products-panel">
 <div class="subcard master-bulk-tools">
@@ -166,6 +167,19 @@
       <div class="actions"><button id="planogramImportAnalyze" type="button">Analisar e cruzar com Base Mestre</button><button id="planogramImportApply" class="secondary" type="button" disabled>Aplicar encontrados ao planograma</button></div>
       <div id="planogramImportSummary"></div><div id="planogramImportResults"></div>
     </div>
+  </div>
+</div>
+<div id="productsSupplierPanel" class="products-panel hidden">
+  <div class="subcard">
+    <div class="section-head">
+      <div><h3>Produtos por fornecedor</h3><p class="muted">Selecione um fornecedor para consultar todos os produtos atualmente vinculados a ele. Cada produto possui somente um fornecedor ativo.</p></div>
+      <div id="productsBySupplierSummary" class="planogram-summary"></div>
+    </div>
+    <div class="grid2">
+      <label>Fornecedor<select id="productsBySupplierFilter" onchange="renderProductsBySupplier()"></select></label>
+      <label>Pesquisar produto<input id="productsBySupplierSearch" placeholder="Produto, EAN ou segmento" oninput="renderProductsBySupplier()"></label>
+    </div>
+    <div id="productsBySupplierList" class="dtable compact-expand-list"></div>
   </div>
 </div>
 </section>
@@ -286,8 +300,8 @@
 </section>
 
 <section id="entries" class="view card hidden">
-<h2>Compras</h2><p class="muted">Planeje a compra da semana, consulte a reposição operacional, receba NF e distribua mercadorias sem perder a prioridade do CD.</p>
-<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" class="tabbtn active">Compra semanal</button><button id="purchaseTabReplenishment" class="tabbtn">Reposição operacional</button><button id="purchaseTabManual" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button></div>
+<h2>Compras</h2><p class="muted">Planeje a compra da semana, faça lançamentos, importe NF e gere o Relatório de Abastecimento sem perder a prioridade do CD.</p>
+<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" class="tabbtn active">Compra semanal</button><button id="purchaseTabManual" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" class="tabbtn">Importar NF</button><button id="purchaseTabReplenishment" class="tabbtn">Validade e abastecimento</button></div>
 <div id="purchaseWeeklyPanel">
   <div class="purchase-weekly-head">
     <div><h3>Planejamento de compras da semana</h3><p class="muted">Projeta o consumo até a próxima entrega do fornecedor. O CD é consumido primeiro; somente a falta remanescente vira compra externa.</p></div>
@@ -299,36 +313,33 @@
     <div class="field weekly-check-filter dropdown-card"><label>Fornecedores</label><button id="weeklySupplierToggle" type="button" class="multiselect-toggle"><span id="weeklySupplierSelectionSummary">Todos os fornecedores</span><span>⌄</span></button><div id="weeklySupplierDropdown" class="dropdown-panel hidden"><input id="weeklySupplierSearch" placeholder="Pesquisar fornecedor"><div class="check-filter-actions"><button id="weeklySupplierAll" type="button" class="linkbtn">Todos</button><button id="weeklySupplierNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklySupplierChecks" class="compact-checklist"></div></div></div>
     <label>Pesquisar produto<input id="weeklyPurchaseSearch" placeholder="Produto ou EAN"></label>
   </div>
-  <div class="actions"><button id="weeklyPurchaseCalc">Gerar / atualizar compra semanal</button><button id="weeklyPurchaseByUnit" class="secondary">Visão por condomínio</button><button id="weeklyPurchaseByProduct" class="secondary">Consolidado por produto</button><button id="weeklyPurchaseExport" class="secondary">Exportar para Excel (CSV)</button></div>
+  <div class="weekly-routing-box">
+  <b>Destino após a compra</b>
+  <span class="muted">Defina por fornecedor para agilizar e altere individualmente por Produto × Condomínio quando necessário.</span>
+  <div class="actions">
+    <button id="weeklyRouteImmediate" type="button" class="secondary">Selecionados → Imediato</button>
+    <button id="weeklyRouteCD" type="button" class="secondary">Selecionados → CD</button>
+    <button id="weeklyApprovePurchase" type="button">Fechar relatório de compra</button>
+  </div>
+</div>
+<div class="actions"><button id="weeklyPurchaseCalc">Gerar / atualizar compra semanal</button><button id="weeklyPurchaseByUnit" class="secondary">Visão por condomínio</button><button id="weeklyPurchaseByProduct" class="secondary">Consolidado por produto</button><button id="weeklyPurchaseExport" class="secondary">Exportar para Excel (CSV)</button></div>
   <div class="alert-card alert-info"><b>Importante:</b> este relatório é preventivo. Um produto pode aparecer como <b>“não precisa reposição” hoje</b> e, mesmo assim, exigir compra para atravessar a semana sem ruptura.</div>
   <div id="weeklyPurchaseSummary"></div>
   <div id="weeklyPurchaseReport"></div>
 </div>
 <div id="purchaseReplenishmentPanel" class="hidden">
 <div class="embedded-replenishment">
-<h3>Relatório de Reposição</h3>
-<div class="workflow"><div><b>1</b><span>Vendas<small>Importadas</small></span></div><i>›</i><div><b>2</b><span>Cálculo<small>Demanda e estoque</small></span></div><i>›</i><div><b>3</b><span>Rascunho<small>Editável</small></span></div><i>›</i><div><b>4</b><span>Aprovação<small>Revise e aprove</small></span></div><i>›</i><div><b>5</b><span>PDF<small>Registrado</small></span></div><i>›</i><div><b>6</b><span>Confirmação<small>Física/NF</small></span></div><i>›</i><div><b>7</b><span>Estoque<small>Atualizado</small></span></div></div>
-<div class="filtergrid">
-  <div class="field">
-    <label>Unidades para abastecimento</label>
-    <button type="button" id="repUnitsToggle" class="multiselect-toggle">Selecionar unidades <span>⌄</span></button>
-    <div id="repUnitsPanel" class="multiselect-panel hidden">
-      <div class="multi-actions"><button type="button" id="repSelectAll" class="linkbtn">Selecionar todas</button><button type="button" id="repClearUnits" class="linkbtn">Limpar</button></div>
-      <input id="repUnitSearch" placeholder="Buscar unidades">
-      <div id="repUnitChecks"></div>
-    </div>
-    <div id="repUnitSummary" class="fieldhint">Nenhuma unidade selecionada</div>
-  </div>
-  <div class="field"><label>Data do abastecimento</label><input id="repDate" type="date"></div>
-  <div class="field"><label>Agrupar PDF por</label><select id="repMode"><option value="BOTH">Ambos — Fornecedor e Condomínio</option><option value="SUPPLIER">Fornecedor</option><option value="UNIT">Condomínio</option></select></div>
+<h3>Controle de validade e abastecimento</h3>
+<p class="muted">A Compra Semanal é o documento de origem. Aqui você apenas acompanha o recebimento, registra validade/lote e libera a mercadoria para abastecimento, sem gerar um segundo relatório de compra.</p>
+<div class="grid4">
+<label>Condomínio<select id="purchaseFlowUnit"><option value="">Todos</option></select></label>
+<label>Fornecedor<select id="purchaseFlowSupplier"><option value="">Todos</option></select></label>
+<label>Fluxo<select id="purchaseFlowRoute"><option value="">Todos</option><option value="IMMEDIATE">Abastecimento imediato</option><option value="CD">Passar pelo CD</option></select></label>
+<label>Status<select id="purchaseFlowStatus"><option value="">Todos</option><option value="AWAITING_RECEIPT">Aguardando recebimento</option><option value="AWAITING_EXPIRY">Aguardando validade</option><option value="READY">Pronto para abastecer</option><option value="CD_RESERVED">Reservado no CD</option><option value="DISPATCHED">Despachado / pendente</option><option value="SUPPLIED">Abastecido</option></select></label>
 </div>
-<div class="actions"><button id="repDraft">Gerar / recalcular rascunho</button><button id="repApprove">Aprovar reposição e gerar PDF</button></div>
-<div class="alert-card alert-info rep-priority-note"><b>Prioridade de origem:</b> o sistema consulta primeiro o saldo disponível no CD. Somente a quantidade que faltar no CD é sugerida para compra do fornecedor.</div>
-<p id="repMsg" class="muted"></p><div id="repSummary"></div>
-<div class="grid2 rep-inline-filters"><label>Pesquisar no rascunho<input id="repDraftSearch" placeholder="Produto, EAN, unidade ou fornecedor"></label><label>Exibir<select id="repDraftStatus"><option value="ACTIVE">Selecionados para abastecer</option><option value="ALL">Todos</option><option value="REMOVED">Retirados da lista</option><option value="CD">Somente origem CD</option><option value="COMPRA">Somente compra</option></select></label></div>
-<div class="selector-toggle-row"><button id="repProductSelectorBtn" type="button" class="secondary">Filtro avançado de produtos</button></div>
-<div id="repProductSelector" class="hidden"></div>
-<div id="repEditor"></div><hr><h3>Reposições registradas</h3><div id="repHistory"></div>
+<label>Pesquisar produto / EAN<input id="purchaseFlowSearch" placeholder="Produto ou EAN"></label>
+<div id="purchaseFlowSummary"></div>
+<div id="purchaseFlowList"></div>
 </div>
 </div>
 <div id="purchaseManualPanel" class="hidden">
@@ -342,7 +353,7 @@
 <div class="purchase-options"><label class="inline-check"><input id="purchaseAllToCD" type="checkbox"> <b>Receber tudo no CD e distribuir depois</b></label></div>
 <p class="muted">Sem essa opção, Ruptura/Reposição têm prioridade e a sobra vai para o CD. Tudo continua editável.</p><div id="purchaseDistribution"></div>
 <hr><h3>Itens da compra</h3><div id="purchaseItems"></div>
-<div class="actions"><button id="purchaseSave">Confirmar compra e abastecimento</button><button id="purchaseClear" class="secondary">Limpar</button></div><p id="purchaseMsg" class="muted"></p>
+<div class="actions"><button id="purchaseSave">Confirmar compra manual</button><button id="purchaseClear" class="secondary">Limpar</button></div><p id="purchaseMsg" class="muted"></p>
 <hr><h3>Histórico de compras</h3><div id="purchaseHistory"></div></section>
 
 <section id="moves" class="view card hidden">
@@ -401,7 +412,7 @@
 </div>
 <div class="grid3"><label>Relatório por unidade<select id="expiryFilter"></select></label><label>Faixa<select id="expiryRange"><option value="ALL">Todas</option><option value="OVERDUE">Vencidos</option><option value="7">Até 7 dias</option><option value="15">8–15 dias</option><option value="30">16–30 dias</option></select></label><label>&nbsp;<button id="expiryReport" class="primarywide">Atualizar relatório</button></label></div>
 <div class="subcard"><h3>Produtos do planograma da unidade</h3><p class="muted">Depois de selecionar o condomínio/CD, são mostrados somente os produtos cadastrados no planograma da unidade.</p><input id="expiryPlanogramSearch" placeholder="Pesquisar produto ou EAN"><div id="expiryPlanogramProducts" class="planogram-list"></div></div><hr><h3>Registrar validade</h3>
-<div class="alert-card alert-info"><b>Importante:</b> este módulo <b>não incrementa estoque</b>. Ele apenas associa validade/lote a estoque físico já existente. Se o saldo estiver zerado, corrija primeiro pela Contagem de Estoque Física. Mercadoria em trânsito mantém validade pendente até o recebimento.</div><div class="grid3">
+<div class="alert-card alert-info"><b>Importante:</b> este módulo <b>não incrementa estoque</b>. Ele apenas associa validade/lote a estoque físico já existente. Se o saldo estiver zerado, corrija primeiro pela Contagem de Estoque Física. Mercadoria comprada recebe validade no momento do recebimento/conferência.</div><div class="grid3">
   <label>Unidade<select id="eunit"></select></label>
   <label>EAN<input id="eean" inputmode="numeric"><small id="eproductName" class="ean-product-hint">Digite o EAN para identificar o produto.</small></label>
   <label>Validade<input id="edate" type="date"></label>
@@ -468,6 +479,7 @@
   <div id="stockHistoryTable"></div>
 </div>
 <div id="stockMgmtMoveSummary"></div><div id="stockMgmtMoves"></div>
+</div>
 </div>
 <div id="stockMgmtDiffPanel" class="hidden"><div class="subcard">
   <div class="section-head"><div><h3>Análise de divergências de contagem</h3><p class="muted">Compara a última contagem manual/física aprovada com o estoque esperado por produto e condomínio.</p></div><div class="actions"><button id="exportStockDiffReport" type="button" class="secondary">Exportar diferenças CSV</button></div></div>
@@ -634,5 +646,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.44.0.js"></script>
+<script src="app-v3.48.0.js"></script>
 </body></html>

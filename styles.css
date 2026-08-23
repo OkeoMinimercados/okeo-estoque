@@ -197,3 +197,7 @@ table{font-size:12px}
 #stockMgmtUnitTable th,#stockMgmtUnitTable td,#expiryPlanogramProducts th,#expiryPlanogramProducts td,#cdMoveProductList th,#cdMoveProductList td{padding:5px 6px;font-size:10.5px}
 #stockMgmtUnitTable td:first-child,#expiryPlanogramProducts td:first-child,#cdMoveProductList td:nth-child(2){line-height:1.15}
 @media(max-width:1300px){.sidebar nav button{font-size:11px;min-height:34px;padding:7px 8px}.sidebar nav button:before,#menu button::before{font-size:14px;width:22px;min-width:22px;height:22px;margin-right:5px}.side-brand{padding-bottom:12px}.side-brand img{height:55px}.topbar{min-height:72px}.topbar h1{font-size:19px}.topbar p{font-size:11px}.physical-count-product-list .dtable table{min-width:760px}.planogram-master-table table{min-width:650px}}
+
+.weekly-routing-box{margin:12px 0;padding:12px;border:1px solid #dfe6ee;border-radius:10px;background:#fafcfe}
+.weekly-routing-box>b{display:block;margin-bottom:4px}
+#purchaseFlowList input,#purchaseFlowList select{min-width:115px}
