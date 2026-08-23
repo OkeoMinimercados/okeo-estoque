@@ -1,3 +1,4 @@
-OKEO Core V3.39
-Extraia estes arquivos na raiz do repositório GitHub Pages.
-Não envie o arquivo Google Apps Script para o GitHub Pages.
+OKEO V3.40 — GITHUB
+Extraia o conteúdo deste ZIP na raiz do repositório publicado pelo GitHub Pages.
+Arquivos principais: index.html, app-v3.40.0.js, db.js, styles.css, sw.js, manifest.webmanifest e okeo-logo.png.
+Após publicar, faça atualização forçada/limpeza do cache do PWA para garantir que o Service Worker V3.40 seja ativado.

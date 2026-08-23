@@ -33,18 +33,6 @@
       <label>Senha<div class="password-wrap"><input id="pass" type="password" autocomplete="current-password" placeholder="Senha"><button id="togglePass" type="button">◉</button></div></label>
       <label class="remember"><input id="remember" type="checkbox"> Manter conectado</label>
       <button id="enter" class="login-submit">Entrar no sistema</button>
-<div id="bootstrapBox" class="bootstrap-box hidden">
-  <div class="orline"><span>Primeiro acesso</span></div>
-  <p>Nenhum administrador foi configurado ainda.</p>
-  <button id="openBootstrap" type="button" class="outline-login">Criar primeiro administrador</button>
-  <div id="bootstrapForm" class="hidden">
-    <label>Usuário administrador<input id="bootstrapUser" placeholder="admin"></label>
-    <label>Senha<input id="bootstrapPass" type="password" placeholder="Mínimo 8 caracteres"></label>
-    <label>Confirmar senha<input id="bootstrapPass2" type="password" placeholder="Repita a senha"></label>
-    <button id="createBootstrap" type="button" class="login-submit">Criar administrador</button>
-  </div>
-</div>
-
       <div class="login-connection">
         <button id="loginConnToggle" type="button" class="login-connection-toggle">⚙ Configurar conexão</button>
         <div id="loginConnectionPanel" class="login-connection-panel hidden">
@@ -59,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.39.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.40.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -91,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.39.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.40.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -646,5 +634,5 @@
   </div>
 </div>
 <script src="db.js"></script>
-<script src="app-v3.39.0.js"></script>
+<script src="app-v3.40.0.js"></script>
 </body></html>

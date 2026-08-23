@@ -178,3 +178,7 @@ table{font-size:12px}
 #supplierProductList th:first-child,#supplierProductList td:first-child{width:44px;text-align:center}
 .weekly-check-filter .dropdown-panel{min-width:260px}
 @media(max-width:800px){.dropdown-panel{position:fixed;left:12px!important;right:12px!important;top:18%;max-height:65vh}.weekly-check-filter .dropdown-panel{min-width:0}}
+
+/* V3.40 — navegação permanente */
+.top-dashboard-btn{white-space:nowrap;background:#078f3d;color:#fff;border:0;border-radius:9px;padding:8px 12px;font-weight:700;cursor:pointer}.top-dashboard-btn:hover{filter:brightness(.95)}
+@media(max-width:720px){.top-dashboard-btn{padding:7px 9px;font-size:12px}.top-dashboard-btn{max-width:110px}}
