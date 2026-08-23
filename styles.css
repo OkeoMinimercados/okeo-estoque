@@ -204,7 +204,7 @@ table{font-size:12px}
 
 .cd-tabs{margin-bottom:12px}.optional-second-expiry{margin-top:8px;padding-top:8px;border-top:1px dashed #d7dee7}#cdInboundList input{min-width:120px}.hidden[style*="block"]{display:block!important}
 
-/* V3.54 - leitura mais confortável */
+/* V3.55 - leitura mais confortável */
 .dtable th,.dtable td{padding-top:9px!important;padding-bottom:9px!important;line-height:1.35}
 .row{padding-top:10px!important;padding-bottom:10px!important}
 .compact-checklist label,.checklist-list label{padding-top:7px;padding-bottom:7px}
@@ -213,7 +213,7 @@ table{font-size:12px}
 .clear-test-history-btn{float:right;margin-top:-34px;margin-bottom:10px}
 #cdInboundList .dtable td{vertical-align:top}
 
-/* V3.54 - legibilidade e navegação */
+/* V3.55 - legibilidade e navegação */
 .purchase-main-tabs{display:flex;gap:14px;flex-wrap:wrap;padding:8px 0 12px}
 .purchase-main-tabs .tabbtn{padding:10px 15px;line-height:1.25;white-space:nowrap}
 .weekly-purchase-filters{display:grid!important;grid-template-columns:repeat(2,minmax(260px,1fr))!important;gap:16px 22px!important;margin:14px 0 18px}
@@ -228,7 +228,7 @@ table{font-size:12px}
 #supplierRegistryAdminList .mini{display:flex;gap:8px}
 @media(max-width:900px){.weekly-purchase-filters{grid-template-columns:1fr!important}}
 
-/* V3.54 - espaçamento dos filtros de Compra Semanal */
+/* V3.55 - espaçamento dos filtros de Compra Semanal */
 .weekly-purchase-filters{row-gap:24px!important;column-gap:24px!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.field{margin-bottom:6px!important}
 .weekly-purchase-filters label{display:block;margin-bottom:7px!important;font-weight:600}
@@ -240,7 +240,7 @@ table{font-size:12px}
 .approval-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #e6ece8}
 .approval-row:first-of-type{border-top:0}
 
-/* V3.54 - reforço visual de espaçamento */
+/* V3.55 - reforço visual de espaçamento */
 .weekly-purchase-filters{display:grid!important;grid-template-columns:1fr!important;gap:0!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.weekly-check-filter,.weekly-purchase-filters>.field{display:block!important;margin:0 0 20px!important;padding:0 0 4px!important}
 .weekly-purchase-filters>label+label,.weekly-purchase-filters>.weekly-check-filter+.weekly-check-filter{margin-top:4px!important}
@@ -249,3 +249,14 @@ table{font-size:12px}
 .admin-task-alert{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .admin-task-alert button{white-space:nowrap}
 #physicalCountPermissionHint{align-self:center;margin-left:8px}
+
+/* V3.55 - validade integrada à Contagem Física */
+.physical-count-table td{vertical-align:top}
+.physical-expiry-panel{margin-top:8px;min-width:410px;padding:9px;border:1px solid #dfe7e2;border-radius:8px;background:#fbfdfb}
+.physical-expiry-grid{display:grid;grid-template-columns:76px 135px 100px;gap:8px;margin-top:8px}
+.physical-expiry-grid label{font-size:10px;font-weight:600}
+.physical-expiry-grid input{margin-top:4px;min-height:30px}
+.inline-check{display:flex!important;align-items:center;gap:6px;font-weight:600!important}
+.supplier-products-status{display:flex;gap:18px;align-items:center;margin-bottom:8px;padding:7px 8px;background:#f7faf8;border-radius:7px}
+.supplier-linked-row{background:#f1fbf4}
+#purchaseFlowUnit,#purchaseFlowSupplier,#purchaseFlowRoute,#purchaseFlowStatus{min-height:38px}
