@@ -1,4 +1,4 @@
-# OKEO V3.55 — Homologação Final
+# OKEO V3.57 — Homologação Final
 
 ## Correções implementadas
 
@@ -61,7 +61,7 @@ Filtro sintético com 300.000 registros: aproximadamente **20 ms** de mediana.
 Frontend, backend Apps Script e Service Worker passaram na validação de sintaxe. Os pacotes ZIP passaram na verificação de integridade.
 
 ## Teste publicado recomendado
-Após publicar V3.55, validar em navegador:
+Após publicar V3.57, validar em navegador:
 1. os quatro botões da Compra Semanal;
 2. `Ver produtos` em AMBEV e outro fornecedor;
 3. abrir Conferência e abastecimento e verificar as listas de Condomínio/Fornecedor mesmo sem mercadorias;

@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.55.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.58.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.55.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.58.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -179,7 +179,7 @@
 <section id="units" class="view card hidden">
 <h2>Condomínios e Fornecedores</h2>
 <p class="muted">Cadastro operacional único de condomínios e fornecedores. Os vínculos com produtos são compartilhados pelos demais módulos.</p>
-<div class="products-tabs registry-tabs">
+<div class="tab-scroll-hint">← Deslize lateralmente para acessar todas as abas →</div><div class="products-tabs registry-tabs">
   <button id="registryTabUnits" type="button" class="active">Condomínios</button>
   <button id="registryTabSuppliers" type="button" class="secondary">Fornecedores</button>
 </div>
@@ -224,14 +224,14 @@
     </div>
   </div>
   <div class="subcard">
-    <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor e marque os produtos atendidos. Cada produto pode ter somente um fornecedor ativo; ao trocar, o vínculo anterior é removido automaticamente.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
+    <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor. Todos os produtos já vinculados aparecem marcados. Ao desmarcar, o produto fica sem fornecedor; ao marcar, passa para este fornecedor e sai automaticamente do anterior.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
     <div class="grid3">
       <label>Fornecedor<select id="supplierRegistryFilter" onchange="Promise.resolve(loadSupplierProductSelection()).catch(console.error)"></select></label>
       <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto, EAN ou fornecedor principal" oninput="Promise.resolve(renderSupplierProductList()).catch(console.error)"></label>
       <label>&nbsp;<button id="supplierProductToggle" type="button" class="secondary">Atualizar lista de produtos</button></label>
     </div>
     <div id="supplierProductDropdown" class="supplier-product-panel">
-      <div class="actions"><button id="supplierProductSelectVisible" class="secondary" type="button">Selecionar visíveis</button><button id="supplierProductClearVisible" class="secondary" type="button">Desmarcar visíveis</button><button id="supplierProductSave" type="button">Salvar produtos atendidos</button></div>
+      <div class="actions"><button id="supplierProductSelectVisible" class="secondary" type="button">Selecionar visíveis</button><button id="supplierProductClearVisible" class="secondary" type="button">Desmarcar visíveis</button><button id="supplierProductSave" type="button">Confirmar vínculos</button></div>
       <div id="supplierProductList" class="dtable compact-expand-list"></div>
     </div>
   </div>
@@ -294,7 +294,7 @@
 
 <section id="entries" class="view card hidden">
 <h2>Compras</h2><p class="muted">Planeje a compra da semana, faça lançamentos, importe NF e gere o Relatório de Abastecimento sem perder a prioridade do CD.</p>
-<div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" data-purchase-tab="weekly" onclick="showPurchaseTab('weekly')" class="tabbtn active">Compra semanal</button><button id="purchaseTabManual" data-purchase-tab="manual" onclick="showPurchaseTab('manual')" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" data-purchase-tab="nf" onclick="showPurchaseTab('nf')" class="tabbtn">Importar NF</button><button id="purchaseTabReplenishment" data-purchase-tab="replenishment" onclick="showPurchaseTab('replenishment')" class="tabbtn">Conferência e abastecimento</button></div>
+<div class="tab-scroll-hint">← Deslize lateralmente para acessar todas as abas →</div><div class="tabsbar purchase-main-tabs"><button id="purchaseTabWeekly" data-purchase-tab="weekly" onclick="showPurchaseTab('weekly')" class="tabbtn active">Compra semanal</button><button id="purchaseTabManual" data-purchase-tab="manual" onclick="showPurchaseTab('manual')" class="tabbtn">Lançamento manual</button><button id="purchaseTabNF" data-purchase-tab="nf" onclick="showPurchaseTab('nf')" class="tabbtn">Importar NF</button><button id="purchaseTabReplenishment" data-purchase-tab="replenishment" onclick="showPurchaseTab('replenishment')" class="tabbtn">Conferência e abastecimento</button></div>
 <div id="purchaseWeeklyPanel">
   <div class="purchase-weekly-head">
     <div><h3>Planejamento de compras da semana</h3><p class="muted">Projeta o consumo até a próxima entrega do fornecedor. O CD é consumido primeiro; somente a falta remanescente vira compra externa.</p></div>
@@ -379,7 +379,7 @@
 <section id="cdmove" class="view card hidden">
 <h2>Movimentação de Estoque CD</h2>
 <p class="muted">Selecione produtos disponíveis no CD e veja as sugestões de alocação calculadas pela Demanda Inteligente.</p>
-<div class="products-tabs cd-tabs"><button id="cdTabStock" type="button" class="active" onclick="showCdTab('stock')">Estoque</button><button id="cdTabInbound" type="button" class="secondary" onclick="showCdTab('inbound')">Pré-Separado em Compras</button></div>
+<div class="tab-scroll-hint">← Deslize lateralmente para acessar todas as abas →</div><div class="products-tabs cd-tabs"><button id="cdTabStock" type="button" class="active" onclick="showCdTab('stock')">Estoque</button><button id="cdTabInbound" type="button" class="secondary" onclick="showCdTab('inbound')">Pré-Separado em Compras</button></div>
 <div id="cdStockPanel">
 <div id="cdMoveMetrics" class="metriccards"></div>
 <div class="grid2 cd-move-layout">
@@ -397,14 +397,14 @@
 <div id="cdInboundPanel" class="hidden">
   <div class="subcard">
     <div class="section-head"><div><h3>Mercadorias pré-separadas em Compras</h3><p class="muted">Exibe os itens marcados como <b>Pré-Separado no CD</b> na Compra Semanal. Itens do rascunho aparecem como “Pré-selecionado”; após fechar a compra passam para Conferência.</p></div><div id="cdInboundSummary" class="planogram-summary"></div></div>
-    <div class="grid4"><label>Fornecedor<select id="cdInboundSupplier"><option value="">Todos</option></select></label><label>Condomínio<select id="cdInboundUnit"><option value="">Todos</option></select></label><label>Status<select id="cdInboundStatus">
+    <div class="grid4"><label>Fornecedor<select id="cdInboundSupplier" onchange="renderCdInboundPurchases()"><option value="">Todos os fornecedores</option></select></label><label>Condomínio<select id="cdInboundUnit" onchange="renderCdInboundPurchases()"><option value="">Todos os condomínios</option></select></label><label>Status<select id="cdInboundStatus" onchange="renderCdInboundPurchases()">
       <option value="">Todos</option>
       <option value="DRAFT">Pré-selecionado em Compras</option>
       <option value="CONFERENCE">Conferência</option>
       <option value="AWAITING_EXPIRY">Validade pendente</option>
       <option value="READY">Pronto para abastecer</option>
-    </select></label><label>Pesquisar<input id="cdInboundSearch" placeholder="Produto ou EAN"></label></div>
-    <div id="cdInboundList"></div>
+    </select></label><label>Pesquisar<input id="cdInboundSearch" placeholder="Produto, EAN, fornecedor ou condomínio" oninput="renderCdInboundPurchases()"></label></div>
+    <div class="actions cd-filter-actions"><button type="button" class="secondary" onclick="clearCdInboundFilters()">Limpar filtros</button></div><div id="cdInboundList"></div>
   </div>
 </div>
 </section>
@@ -473,7 +473,7 @@
 
 
 <section id="stockmgmt" class="view card hidden">
-<h2>Gestão de Estoque</h2><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active" onclick="Promise.resolve(setStockMgmtMode('general')).catch(console.error)">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary" onclick="Promise.resolve(setStockMgmtMode('unit')).catch(console.error)">Gestão de Estoque por Condomínio</button><button id="stockMgmtTabDiff" type="button" class="secondary" onclick="Promise.resolve(setStockMgmtMode('diff')).catch(console.error)">Análise de divergências</button></div><div id="stockMgmtGeneralPanel">
+<h2>Gestão de Estoque</h2><div class="tab-scroll-hint">← Deslize lateralmente para acessar todas as abas →</div><div class="products-tabs"><button id="stockMgmtTabGeneral" type="button" class="active" onclick="Promise.resolve(setStockMgmtMode('general')).catch(console.error)">Controle Geral</button><button id="stockMgmtTabUnit" type="button" class="secondary" onclick="Promise.resolve(setStockMgmtMode('unit')).catch(console.error)">Gestão de Estoque por Condomínio</button><button id="stockMgmtTabDiff" type="button" class="secondary" onclick="Promise.resolve(setStockMgmtMode('diff')).catch(console.error)">Análise de divergências</button></div><div id="stockMgmtGeneralPanel">
 <p class="muted">Fotografia operacional do estoque atual, independente da próxima importação de vendas.</p>
 <div id="stockMgmtMetrics" class="metriccards"></div>
 <div class="stock-meta-row">
@@ -572,7 +572,7 @@
 <div id="userAdminPanel" class="admin-only">
 <h3>Usuários e Perfis</h3>
 <p class="muted">Crie usuários, cadastre perfis reutilizáveis e defina as permissões de cada perfil.</p>
-<div class="tabsbar">
+<div class="tab-scroll-hint">← Deslize lateralmente para acessar todas as abas →</div><div class="tabsbar">
   <button id="tabUsers" class="tabbtn active" type="button">Usuários</button>
   <button id="tabProfiles" class="tabbtn" type="button">Perfis de Acesso</button>
 </div>
@@ -665,7 +665,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.55.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.58.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -678,6 +678,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.55.0"></script>
-<script src="app-v3.55.0.js?v=3.55.0"></script>
+<script src="db.js?v=3.58.0"></script>
+<script src="app-v3.58.0.js?v=3.58.0"></script>
 </body></html>
