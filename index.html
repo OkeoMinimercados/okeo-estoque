@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.58.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.60.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.58.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.60.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -224,11 +224,12 @@
     </div>
   </div>
   <div class="subcard">
-    <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor. Todos os produtos já vinculados aparecem marcados. Ao desmarcar, o produto fica sem fornecedor; ao marcar, passa para este fornecedor e sai automaticamente do anterior.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
-    <div class="grid3">
+    <div class="section-head"><div><h3>Produtos atendidos pelo fornecedor</h3><p class="muted">Selecione um fornecedor. Em “Produtos deste fornecedor” aparecem somente os produtos atualmente vinculados a ele, todos marcados. Ao desmarcar, o produto fica sem fornecedor e sai da lista. Use “Sem fornecedor” para atribuir produtos livres.</p></div><div id="supplierProductSummary" class="planogram-summary"></div></div>
+    <div class="grid4 supplier-product-filters">
       <label>Fornecedor<select id="supplierRegistryFilter" onchange="Promise.resolve(loadSupplierProductSelection()).catch(console.error)"></select></label>
-      <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto, EAN ou fornecedor principal" oninput="Promise.resolve(renderSupplierProductList()).catch(console.error)"></label>
-      <label>&nbsp;<button id="supplierProductToggle" type="button" class="secondary">Atualizar lista de produtos</button></label>
+      <label>Visualizar<select id="supplierProductMode" onchange="Promise.resolve(renderSupplierProductList()).catch(console.error)"><option value="LINKED">Produtos deste fornecedor</option><option value="UNASSIGNED">Sem fornecedor</option></select></label>
+      <label>Pesquisar produto<input id="supplierProductSearch" placeholder="Produto ou EAN" oninput="Promise.resolve(renderSupplierProductList()).catch(console.error)"></label>
+      <label>&nbsp;<button id="supplierProductToggle" type="button" class="secondary">Atualizar lista</button></label>
     </div>
     <div id="supplierProductDropdown" class="supplier-product-panel">
       <div class="actions"><button id="supplierProductSelectVisible" class="secondary" type="button">Selecionar visíveis</button><button id="supplierProductClearVisible" class="secondary" type="button">Desmarcar visíveis</button><button id="supplierProductSave" type="button">Confirmar vínculos</button></div>
@@ -665,7 +666,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.58.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.60.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -678,6 +679,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.58.0"></script>
-<script src="app-v3.58.0.js?v=3.58.0"></script>
+<script src="db.js?v=3.60.0"></script>
+<script src="app-v3.60.0.js?v=3.60.0"></script>
 </body></html>

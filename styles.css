@@ -204,7 +204,7 @@ table{font-size:12px}
 
 .cd-tabs{margin-bottom:12px}.optional-second-expiry{margin-top:8px;padding-top:8px;border-top:1px dashed #d7dee7}#cdInboundList input{min-width:120px}.hidden[style*="block"]{display:block!important}
 
-/* V3.58 - leitura mais confortável */
+/* V3.60 - leitura mais confortável */
 .dtable th,.dtable td{padding-top:9px!important;padding-bottom:9px!important;line-height:1.35}
 .row{padding-top:10px!important;padding-bottom:10px!important}
 .compact-checklist label,.checklist-list label{padding-top:7px;padding-bottom:7px}
@@ -213,7 +213,7 @@ table{font-size:12px}
 .clear-test-history-btn{float:right;margin-top:-34px;margin-bottom:10px}
 #cdInboundList .dtable td{vertical-align:top}
 
-/* V3.58 - legibilidade e navegação */
+/* V3.60 - legibilidade e navegação */
 .purchase-main-tabs{display:flex;gap:14px;flex-wrap:wrap;padding:8px 0 12px}
 .purchase-main-tabs .tabbtn{padding:10px 15px;line-height:1.25;white-space:nowrap}
 .weekly-purchase-filters{display:grid!important;grid-template-columns:repeat(2,minmax(260px,1fr))!important;gap:16px 22px!important;margin:14px 0 18px}
@@ -228,7 +228,7 @@ table{font-size:12px}
 #supplierRegistryAdminList .mini{display:flex;gap:8px}
 @media(max-width:900px){.weekly-purchase-filters{grid-template-columns:1fr!important}}
 
-/* V3.58 - espaçamento dos filtros de Compra Semanal */
+/* V3.60 - espaçamento dos filtros de Compra Semanal */
 .weekly-purchase-filters{row-gap:24px!important;column-gap:24px!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.field{margin-bottom:6px!important}
 .weekly-purchase-filters label{display:block;margin-bottom:7px!important;font-weight:600}
@@ -240,7 +240,7 @@ table{font-size:12px}
 .approval-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #e6ece8}
 .approval-row:first-of-type{border-top:0}
 
-/* V3.58 - reforço visual de espaçamento */
+/* V3.60 - reforço visual de espaçamento */
 .weekly-purchase-filters{display:grid!important;grid-template-columns:1fr!important;gap:0!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.weekly-check-filter,.weekly-purchase-filters>.field{display:block!important;margin:0 0 20px!important;padding:0 0 4px!important}
 .weekly-purchase-filters>label+label,.weekly-purchase-filters>.weekly-check-filter+.weekly-check-filter{margin-top:4px!important}
@@ -250,7 +250,7 @@ table{font-size:12px}
 .admin-task-alert button{white-space:nowrap}
 #physicalCountPermissionHint{align-self:center;margin-left:8px}
 
-/* V3.58 - validade integrada à Contagem Física */
+/* V3.60 - validade integrada à Contagem Física */
 .physical-count-table td{vertical-align:top}
 .physical-expiry-panel{margin-top:8px;min-width:410px;padding:9px;border:1px solid #dfe7e2;border-radius:8px;background:#fbfdfb}
 .physical-expiry-grid{display:grid;grid-template-columns:76px 135px 100px;gap:8px;margin-top:8px}
@@ -263,7 +263,7 @@ table{font-size:12px}
 
 
 /* =========================================================
-   OKEO V3.58 - Abas sempre visíveis com rolagem horizontal
+   OKEO V3.60 - Abas sempre visíveis com rolagem horizontal
    ========================================================= */
 
 /* Barras de abas principais e secundárias */
@@ -352,14 +352,113 @@ table{font-size:12px}
   .tab-scroll-hint{display:block}
 }
 
-/* V3.58 - filtros Pré-Separado em Compras */
+/* V3.60 - filtros Pré-Separado em Compras */
 #cdInboundPanel .grid4{gap:14px!important}
 #cdInboundPanel .grid4 label{font-weight:600}
 #cdInboundPanel select,#cdInboundPanel input{min-height:38px}
 .cd-filter-actions{justify-content:flex-end;margin-top:8px;margin-bottom:10px}
 
-/* V3.58 - checklist de fornecedor */
+/* V3.60 - checklist de fornecedor */
 #supplierProductList input[type="checkbox"]{width:16px;height:16px;cursor:pointer}
 #supplierProductList .supplier-linked-row{background:#eefaf2}
 #supplierProductList .supplier-empty{font-weight:700;color:#8a5a00}
 #supplierProductList td{padding-top:8px!important;padding-bottom:8px!important}
+
+/* =========================================================
+   OKEO V3.60 - Contagem Física com visão completa
+   ========================================================= */
+#physicalCountProductList{width:100%;max-width:100%;overflow:hidden}
+.physical-table-viewport{
+  width:100%;
+  max-width:100%;
+  overflow-x:auto;
+  overflow-y:auto;
+  max-height:560px;
+  border:1px solid #dce6df;
+  border-radius:9px;
+  scrollbar-width:thin;
+}
+.physical-overview-table{
+  width:100%;
+  min-width:900px;
+  table-layout:fixed;
+  border-collapse:collapse;
+  font-size:11px;
+}
+.physical-overview-table thead th{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:#edf7f1;
+  color:#086d32;
+  padding:8px 6px!important;
+  border:1px solid #d8e3dc;
+  white-space:nowrap;
+}
+.physical-overview-table td{
+  height:42px;
+  padding:6px!important;
+  border:1px solid #dfe7e2;
+  vertical-align:middle!important;
+  overflow:hidden;
+}
+.physical-overview-table .pc-check{width:42px;text-align:center}
+.physical-overview-table .pc-product{width:30%;min-width:250px}
+.physical-overview-table .pc-product b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.physical-overview-table .pc-ean{width:130px;text-align:center;white-space:nowrap}
+.physical-overview-table .pc-number{width:76px;text-align:center}
+.physical-overview-table .pc-count{width:150px;text-align:center}
+.physical-overview-table .pc-expiry{width:220px}
+.pc-count-control{display:flex;align-items:center;justify-content:center;gap:6px}
+.pc-count-control .physical-manual-input{width:62px!important;min-width:62px!important;height:30px!important;text-align:center;padding:3px 5px!important}
+.pc-count-control .qty-mini{width:30px!important;height:30px!important;min-width:30px!important;padding:0!important}
+.pc-expiry-cell{display:flex;align-items:center;gap:5px;min-width:0}
+.pc-expiry-cell>span{flex:0 1 auto}
+.pc-expiry-chip{display:inline-block;max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;background:#eef8f1;border:1px solid #cfe4d6;border-radius:999px;padding:3px 6px;font-size:9px}
+.pc-expiry-none,.pc-expiry-pending{font-size:9px;white-space:nowrap}
+.pc-expiry-pending{color:#9a6200;font-weight:700}
+.pc-expiry-button{margin-left:auto!important;flex:0 0 auto;padding:6px 8px!important;font-size:9px!important}
+
+/* Modal de validade - não aumenta a altura da linha */
+.okeo-modal-overlay{
+  position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.32);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.okeo-modal{
+  width:min(760px,96vw);max-height:90vh;overflow:auto;background:#fff;border-radius:14px;
+  box-shadow:0 18px 60px rgba(0,0,0,.28);padding:18px;
+}
+.okeo-modal-header{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #e1e8e4;padding-bottom:10px;margin-bottom:14px}
+.okeo-modal-header h3{margin:0 0 5px;color:#087a37}
+.okeo-modal-header p{margin:0}
+.modal-close{width:34px!important;height:34px!important;padding:0!important;font-size:22px!important;line-height:1!important}
+.physical-expiry-question{padding:10px 12px;background:#f3f8f5;border-radius:9px;margin-bottom:14px}
+.physical-expiry-question label{display:flex;align-items:center;gap:8px;font-weight:700}
+.expiry-modal-grid{display:grid;grid-template-columns:40px 110px 170px 1fr;gap:10px;align-items:center;margin-bottom:9px}
+.expiry-modal-grid input{width:100%;min-height:36px}
+.expiry-modal-head{font-size:10px;color:#607067;margin-bottom:5px}
+.expiry-modal-single{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.expiry-modal-single label{font-weight:700}
+.expiry-modal-single input{display:block;width:100%;margin-top:6px;min-height:38px}
+.expiry-total-preview{margin-top:10px;padding:9px 12px;border-radius:8px;background:#f4fbf6}
+.modal-help{margin:0 0 13px;color:#66736b}
+.okeo-modal-actions{display:flex;align-items:center;gap:8px;border-top:1px solid #e1e8e4;margin-top:16px;padding-top:14px}
+.modal-spacer{flex:1}
+@media(max-width:1050px){
+  .physical-overview-table{min-width:820px;font-size:10px}
+  .physical-overview-table .pc-product{width:28%;min-width:210px}
+  .physical-overview-table .pc-ean{width:115px}
+  .physical-overview-table .pc-expiry{width:190px}
+}
+@media(max-width:650px){
+  .expiry-modal-grid{grid-template-columns:32px 80px 1fr;gap:7px}
+  .expiry-modal-grid>input:last-child{grid-column:2/4}
+  .expiry-modal-head{display:none}
+  .expiry-modal-single{grid-template-columns:1fr}
+}
+
+/* V3.60 - visão correta Produtos por Fornecedor */
+.supplier-product-filters{align-items:end}
+#supplierProductMode{min-height:38px}
+#supplierProductList .supplier-linked-row td{background:#eefaf2}
+#supplierProductList .supplier-empty{color:#8a5a00;font-weight:700}
