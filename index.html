@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.63.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.64.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.63.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.64.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -549,6 +549,14 @@
   <p id="demandSnapshotMsg" class="muted"></p>
 </div>
 
+<div class="subcard demand-update-control">
+  <div class="demand-update-header">
+    <div><h3>Controle de atualização</h3><p class="muted">Acompanhe se a Demanda está atualizada em relação à base e ao período selecionado.</p></div>
+    <div class="actions"><button id="demandRefreshStatus" type="button" class="secondary">Atualizar status</button><button id="demandRecalculateNow" type="button">Recalcular agora</button></div>
+  </div>
+  <div id="demandUpdatePanel" class="demand-update-panel"></div>
+</div>
+
 <div class="subcard">
   <h3>2. Cálculo operacional</h3>
   <div class="grid4">
@@ -683,7 +691,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.63.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.64.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -696,6 +704,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.63.0"></script>
-<script src="app-v3.63.0.js?v=3.63.0"></script>
+<script src="db.js?v=3.64.0"></script>
+<script src="app-v3.64.0.js?v=3.64.0"></script>
 </body></html>

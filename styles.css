@@ -204,7 +204,7 @@ table{font-size:12px}
 
 .cd-tabs{margin-bottom:12px}.optional-second-expiry{margin-top:8px;padding-top:8px;border-top:1px dashed #d7dee7}#cdInboundList input{min-width:120px}.hidden[style*="block"]{display:block!important}
 
-/* V3.63 - leitura mais confortável */
+/* V3.64 - leitura mais confortável */
 .dtable th,.dtable td{padding-top:9px!important;padding-bottom:9px!important;line-height:1.35}
 .row{padding-top:10px!important;padding-bottom:10px!important}
 .compact-checklist label,.checklist-list label{padding-top:7px;padding-bottom:7px}
@@ -213,7 +213,7 @@ table{font-size:12px}
 .clear-test-history-btn{float:right;margin-top:-34px;margin-bottom:10px}
 #cdInboundList .dtable td{vertical-align:top}
 
-/* V3.63 - legibilidade e navegação */
+/* V3.64 - legibilidade e navegação */
 .purchase-main-tabs{display:flex;gap:14px;flex-wrap:wrap;padding:8px 0 12px}
 .purchase-main-tabs .tabbtn{padding:10px 15px;line-height:1.25;white-space:nowrap}
 .weekly-purchase-filters{display:grid!important;grid-template-columns:repeat(2,minmax(260px,1fr))!important;gap:16px 22px!important;margin:14px 0 18px}
@@ -228,7 +228,7 @@ table{font-size:12px}
 #supplierRegistryAdminList .mini{display:flex;gap:8px}
 @media(max-width:900px){.weekly-purchase-filters{grid-template-columns:1fr!important}}
 
-/* V3.63 - espaçamento dos filtros de Compra Semanal */
+/* V3.64 - espaçamento dos filtros de Compra Semanal */
 .weekly-purchase-filters{row-gap:24px!important;column-gap:24px!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.field{margin-bottom:6px!important}
 .weekly-purchase-filters label{display:block;margin-bottom:7px!important;font-weight:600}
@@ -240,7 +240,7 @@ table{font-size:12px}
 .approval-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #e6ece8}
 .approval-row:first-of-type{border-top:0}
 
-/* V3.63 - reforço visual de espaçamento */
+/* V3.64 - reforço visual de espaçamento */
 .weekly-purchase-filters{display:grid!important;grid-template-columns:1fr!important;gap:0!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.weekly-check-filter,.weekly-purchase-filters>.field{display:block!important;margin:0 0 20px!important;padding:0 0 4px!important}
 .weekly-purchase-filters>label+label,.weekly-purchase-filters>.weekly-check-filter+.weekly-check-filter{margin-top:4px!important}
@@ -250,7 +250,7 @@ table{font-size:12px}
 .admin-task-alert button{white-space:nowrap}
 #physicalCountPermissionHint{align-self:center;margin-left:8px}
 
-/* V3.63 - validade integrada à Contagem Física */
+/* V3.64 - validade integrada à Contagem Física */
 .physical-count-table td{vertical-align:top}
 .physical-expiry-panel{margin-top:8px;min-width:410px;padding:9px;border:1px solid #dfe7e2;border-radius:8px;background:#fbfdfb}
 .physical-expiry-grid{display:grid;grid-template-columns:76px 135px 100px;gap:8px;margin-top:8px}
@@ -263,7 +263,7 @@ table{font-size:12px}
 
 
 /* =========================================================
-   OKEO V3.63 - Abas sempre visíveis com rolagem horizontal
+   OKEO V3.64 - Abas sempre visíveis com rolagem horizontal
    ========================================================= */
 
 /* Barras de abas principais e secundárias */
@@ -352,20 +352,20 @@ table{font-size:12px}
   .tab-scroll-hint{display:block}
 }
 
-/* V3.63 - filtros Pré-Separado em Compras */
+/* V3.64 - filtros Pré-Separado em Compras */
 #cdInboundPanel .grid4{gap:14px!important}
 #cdInboundPanel .grid4 label{font-weight:600}
 #cdInboundPanel select,#cdInboundPanel input{min-height:38px}
 .cd-filter-actions{justify-content:flex-end;margin-top:8px;margin-bottom:10px}
 
-/* V3.63 - checklist de fornecedor */
+/* V3.64 - checklist de fornecedor */
 #supplierProductList input[type="checkbox"]{width:16px;height:16px;cursor:pointer}
 #supplierProductList .supplier-linked-row{background:#eefaf2}
 #supplierProductList .supplier-empty{font-weight:700;color:#8a5a00}
 #supplierProductList td{padding-top:8px!important;padding-bottom:8px!important}
 
 /* =========================================================
-   OKEO V3.63 - Contagem Física com visão completa
+   OKEO V3.64 - Contagem Física com visão completa
    ========================================================= */
 #physicalCountProductList{width:100%;max-width:100%;overflow:hidden}
 .physical-table-viewport{
@@ -457,19 +457,19 @@ table{font-size:12px}
   .expiry-modal-single{grid-template-columns:1fr}
 }
 
-/* V3.63 - visão correta Produtos por Fornecedor */
+/* V3.64 - visão correta Produtos por Fornecedor */
 .supplier-product-filters{align-items:end}
 #supplierProductMode{min-height:38px}
 #supplierProductList .supplier-linked-row td{background:#eefaf2}
 #supplierProductList .supplier-empty{color:#8a5a00;font-weight:700}
 
-/* V3.63 - estado visual dos filtros */
+/* V3.64 - estado visual dos filtros */
 .multiselect-toggle.filter-active{border:2px solid #07883f!important;background:#f0faf4!important;color:#075f2f!important}
 .compact-checklist label{display:flex;align-items:center;gap:7px;min-height:30px;padding:6px 5px!important}
 .compact-checklist input[type="checkbox"]{width:15px;height:15px;flex:0 0 auto}
 .filter-zero-state{padding:9px 11px;background:#fff7e7;border:1px solid #e9b54d;border-radius:8px;color:#7b5200}
 
-/* V3.63 - Reset Geral Operacional */
+/* V3.64 - Reset Geral Operacional */
 .reset-general-card{border:1px solid #e1c36b;background:#fffaf0;border-radius:12px;padding:15px;margin:10px 0 18px}
 .reset-general-card>p:first-child{margin-top:0}
 .reset-preserve-grid{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr));gap:7px;margin:12px 0}
@@ -486,7 +486,36 @@ table{font-size:12px}
 .reset-confirm-label input{display:block;width:100%;margin-top:7px;min-height:40px;border:2px solid #b34a4a}
 @media(max-width:760px){.reset-preserve-grid{grid-template-columns:1fr 1fr}}
 
-/* V3.63 - progresso do cálculo de demanda */
+/* V3.64 - progresso do cálculo de demanda */
 .demand-progress-wrap{position:relative;height:30px;border:1px solid #cfe1d5;border-radius:8px;background:#f4f8f5;overflow:hidden;margin:8px 0 10px}
 .demand-progress-bar{position:absolute;left:0;top:0;bottom:0;width:0;background:#d9f1e1;transition:width .18s ease}
 .demand-progress-wrap span{position:relative;z-index:2;display:flex;align-items:center;height:100%;padding:0 10px;font-size:11px;font-weight:700;color:#176237}
+
+/* V3.64 - Controle explícito de atualização da Demanda */
+.demand-update-control{border:1px solid #cfe0d4!important;background:#fbfdfb}
+.demand-update-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
+.demand-update-header h3{margin:0 0 4px}
+.demand-update-header p{margin:0}
+.demand-update-panel{display:flex;flex-direction:column;gap:10px}
+.demand-status-strip{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));border-radius:10px;border:1px solid #dce6df;overflow:hidden}
+.demand-status-strip>div{padding:11px 12px;border-right:1px solid #e2e9e5;min-width:0}
+.demand-status-strip>div:last-child{border-right:0}
+.demand-status-strip span,.demand-control-details span{display:block;font-size:9px;color:#65746b;margin-bottom:3px}
+.demand-status-strip b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.demand-status-strip small{display:block;margin-top:3px;color:#69766e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.demand-status-strip.ok{background:#f0faf3;border-color:#bcdcc6}
+.demand-status-strip.warn{background:#fff9eb;border-color:#e3c36a}
+.demand-status-strip.processing{background:#edf7ff;border-color:#9dc7e5}
+.demand-status-strip.bad{background:#fff0f0;border-color:#e2a2a2}
+.demand-status-strip.neutral{background:#f6f7f6}
+.demand-control-details{display:grid;grid-template-columns:repeat(3,minmax(170px,1fr));gap:8px}
+.demand-control-details>div{padding:9px 10px;border:1px solid #e0e7e2;border-radius:8px;background:#fff}
+.demand-control-details b{font-size:11px}
+.demand-control-warning{padding:9px 11px;border-radius:8px;background:#fff6df;border:1px solid #e5be55;color:#765000}
+.demand-control-error{padding:9px 11px;border-radius:8px;background:#fff0f0;border:1px solid #e1a2a2;color:#841d1d;font-weight:600}
+@media(max-width:900px){
+  .demand-status-strip{grid-template-columns:1fr 1fr}
+  .demand-status-strip>div:nth-child(2){border-right:0}
+  .demand-control-details{grid-template-columns:1fr 1fr}
+  .demand-update-header{flex-direction:column}
+}
