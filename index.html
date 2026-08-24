@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.60.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.61.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.60.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.61.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -274,7 +274,7 @@
   </div>
   <div class="grid2">
     <label>Pesquisar produto
-      <input id="physicalCountSearch" placeholder="Nome, EAN, alias, VM Pay ou fornecedor">
+      <input id="physicalCountSearch" oninput="renderPhysicalCountProductList()" placeholder="Nome, EAN, alias, VM Pay ou fornecedor">
     </label>
     <label>EAN / câmera
       <div class="ean-camera-row">
@@ -303,9 +303,9 @@
   </div>
   <div class="grid4 weekly-purchase-filters">
     <label>Cobertura até próxima entrega<select id="weeklyCoverageDays"><option value="7" selected>7 dias (1 entrega/semana)</option><option value="6">6 dias</option><option value="5">5 dias</option><option value="4">4 dias</option><option value="3">3 dias</option><option value="2">2 dias</option><option value="1">1 dia</option><option value="14">14 dias</option></select></label>
-    <div class="field weekly-check-filter dropdown-card"><label>Condomínios</label><button id="weeklyUnitToggle" type="button" class="multiselect-toggle"><span id="weeklyUnitSelectionSummary">Todos os condomínios</span><span>⌄</span></button><div id="weeklyUnitDropdown" class="dropdown-panel hidden"><input id="weeklyUnitSearch" placeholder="Pesquisar condomínio"><div class="check-filter-actions"><button id="weeklyUnitAll" type="button" class="linkbtn">Todos</button><button id="weeklyUnitNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklyUnitChecks" class="compact-checklist"></div></div></div>
-    <div class="field weekly-check-filter dropdown-card"><label>Fornecedores</label><button id="weeklySupplierToggle" type="button" class="multiselect-toggle"><span id="weeklySupplierSelectionSummary">Todos os fornecedores</span><span>⌄</span></button><div id="weeklySupplierDropdown" class="dropdown-panel hidden"><input id="weeklySupplierSearch" placeholder="Pesquisar fornecedor"><div class="check-filter-actions"><button id="weeklySupplierAll" type="button" class="linkbtn">Todos</button><button id="weeklySupplierNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklySupplierChecks" class="compact-checklist"></div></div></div>
-    <label>Pesquisar produto<input id="weeklyPurchaseSearch" placeholder="Produto ou EAN"></label>
+    <div class="field weekly-check-filter dropdown-card"><label>Condomínios</label><button id="weeklyUnitToggle" type="button" class="multiselect-toggle"><span id="weeklyUnitSelectionSummary">Todos os condomínios</span><span>⌄</span></button><div id="weeklyUnitDropdown" class="dropdown-panel hidden"><input id="weeklyUnitSearch" oninput="renderWeeklyFilterChecks()" placeholder="Pesquisar condomínio"><div class="check-filter-actions"><button id="weeklyUnitAll" type="button" class="linkbtn">Todos</button><button id="weeklyUnitNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklyUnitChecks" class="compact-checklist"></div></div></div>
+    <div class="field weekly-check-filter dropdown-card"><label>Fornecedores</label><button id="weeklySupplierToggle" type="button" class="multiselect-toggle"><span id="weeklySupplierSelectionSummary">Todos os fornecedores</span><span>⌄</span></button><div id="weeklySupplierDropdown" class="dropdown-panel hidden"><input id="weeklySupplierSearch" oninput="renderWeeklyFilterChecks()" placeholder="Pesquisar fornecedor"><div class="check-filter-actions"><button id="weeklySupplierAll" type="button" class="linkbtn">Todos</button><button id="weeklySupplierNone" type="button" class="linkbtn">Limpar</button></div><div id="weeklySupplierChecks" class="compact-checklist"></div></div></div>
+    <label>Pesquisar produto<input id="weeklyPurchaseSearch" oninput="renderWeeklyPurchasePlan()" placeholder="Produto ou EAN"></label>
   </div>
 <div class="actions"><button id="weeklyPurchaseCalc" onclick="buildWeeklyPurchasePlan()">Gerar / atualizar compra semanal</button><button id="weeklyPurchaseByUnit" class="secondary" onclick="weeklyPurchaseView='UNIT';renderWeeklyPurchasePlan()">Visão por condomínio</button><button id="weeklyPurchaseByProduct" class="secondary" onclick="weeklyPurchaseView='PRODUCT';renderWeeklyPurchasePlan()">Consolidado por produto</button><button id="weeklyPurchaseExport" class="secondary" onclick="exportWeeklyPurchasePlan()">Exportar para Excel (CSV)</button><button id="weeklyApprovePurchase">Fechar relatório de compra</button></div>
   <div class="alert-card alert-info"><b>Importante:</b> este relatório é preventivo. Um produto pode aparecer como <b>“não precisa reposição” hoje</b> e, mesmo assim, exigir compra para atravessar a semana sem ruptura.</div>
@@ -666,7 +666,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.60.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.61.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -679,6 +679,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.60.0"></script>
-<script src="app-v3.60.0.js?v=3.60.0"></script>
+<script src="db.js?v=3.61.0"></script>
+<script src="app-v3.61.0.js?v=3.61.0"></script>
 </body></html>
