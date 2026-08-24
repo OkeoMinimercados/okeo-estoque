@@ -47,7 +47,7 @@
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.61.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.63.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -79,7 +79,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.61.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.63.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -558,6 +558,7 @@
     <label>Estoque Ideal<input value="100% da demanda semanal média" readonly></label>
   </div>
   <div class="actions"><button id="dcalc">Calcular / atualizar demanda</button></div>
+  <div id="demandProgressWrap" class="demand-progress-wrap hidden"><div id="demandProgressBar" class="demand-progress-bar"></div><span id="demandProgressText">Preparando...</span></div>
   <p id="demandCalcMsg" class="muted"></p><div id="demandStorageStatus" class="storage-status"></div>
 </div>
 <div class="selector-toggle-row"><button id="demandSelectorBtn" type="button" class="secondary">Filtrar produtos da análise</button></div>
@@ -654,6 +655,22 @@
 <p class="muted">Fornecedores são criados automaticamente a partir do cadastro de produtos e das compras.</p>
 <div id="supplierRegistry"></div>
 <hr>
+<h3>Reset Geral para Início Operacional</h3>
+<div class="reset-general-card admin-only">
+  <p><b>Use esta opção quando terminar os testes e for iniciar a operação real.</b></p>
+  <p class="muted">O reset não apaga Base Mestre, condomínios/CD, fornecedores, vínculos Produto × Condomínio, usuários/perfis, grupos ou configurações.</p>
+  <div class="reset-preserve-grid">
+    <span>✓ Base Mestre</span><span>✓ Condomínios / CD</span><span>✓ Fornecedores</span>
+    <span>✓ Planogramas</span><span>✓ Usuários / Perfis</span><span>✓ Configurações</span>
+  </div>
+  <label class="reset-history-option"><input id="resetIncludeDemandBase" type="checkbox"> Apagar também o histórico-base de demanda/vendas usado pela inteligência de reposição</label>
+  <div class="actions">
+    <button id="resetBackupFirst" type="button" class="secondary">Exportar backup antes</button>
+    <button id="resetGeneralOpen" type="button" class="danger-button">Reset Geral Operacional</button>
+  </div>
+  <p id="resetGeneralMsg" class="muted"></p>
+</div>
+<hr>
 <h3>Auditoria Operacional</h3>
 <p class="muted">Histórico das alterações críticas efetuadas no sistema.</p>
 <div class="actions"><button id="refreshAudit" type="button">Atualizar auditoria</button></div>
@@ -666,7 +683,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.61.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.63.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -679,6 +696,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.61.0"></script>
-<script src="app-v3.61.0.js?v=3.61.0"></script>
+<script src="db.js?v=3.63.0"></script>
+<script src="app-v3.63.0.js?v=3.63.0"></script>
 </body></html>
