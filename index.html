@@ -47,8 +47,26 @@
         </div>
         <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div><div id="loginBackendIdentity" class="login-backend-identity"></div>
       </div>
+      <div id="bootstrapBox" class="bootstrap-admin-box hidden">
+        <div class="bootstrap-head">
+          <b>Base Central sem Administrador</b>
+          <small>Esta implantação ainda não possui usuários cadastrados.</small>
+        </div>
+        <p>Crie o primeiro Administrador desta Base Central. Faça isso apenas uma vez.</p>
+        <label>Usuário Administrador
+          <input id="bootstrapUser" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" value="admin">
+        </label>
+        <label>Nova senha
+          <input id="bootstrapPass" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+        </label>
+        <label>Confirmar senha
+          <input id="bootstrapPass2" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false">
+        </label>
+        <button id="bootstrapCreate" type="button" class="login-submit">Criar primeiro Administrador</button>
+        <small id="bootstrapInfo" class="muted"></small>
+      </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.72.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.73.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -80,7 +98,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.72.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.73.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -761,7 +779,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.72.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.73.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -774,6 +792,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.72.0"></script>
-<script src="app-v3.72.0.js?v=3.72.0"></script>
+<script src="db.js?v=3.73.0"></script>
+<script src="app-v3.73.0.js?v=3.73.0"></script>
 </body></html>
