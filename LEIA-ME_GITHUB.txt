@@ -1,3 +1,3 @@
-OKEO V3.73 — extrair TODOS os arquivos deste pacote na raiz do repositório GitHub Pages. Não misturar com V3.73 ou anteriores. Após publicar, faça atualização forçada para trocar o Service Worker.
+OKEO V3.74 — extrair TODOS os arquivos deste pacote na raiz do repositório GitHub Pages. Não misturar com V3.74 ou anteriores. Após publicar, faça atualização forçada para trocar o Service Worker.
 
-V3.73 corrige abas em branco de Gestão de Estoque causadas por aninhamento HTML incorreto.
+V3.74 corrige abas em branco de Gestão de Estoque causadas por aninhamento HTML incorreto.
