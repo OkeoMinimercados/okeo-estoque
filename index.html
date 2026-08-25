@@ -45,10 +45,10 @@
             <button id="loginConnDefault" type="button" class="secondary">Restaurar conexão oficial</button>
           </div>
         </div>
-        <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div>
+        <div id="loginConnectionStatus" class="login-connection-status">Verificando conexão…</div><div id="loginBackendIdentity" class="login-backend-identity"></div>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.69.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.71.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -80,7 +80,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.69.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.71.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -709,6 +709,30 @@
 <p class="muted">Fornecedores são criados automaticamente a partir do cadastro de produtos e das compras.</p>
 <div id="supplierRegistry"></div>
 <hr>
+<h3>Diagnóstico e Recuperação de Acesso</h3>
+<div class="auth-diagnostic-card admin-only">
+  <p><b>Use esta área se um dispositivo entra no sistema e outro rejeita a mesma senha.</b></p>
+  <p class="muted">O diagnóstico não exibe senha nem hash. Ele verifica apenas sessão, usuário, status da credencial e versão do backend.</p>
+  <div class="actions">
+    <button id="runAuthDiagnostic" type="button" class="secondary">Executar diagnóstico</button>
+  </div>
+  <div id="authDiagnosticResult" class="auth-diagnostic-result muted">Diagnóstico ainda não executado.</div>
+
+  <div class="auth-reset-box">
+    <h4>Recriar minha credencial</h4>
+    <p class="muted">Define uma nova senha para o usuário atualmente conectado e invalida todas as sessões antigas. Depois disso, computador e celular deverão entrar novamente com a nova senha.</p>
+    <div class="grid2">
+      <label>Nova senha<input id="authResetPassword1" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+      <label>Confirmar nova senha<input id="authResetPassword2" type="password" autocomplete="new-password" autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+    </div>
+    <label class="auth-reset-confirm"><input id="authResetConfirm" type="checkbox"> Entendo que todos os dispositivos serão desconectados.</label>
+    <div class="actions">
+      <button id="resetMyCredential" type="button" class="danger-button">Recriar credencial e desconectar tudo</button>
+    </div>
+    <p id="authResetMsg" class="muted"></p>
+  </div>
+</div>
+<hr>
 <h3>Reset Geral para Início Operacional</h3>
 <div class="reset-general-card admin-only">
   <p><b>Use esta opção quando terminar os testes e for iniciar a operação real.</b></p>
@@ -737,7 +761,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.69.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.71.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -750,6 +774,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.69.0"></script>
-<script src="app-v3.69.0.js?v=3.69.0"></script>
+<script src="db.js?v=3.71.0"></script>
+<script src="app-v3.71.0.js?v=3.71.0"></script>
 </body></html>
