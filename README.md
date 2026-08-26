@@ -1,1 +1,1 @@
-OKEO 4.1.6 — Saúde consulta exclusivamente a Base Central ativa.
+OKEO 4.1.7 — remove regressão automática para a implantação antiga.
