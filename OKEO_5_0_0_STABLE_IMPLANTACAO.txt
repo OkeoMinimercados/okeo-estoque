@@ -1,0 +1,36 @@
+OKEO 5.0 STABLE — ÚNICA PUBLICAÇÃO FINAL
+
+BACKEND
+1. Abrir o Apps Script da implantação que termina em IJQBAutw.
+2. Substituir o código por OKEO_5_0_0_STABLE_BACKEND.gs.
+3. Salvar.
+4. Gerenciar implantações > editar a implantação IJQBAutw > Nova versão > Implantar.
+5. Abrir a URL /exec e confirmar version 5.0.0.
+
+FRONTEND
+6. Publicar o conteúdo de OKEO_5_0_0_STABLE_GITHUB.zip.
+7. Abrir o OKEO e fazer Ctrl+F5 uma única vez.
+
+ACEITAÇÃO NO COMPUTADOR FONTE
+8. A página deve permanecer estável no login.
+9. Entrar manualmente.
+10. Saúde deve mostrar backend 5.0.0 e implantação IJQBAutw.
+11. Enquanto a nova Central estiver vazia: PREPRODUCTION.
+12. Confirmar base local: ~1245 produtos, 8 unidades, 25 fornecedores, ~1245 vínculos.
+13. Preparar Base Central para Produção.
+14. Confirmar novo snapshot e estado READY.
+
+ACEITAÇÃO NO CELULAR
+15. Atualizar/reabrir.
+16. Login.
+17. Deve aparecer NEEDS_HYDRATION/Atualização necessária.
+18. Usar Atualizar este dispositivo pela Central.
+19. Confirmar fila antiga descartada/quarentenada e estado READY.
+20. Saúde sem invariantes quebradas.
+
+PROVA DE CRESCIMENTO
+21. Criar fornecedor teste, produto teste e unidade teste.
+22. Confirmar sincronização no outro dispositivo.
+23. Inativar/remover os três registros de teste.
+
+Se os passos 8–23 passarem, congelar a 5.0 Stable.
