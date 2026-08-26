@@ -66,7 +66,7 @@
         <small id="bootstrapInfo" class="muted"></small>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.77.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.78.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -98,7 +98,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.77.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.78.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -704,6 +704,19 @@
 </div>
 <p id="syncMsg" class="muted"></p>
 <hr>
+<h3>Sincronização entre dispositivos</h3>
+<div class="device-sync-card admin-only">
+  <p><b>Use o computador que contém a base completa como origem inicial.</b></p>
+  <p class="muted">A Base Central precisa receber os registros locais uma única vez. Depois disso, computador, celular e outros dispositivos usam a mesma base.</p>
+  <div class="actions">
+    <button id="deviceSyncDiagnose" type="button" class="secondary">Diagnosticar Local × Central</button>
+    <button id="deviceSyncPublish" type="button">Publicar esta base local na Base Central</button>
+    <button id="deviceSyncDownload" type="button" class="secondary">Baixar Base Central neste dispositivo</button>
+  </div>
+  <div id="deviceSyncStatus" class="device-sync-status muted">Diagnóstico ainda não executado.</div>
+  <div id="deviceSyncTable"></div>
+</div>
+<hr>
 <h3>Base Central de Produtos</h3>
 <p>Produtos e unidades são carregados da Base Central autenticada. Alterações locais são sincronizadas automaticamente.</p>
 <div class="actions"><button id="loadMaster">Atualizar produtos da Base Central</button></div>
@@ -779,7 +792,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.77.0", KEY="okeo_ui_build_v2";
+  const BUILD="3.78.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -792,6 +805,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.77.0"></script>
-<script src="app-v3.77.0.js?v=3.77.0"></script>
+<script src="db.js?v=3.78.0"></script>
+<script src="app-v3.78.0.js?v=3.78.0"></script>
 </body></html>
