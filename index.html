@@ -66,7 +66,7 @@
         <small id="bootstrapInfo" class="muted"></small>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v4.0.2</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v4.1.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -99,7 +99,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v4.0.2</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v4.1.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -729,7 +729,12 @@
 
 <hr>
 <p><b>VM Pay:</b> backend preparado; credenciais permanecem fora do GitHub.</p>
-<button id="backup" type="button" onclick="backup()">Exportar backup</button>
+<div class="actions">
+<button id="backup" type="button" onclick="backup()">Exportar backup 4.1</button>
+<button id="restoreBackupOpen" type="button" class="secondary" onclick="openRestoreBackupPicker()">Restaurar backup</button>
+<input id="restoreBackupFile" type="file" accept=".json,application/json" class="hidden" onchange="restoreBackupFile(this.files?.[0]);this.value=''">
+</div>
+<p id="backupRestoreMsg" class="muted"></p>
 <hr>
 <h3>Core Operacional</h3>
 <div class="core-lock"><b>OKEO Core — Estoque & Compras</b><span>Isolado de Analytics e Financeiro</span><small>Analytics/Financeiro recebem cópias somente-leitura e não participam do ciclo de estoque.</small></div>
@@ -793,15 +798,17 @@
   <button id="clearRuntimeErrors" type="button" class="secondary" onclick="clearRuntimeErrors()">Limpar erros registrados</button>
 </div>
 <div id="deepHealthResult" class="deep-health-result muted">Ainda não executado.</div>
-<div id="healthRepairPanel" class="health-repair-panel admin-only">
-  <h4>Correção de sincronização</h4>
-  <p class="muted">Use somente no computador que contém a base operacional correta. O sistema gera backup, espelha a base local na Base Central e confere novamente os totais.</p>
+<div id="productionPreparePanel" class="production-prepare-panel admin-only">
+  <h4>Preparação Final para Produção</h4>
+  <p class="muted">Executa snapshot completo por base, valida contagem e checksum, ativa o modo Produção e elimina a necessidade da migração lenta por blocos.</p>
   <div class="actions">
-    <button id="healthRepairSync" type="button" class="secondary" onclick="repairCentralFromLocal()">Corrigir sincronização Local → Central</button>
+    <button id="prepareProductionBase" type="button" onclick="prepareProductionBase()">Preparar Base Central para Produção</button>
+    <button id="downloadProductionSnapshot" type="button" class="secondary" onclick="downloadCentralBaseToDevice()">Atualizar este dispositivo pela Central</button>
   </div>
-  <p id="healthRepairStatus" class="muted">Aguardando diagnóstico.</p>
+  <p id="productionPrepareStatus" class="muted">Não executado.</p>
+  <div id="productionPrepareDetails"></div>
 </div>
-</div>
+<!-- Migração antiga por blocos removida da interface na 4.1 Final. -->
 <hr>
 <h3>Auditoria Operacional</h3>
 <p class="muted">Histórico das alterações críticas efetuadas no sistema.</p>
@@ -815,7 +822,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="4.0.2", KEY="okeo_ui_build_v2";
+  const BUILD="4.1.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -828,6 +835,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=4.0.2"></script>
-<script src="app-v4.0.2.js?v=4.0.2"></script>
+<script src="db.js?v=4.1.0"></script>
+<script src="app-v4.1.0.js?v=4.1.0"></script>
 </body></html>

@@ -1,0 +1,18 @@
+OKEO 4.1 FINAL — CHECKLIST
+
+1. Publicar OKEO_4_1_FINAL_GITHUB.zip no GitHub Pages.
+2. Publicar OKEO_4_1_FINAL_APP_WEB_BACKEND.gs como nova versão do Apps Script.
+3. Confirmar na tela:
+   frontend v4.1.0
+   backend v4.1.0
+4. No computador com a base correta:
+   Saúde do Sistema > Preparar Base Central para Produção
+   digitar PRODUCAO
+5. Aguardar:
+   21/21 bases validadas
+   Modo Produção ativo
+6. Rodar Saúde do Sistema.
+7. Nos celulares/outros computadores:
+   Saúde > Atualizar este dispositivo pela Central
+8. Rodar Saúde novamente em cada dispositivo.
+9. Somente depois iniciar operação real.

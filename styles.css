@@ -605,12 +605,19 @@ table{font-size:12px}
 
 .release-candidate-badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#fff7df;border:1px solid #e2bd55;color:#745100;font-size:10px;font-weight:700}
 
-/* OKEO 4.0.2 — acesso administrativo explícito à Saúde do Sistema */
+/* OKEO 4.1.0 — acesso administrativo explícito à Saúde do Sistema */
 .system-health-card{border:2px solid #0a8f45;border-radius:14px;padding:18px;margin-top:12px;scroll-margin-top:18px}
 .system-health-card h3{margin-top:0}
 .health-highlight{animation:okeoHealthPulse 1.2s ease-out}
 @keyframes okeoHealthPulse{0%{box-shadow:0 0 0 5px rgba(10,143,69,.22)}100%{box-shadow:0 0 0 0 rgba(10,143,69,0)}}
 
-/* OKEO 4.0.2 — reparo guiado Local → Central */
+/* OKEO 4.1.0 — reparo guiado Local → Central */
 .health-repair-panel{margin-top:14px;padding:14px;border:1px solid #d9b348;border-radius:12px;background:#fff9e9}
 .health-repair-panel h4{margin:0 0 6px;color:#6b4b00}
+
+/* OKEO 4.1 Final — fechamento de produção */
+.production-prepare-panel{margin-top:14px;padding:16px;border:2px solid #0a8f45;border-radius:14px;background:#f3fff7}
+.production-prepare-panel h4{margin:0 0 6px;color:#08743a}
+.preflight-banner{position:sticky;top:0;z-index:80;padding:9px 12px;background:#fff5d8;border:1px solid #d9b348;border-radius:9px;margin:8px 12px;font-size:11px}
+.preflight-banner.ok{background:#edf9f1;border-color:#8ec6a0;color:#146b32}
+.preflight-banner button{margin-left:8px;padding:4px 8px}

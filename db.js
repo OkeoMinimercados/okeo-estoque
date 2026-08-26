@@ -20,7 +20,7 @@ let dbp;
 function op(){
   if(dbp)return dbp;
   dbp=new Promise((ok,no)=>{
-    const r=indexedDB.open("okeo-estoque-v1",14);
+    const r=indexedDB.open("okeo-estoque-v1",15);
     r.onupgradeneeded=()=>{
       const db=r.result,tx=r.transaction;
       for(const name of STORES){

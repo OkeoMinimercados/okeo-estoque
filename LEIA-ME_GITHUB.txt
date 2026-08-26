@@ -1,11 +1,13 @@
-OKEO 4.0 FINAL
+OKEO 4.1 FINAL
 
-Publique o conteúdo deste pacote no GitHub Pages mantendo os nomes dos arquivos.
+Frontend esperado: 4.1.0
+Backend esperado: 4.1.0
+Cache PWA: okeo-core-v4-1-final
 
-IMPORTANTE:
-1. index.html deve carregar app-v4.0.0.js?v=4.0.0
-2. o Service Worker usa o cache okeo-core-v4-0-final
-3. publique também o backend OKEO_4_0_FINAL_APP_WEB_BACKEND.gs no Apps Script
-4. confirme frontend 4.0.0 e backend 4.0.0 antes de iniciar os testes operacionais
+A versão bloqueia escritas quando frontend/backend são incompatíveis ou quando o
+snapshot local do dispositivo está desatualizado em relação à Base Central.
 
-A suíte automatizada está em OKEO_4_0_FINAL_REGRESSION.py.
+Primeira preparação:
+Saúde do Sistema > Preparar Base Central para Produção.
+
+Depois da preparação, os demais dispositivos devem baixar a fotografia central.
