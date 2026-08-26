@@ -1,0 +1,18 @@
+OKEO 4.1.2 — ÚLTIMA ACEITAÇÃO
+
+1. Publicar frontend 4.1.2.
+2. Publicar backend 4.1.2 como nova versão da implantação Apps Script.
+3. NÃO refazer o snapshot.
+4. Atualizar/reabrir a página.
+5. Saúde do Sistema > Revisão rápida.
+6. Resultado esperado:
+   - Backend 4.1.2
+   - Modo Produção ativo
+   - Snapshot deste dispositivo alinhado
+   - Invariantes preservadas
+   - nenhum erro operacional atual
+   - em rede estável: Saúde APROVADA
+   - se a Central estiver momentaneamente lenta: APROVADA COM AVISOS, nunca “Revisão interrompida”
+7. Atualizar um celular pela Base Central.
+8. Validar login, produtos/unidades e uma operação controlada.
+9. Se passar, congelar 4.1.2 como produção.
