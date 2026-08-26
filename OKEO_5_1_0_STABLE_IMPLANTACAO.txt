@@ -1,0 +1,11 @@
+OKEO 5.1 STABLE
+1. Publicar OKEO_5_1_0_STABLE_BACKEND.gs como NOVA VERSÃO da MESMA implantação IJQBAutw.
+2. Abrir /exec e confirmar version 5.1.0.
+3. Publicar OKEO_5_1_0_STABLE_GITHUB.zip.
+4. Ctrl+F5 uma única vez.
+5. Confirmar Base Central online SEM Failed to fetch.
+6. Login manual.
+7. Saúde: backend 5.1.0 / IJQBAutw.
+8. Preparar produção no computador fonte, se a Central estiver em pré-produção.
+9. Atualizar celular pela Central.
+10. Testar novo produto + fornecedor + unidade.
