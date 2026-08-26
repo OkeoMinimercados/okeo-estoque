@@ -1,24 +1,19 @@
-# OKEO Core V3.79
+# OKEO 4.0 Final
 
-Versão final corrigida após revisão ponta a ponta da V3.79.
+Versão final consolidada do OKEO Gestão após revisão estrutural, suíte de regressão e correções de sincronização/fluxo de compras.
 
-## Correções principais
-- Reposição operacional volta a abrir corretamente dentro de Compras.
-- Histórico de reposições de homologação é limpo uma única vez na migração V3.79 (perfil Administrador).
-- Gestão de Estoque possui aba própria **Análise de divergências**, comparando estoque esperado x contagem física/manual.
-- Cada produto pode ter somente **um fornecedor ativo**; atribuição a novo fornecedor desativa o vínculo anterior e atualiza a Base Mestre.
-- Cadastro de fornecedores exibe apenas o **total de fornecedores ativos** como indicador agregado.
-- Mantidas as correções V3.79 de Produto × Condomínio, planogramas oficiais, desempenho e cache.
-- Service Worker usa cache exclusivo `okeo-core-v3-46-final`.
+Arquivos principais:
+- `index.html`
+- `app-v4.0.0.js`
+- `db.js`
+- `styles.css`
+- `sw.js`
+- `manifest.webmanifest`
+- `seed-planograms-v4.0.0.json`
 
-## Publicação
-Publique todo o conteúdo do pacote GitHub, inclusive `seed-planograms-v3.79.json`, e publique o Apps Script V3.79. Depois, atualize forçadamente o navegador/PWA para substituir o cache anterior.
+Validação automatizada:
+- execute `python OKEO_4_0_FINAL_REGRESSION.py`
+- resultado esperado: `RESULT 40/40`
 
-
-## V3.79 — correção crítica de Gestão de Estoque
-- Corrigida estrutura HTML: Controle Geral, Gestão por Condomínio e Análise de divergências agora são painéis irmãos independentes.
-- Na V3.79 os dois últimos painéis estavam aninhados dentro de Controle Geral e eram ocultados junto com ele.
-
-
-## V3.79
-Correção de inicialização/bind, filtros robustos, fornecedor canônico, CD aguardando recebimento e múltiplas validades.
+O backend Google Apps Script é distribuído separadamente como
+`OKEO_4_0_FINAL_APP_WEB_BACKEND.gs`.

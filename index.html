@@ -66,7 +66,7 @@
         <small id="bootstrapInfo" class="muted"></small>
       </div>
       <p id="loginMsg" class="login-msg"></p>
-      <div class="secure-status"><span></span>OKEO Core protegido <b>v3.79.0</b></div>
+      <div class="secure-status"><span></span>OKEO Core protegido <b>v4.0.0</b></div>
     </div>
     <footer>OKEO Minimercados — Gestão Inteligente.</footer>
   </div>
@@ -98,7 +98,7 @@
   <div class="main-area">
     <header class="topbar">
       <div><h1 id="pageTitle">Dashboard</h1><p id="pageSubtitle">Gestão operacional OKEO</p></div>
-      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v3.79.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
+      <div class="top-actions"><button id="topDashboard" type="button" class="top-dashboard-btn" title="Voltar ao Dashboard">⌂ Dashboard</button><span id="syncState" class="syncstate">Conectando…</span><span class="version-pill">v4.0.0</span><span id="buildStamp" class="version-pill">build 2026-08-23</span><div class="account-wrap"><button id="accountToggle" class="user-badge account-button" type="button" onclick="toggleAccountMenu(event)"><span>●</span><div><b id="currentUserName">Usuário</b><small id="currentUserRole">Carregando perfil…</small></div><em>⌄</em></button><div id="accountMenu" class="account-menu hidden"><button id="myPassword" type="button">Alterar minha senha</button><button id="accountLogout" type="button">Sair</button></div></div></div>
     </header>
     <main>
       <section id="app">
@@ -334,7 +334,7 @@
 <div id="purchaseReplenishmentPanel" class="hidden">
 <div class="embedded-replenishment">
 <h3>Conferência, validade e abastecimento</h3>
-<p class="muted">A Compra Semanal é o documento de origem. Confira a quantidade realmente recebida, registre todas as validades/lotes e finalize em Abastecer.</p>
+<p class="muted">A Compra Semanal é o documento de origem. Confira a quantidade recebida, registre todas as validades/lotes e siga o fluxo: imediato → abastecer; CD → reservar → despachar → confirmar abastecimento.</p>
 <div class="grid4">
 <label>Condomínio<select id="purchaseFlowUnit"><option value="">Todos</option></select></label>
 <label>Fornecedor<select id="purchaseFlowSupplier"><option value="">Todos</option></select></label>
@@ -343,7 +343,9 @@
 <option value="">Todos</option>
 <option value="CONFERENCE">Conferência</option>
 <option value="AWAITING_EXPIRY">Validade pendente</option>
-<option value="READY">Pronto para abastecer</option>
+<option value="READY_CD">Pronto para reservar no CD</option>
+<option value="RESERVED_CD">Reservado no CD</option>
+<option value="READY">Pronto / liberado para abastecer</option>
 <option value="SUPPLIED">Abastecido</option>
 <option value="CUT">Cortado</option>
 </select></label>
@@ -422,7 +424,9 @@
       <option value="DRAFT">Pré-selecionado em Compras</option>
       <option value="CONFERENCE">Conferência</option>
       <option value="AWAITING_EXPIRY">Validade pendente</option>
-      <option value="READY">Pronto para abastecer</option>
+      <option value="READY_CD">Pronto para reservar no CD</option>
+      <option value="RESERVED_CD">Reservado no CD</option>
+      <option value="READY">Despachado / liberado</option>
     </select></label><label>Pesquisar<input id="cdInboundSearch" placeholder="Produto, EAN, fornecedor ou condomínio" oninput="renderCdInboundPurchases()"></label></div>
     <div class="actions cd-filter-actions"><button type="button" class="secondary" onclick="clearCdInboundFilters()">Limpar filtros</button></div><div id="cdInboundList"></div>
   </div>
@@ -707,10 +711,10 @@
 <h3>Sincronização entre dispositivos</h3>
 <div class="device-sync-card admin-only">
   <p><b>Use o computador que contém a base completa como origem inicial.</b></p>
-  <p class="muted">A Base Central precisa receber os registros locais uma única vez. Depois disso, computador, celular e outros dispositivos usam a mesma base.</p>
+  <p class="muted">A Base Central precisa receber os registros locais uma única vez. Na migração inicial, use o computador que contém a base correta como fonte oficial. Depois disso, todos os dispositivos usam a mesma base.</p>
   <div class="actions">
     <button id="deviceSyncDiagnose" type="button" class="secondary" onclick="diagnoseDeviceSync()">Diagnosticar Local × Central</button>
-    <button id="deviceSyncPublish" type="button" onclick="publishLocalBaseToCentral()">Publicar esta base local na Base Central</button>
+    <button id="deviceSyncPublish" type="button" onclick="publishLocalBaseToCentral()">Espelhar esta base local na Base Central</button>
     <button id="deviceSyncDownload" type="button" class="secondary" onclick="downloadCentralBaseToDevice()">Baixar Base Central neste dispositivo</button>
   </div>
   <div id="deviceSyncStatus" class="device-sync-status muted">Diagnóstico ainda não executado.</div>
@@ -719,12 +723,12 @@
 <hr>
 <h3>Base Central de Produtos</h3>
 <p>Produtos e unidades são carregados da Base Central autenticada. Alterações locais são sincronizadas automaticamente.</p>
-<div class="actions"><button id="loadMaster">Atualizar produtos da Base Central</button></div>
+<div class="actions"><button id="loadMaster" type="button" onclick="loadMaster()">Atualizar produtos da Base Central</button></div>
 <p id="masterMsg" class="muted"></p>
 
 <hr>
 <p><b>VM Pay:</b> backend preparado; credenciais permanecem fora do GitHub.</p>
-<button id="backup">Exportar backup</button>
+<button id="backup" type="button" onclick="backup()">Exportar backup</button>
 <hr>
 <h3>Core Operacional</h3>
 <div class="core-lock"><b>OKEO Core — Estoque & Compras</b><span>Isolado de Analytics e Financeiro</span><small>Analytics/Financeiro recebem cópias somente-leitura e não participam do ciclo de estoque.</small></div>
@@ -733,7 +737,7 @@
 <hr>
 <h3>Integridade e Escalabilidade</h3>
 <p class="muted">Valida cadastros duplicados, referências órfãs, saldos inconsistentes e estrutura da Base Central.</p>
-<div class="actions"><button id="runIntegrity" type="button">Executar verificação de integridade</button><button id="runSelfTest" type="button" class="secondary">Executar autoteste do sistema</button></div>
+<div class="actions"><button id="runIntegrity" type="button" onclick="runIntegrityCheck()">Executar verificação de integridade</button><button id="runSelfTest" type="button" class="secondary" onclick="runSystemSelfTest()">Executar autoteste do sistema</button></div>
 <div id="integrityResult"></div><div id="selfTestResult"></div>
 <hr>
 <h3>Fornecedores Cadastrados</h3>
@@ -780,6 +784,14 @@
   <p id="resetGeneralMsg" class="muted"></p>
 </div>
 <hr>
+<h3>Saúde do Sistema</h3>
+<p class="muted">Verifica interface, funções críticas, comunicação com a Base Central e erros recentes do navegador.</p>
+<div class="actions">
+  <button id="runDeepHealthCheck" type="button" onclick="runDeepHealthCheck()">Executar revisão rápida</button>
+  <button id="clearRuntimeErrors" type="button" class="secondary" onclick="clearRuntimeErrors()">Limpar erros registrados</button>
+</div>
+<div id="deepHealthResult" class="deep-health-result muted">Ainda não executado.</div>
+<hr>
 <h3>Auditoria Operacional</h3>
 <p class="muted">Histórico das alterações críticas efetuadas no sistema.</p>
 <div class="actions"><button id="refreshAudit" type="button">Atualizar auditoria</button></div>
@@ -792,7 +804,7 @@
 </div>
 <script>
 (function(){
-  const BUILD="3.79.0", KEY="okeo_ui_build_v2";
+  const BUILD="4.0.0", KEY="okeo_ui_build_v2";
   try{
     const old=localStorage.getItem(KEY);
     if(old!==BUILD){
@@ -805,6 +817,6 @@
   }catch(e){}
 })();
 </script>
-<script src="db.js?v=3.79.0"></script>
-<script src="app-v3.79.0.js?v=3.79.0"></script>
+<script src="db.js?v=4.0.0"></script>
+<script src="app-v4.0.0.js?v=4.0.0"></script>
 </body></html>

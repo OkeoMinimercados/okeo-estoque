@@ -1,3 +1,11 @@
-OKEO V3.79 — extrair TODOS os arquivos deste pacote na raiz do repositório GitHub Pages. Não misturar com V3.79 ou anteriores. Após publicar, faça atualização forçada para trocar o Service Worker.
+OKEO 4.0 FINAL
 
-V3.79 corrige abas em branco de Gestão de Estoque causadas por aninhamento HTML incorreto.
+Publique o conteúdo deste pacote no GitHub Pages mantendo os nomes dos arquivos.
+
+IMPORTANTE:
+1. index.html deve carregar app-v4.0.0.js?v=4.0.0
+2. o Service Worker usa o cache okeo-core-v4-0-final
+3. publique também o backend OKEO_4_0_FINAL_APP_WEB_BACKEND.gs no Apps Script
+4. confirme frontend 4.0.0 e backend 4.0.0 antes de iniciar os testes operacionais
+
+A suíte automatizada está em OKEO_4_0_FINAL_REGRESSION.py.
