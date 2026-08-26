@@ -204,7 +204,7 @@ table{font-size:12px}
 
 .cd-tabs{margin-bottom:12px}.optional-second-expiry{margin-top:8px;padding-top:8px;border-top:1px dashed #d7dee7}#cdInboundList input{min-width:120px}.hidden[style*="block"]{display:block!important}
 
-/* V3.76 - leitura mais confortável */
+/* V3.77 - leitura mais confortável */
 .dtable th,.dtable td{padding-top:9px!important;padding-bottom:9px!important;line-height:1.35}
 .row{padding-top:10px!important;padding-bottom:10px!important}
 .compact-checklist label,.checklist-list label{padding-top:7px;padding-bottom:7px}
@@ -213,7 +213,7 @@ table{font-size:12px}
 .clear-test-history-btn{float:right;margin-top:-34px;margin-bottom:10px}
 #cdInboundList .dtable td{vertical-align:top}
 
-/* V3.76 - legibilidade e navegação */
+/* V3.77 - legibilidade e navegação */
 .purchase-main-tabs{display:flex;gap:14px;flex-wrap:wrap;padding:8px 0 12px}
 .purchase-main-tabs .tabbtn{padding:10px 15px;line-height:1.25;white-space:nowrap}
 .weekly-purchase-filters{display:grid!important;grid-template-columns:repeat(2,minmax(260px,1fr))!important;gap:16px 22px!important;margin:14px 0 18px}
@@ -228,7 +228,7 @@ table{font-size:12px}
 #supplierRegistryAdminList .mini{display:flex;gap:8px}
 @media(max-width:900px){.weekly-purchase-filters{grid-template-columns:1fr!important}}
 
-/* V3.76 - espaçamento dos filtros de Compra Semanal */
+/* V3.77 - espaçamento dos filtros de Compra Semanal */
 .weekly-purchase-filters{row-gap:24px!important;column-gap:24px!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.field{margin-bottom:6px!important}
 .weekly-purchase-filters label{display:block;margin-bottom:7px!important;font-weight:600}
@@ -240,7 +240,7 @@ table{font-size:12px}
 .approval-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid #e6ece8}
 .approval-row:first-of-type{border-top:0}
 
-/* V3.76 - reforço visual de espaçamento */
+/* V3.77 - reforço visual de espaçamento */
 .weekly-purchase-filters{display:grid!important;grid-template-columns:1fr!important;gap:0!important}
 .weekly-purchase-filters>label,.weekly-purchase-filters>.weekly-check-filter,.weekly-purchase-filters>.field{display:block!important;margin:0 0 20px!important;padding:0 0 4px!important}
 .weekly-purchase-filters>label+label,.weekly-purchase-filters>.weekly-check-filter+.weekly-check-filter{margin-top:4px!important}
@@ -250,7 +250,7 @@ table{font-size:12px}
 .admin-task-alert button{white-space:nowrap}
 #physicalCountPermissionHint{align-self:center;margin-left:8px}
 
-/* V3.76 - validade integrada à Contagem Física */
+/* V3.77 - validade integrada à Contagem Física */
 .physical-count-table td{vertical-align:top}
 .physical-expiry-panel{margin-top:8px;min-width:410px;padding:9px;border:1px solid #dfe7e2;border-radius:8px;background:#fbfdfb}
 .physical-expiry-grid{display:grid;grid-template-columns:76px 135px 100px;gap:8px;margin-top:8px}
@@ -263,7 +263,7 @@ table{font-size:12px}
 
 
 /* =========================================================
-   OKEO V3.76 - Abas sempre visíveis com rolagem horizontal
+   OKEO V3.77 - Abas sempre visíveis com rolagem horizontal
    ========================================================= */
 
 /* Barras de abas principais e secundárias */
@@ -352,20 +352,20 @@ table{font-size:12px}
   .tab-scroll-hint{display:block}
 }
 
-/* V3.76 - filtros Pré-Separado em Compras */
+/* V3.77 - filtros Pré-Separado em Compras */
 #cdInboundPanel .grid4{gap:14px!important}
 #cdInboundPanel .grid4 label{font-weight:600}
 #cdInboundPanel select,#cdInboundPanel input{min-height:38px}
 .cd-filter-actions{justify-content:flex-end;margin-top:8px;margin-bottom:10px}
 
-/* V3.76 - checklist de fornecedor */
+/* V3.77 - checklist de fornecedor */
 #supplierProductList input[type="checkbox"]{width:16px;height:16px;cursor:pointer}
 #supplierProductList .supplier-linked-row{background:#eefaf2}
 #supplierProductList .supplier-empty{font-weight:700;color:#8a5a00}
 #supplierProductList td{padding-top:8px!important;padding-bottom:8px!important}
 
 /* =========================================================
-   OKEO V3.76 - Contagem Física com visão completa
+   OKEO V3.77 - Contagem Física com visão completa
    ========================================================= */
 #physicalCountProductList{width:100%;max-width:100%;overflow:hidden}
 .physical-table-viewport{
@@ -457,19 +457,19 @@ table{font-size:12px}
   .expiry-modal-single{grid-template-columns:1fr}
 }
 
-/* V3.76 - visão correta Produtos por Fornecedor */
+/* V3.77 - visão correta Produtos por Fornecedor */
 .supplier-product-filters{align-items:end}
 #supplierProductMode{min-height:38px}
 #supplierProductList .supplier-linked-row td{background:#eefaf2}
 #supplierProductList .supplier-empty{color:#8a5a00;font-weight:700}
 
-/* V3.76 - estado visual dos filtros */
+/* V3.77 - estado visual dos filtros */
 .multiselect-toggle.filter-active{border:2px solid #07883f!important;background:#f0faf4!important;color:#075f2f!important}
 .compact-checklist label{display:flex;align-items:center;gap:7px;min-height:30px;padding:6px 5px!important}
 .compact-checklist input[type="checkbox"]{width:15px;height:15px;flex:0 0 auto}
 .filter-zero-state{padding:9px 11px;background:#fff7e7;border:1px solid #e9b54d;border-radius:8px;color:#7b5200}
 
-/* V3.76 - Reset Geral Operacional */
+/* V3.77 - Reset Geral Operacional */
 .reset-general-card{border:1px solid #e1c36b;background:#fffaf0;border-radius:12px;padding:15px;margin:10px 0 18px}
 .reset-general-card>p:first-child{margin-top:0}
 .reset-preserve-grid{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr));gap:7px;margin:12px 0}
@@ -486,12 +486,12 @@ table{font-size:12px}
 .reset-confirm-label input{display:block;width:100%;margin-top:7px;min-height:40px;border:2px solid #b34a4a}
 @media(max-width:760px){.reset-preserve-grid{grid-template-columns:1fr 1fr}}
 
-/* V3.76 - progresso do cálculo de demanda */
+/* V3.77 - progresso do cálculo de demanda */
 .demand-progress-wrap{position:relative;height:30px;border:1px solid #cfe1d5;border-radius:8px;background:#f4f8f5;overflow:hidden;margin:8px 0 10px}
 .demand-progress-bar{position:absolute;left:0;top:0;bottom:0;width:0;background:#d9f1e1;transition:width .18s ease}
 .demand-progress-wrap span{position:relative;z-index:2;display:flex;align-items:center;height:100%;padding:0 10px;font-size:11px;font-weight:700;color:#176237}
 
-/* V3.76 - Controle explícito de atualização da Demanda */
+/* V3.77 - Controle explícito de atualização da Demanda */
 .demand-update-control{border:1px solid #cfe0d4!important;background:#fbfdfb}
 .demand-update-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
 .demand-update-header h3{margin:0 0 4px}
@@ -520,7 +520,7 @@ table{font-size:12px}
   .demand-update-header{flex-direction:column}
 }
 
-/* V3.76 - Demanda Inteligente como entrada/consulta */
+/* V3.77 - Demanda Inteligente como entrada/consulta */
 .demand-section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}
 .demand-section-title h3{margin:0 0 4px}
 .demand-section-title p{margin:0}
@@ -530,20 +530,20 @@ table{font-size:12px}
 .demand-processing-note{background:#fbfcfb}
 .demand-processing-note h3{margin-bottom:6px}
 
-/* V3.76 - Exportador da configuração de demanda */
+/* V3.77 - Exportador da configuração de demanda */
 .demand-export-info{margin-top:10px;padding:9px 11px;border:1px solid #dce6df;border-radius:8px;background:#f8fbf9}
 #exportDemandConfig{white-space:nowrap}
 
-/* V3.76 - conexão automática da Base Central */
+/* V3.77 - conexão automática da Base Central */
 .login-connection-actions{display:flex;flex-wrap:wrap;gap:8px}
 .login-connection-actions button{flex:1 1 140px}
 @media(max-width:600px){.login-connection-actions button{flex:1 1 100%;width:100%}}
 
-/* V3.76 - login móvel */
+/* V3.77 - login móvel */
 #user,#pass{font-size:16px!important}
 .login-msg{min-height:22px}
 
-/* V3.76 - diagnóstico e recuperação de autenticação */
+/* V3.77 - diagnóstico e recuperação de autenticação */
 .auth-diagnostic-card{border:1px solid #d7e3da;border-radius:12px;padding:14px;margin:10px 0 18px;background:#fbfdfb}
 .auth-diagnostic-result{margin-top:12px}
 .auth-diag-grid{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:8px}
@@ -558,10 +558,10 @@ table{font-size:12px}
 
 .login-backend-identity{font-size:10px;color:#6a776f;text-align:center;margin-top:5px;word-break:break-all}
 
-/* V3.76 - conexão/login não bloqueantes */
+/* V3.77 - conexão/login não bloqueantes */
 .login-connection-status.warn{background:#fff7e6;color:#755400}
 
-/* V3.76 - bootstrap visível da Base Central */
+/* V3.77 - bootstrap visível da Base Central */
 .bootstrap-admin-box{
   margin:14px 0 8px;padding:14px;border:1px solid #e2bc57;border-radius:12px;background:#fff9e9;text-align:left
 }
@@ -573,6 +573,6 @@ table{font-size:12px}
 .bootstrap-admin-box input{width:100%;margin-top:5px;min-height:42px}
 .bootstrap-admin-box .login-submit{margin-top:12px}
 
-/* V3.76 - bootstrap resiliente */
+/* V3.77 - bootstrap resiliente */
 #bootstrapInfo{display:block;margin-top:7px;min-height:14px}
 #bootstrapCreate:disabled{opacity:.72;cursor:wait}
