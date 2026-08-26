@@ -604,3 +604,9 @@ table{font-size:12px}
 @media(max-width:700px){.runtime-error-row{grid-template-columns:1fr}.okeo-runtime-toast{left:12px;right:12px;bottom:12px}}
 
 .release-candidate-badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;background:#fff7df;border:1px solid #e2bd55;color:#745100;font-size:10px;font-weight:700}
+
+/* OKEO 4.0.1 — acesso administrativo explícito à Saúde do Sistema */
+.system-health-card{border:2px solid #0a8f45;border-radius:14px;padding:18px;margin-top:12px;scroll-margin-top:18px}
+.system-health-card h3{margin-top:0}
+.health-highlight{animation:okeoHealthPulse 1.2s ease-out}
+@keyframes okeoHealthPulse{0%{box-shadow:0 0 0 5px rgba(10,143,69,.22)}100%{box-shadow:0 0 0 0 rgba(10,143,69,0)}}
