@@ -1,1 +1,1 @@
-OKEO 4.1.4 — troca segura e verificável da Base Central.
+OKEO 4.1.5 — correção CORS/preflight no teste direto da Base Central.
