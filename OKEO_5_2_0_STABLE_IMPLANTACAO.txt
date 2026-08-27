@@ -1,0 +1,22 @@
+OKEO 5.2 STABLE — UMA PUBLICAÇÃO FINAL DE CADA LADO
+
+BACKEND
+1. No projeto Apps Script da implantação IJQBAutw, substituir o código pelo arquivo
+   OKEO_5_2_0_STABLE_BACKEND.gs.
+2. Salvar > Gerenciar implantações > editar IJQBAutw > Nova versão > Implantar.
+3. Abrir /exec diretamente e confirmar version 5.2.0.
+
+FRONTEND
+4. Publicar OKEO_5_2_0_STABLE_GITHUB.zip no repositório atual.
+5. Ctrl+F5 uma única vez.
+
+ACEITAÇÃO
+6. A tela de login deve mostrar Base Central online / backend 5.2.0.
+7. Fazer login manual. Não deve haver timeout, login/logout automático ou Failed to fetch.
+8. Abrir Saúde e confirmar implantação IJQBAutw e backend 5.2.0.
+9. Conferir local: produtos, unidades, fornecedores e vínculos preservados.
+10. Somente então preparar a Base Central para Produção, se ela ainda estiver em pré-produção.
+11. Atualizar o celular pela Central.
+12. Testar criação de 1 produto + 1 fornecedor + 1 unidade e sincronizar no outro dispositivo.
+
+Se 6–12 passarem, CONGELAR 5.2 Stable. Não continuar mexendo nessa release por melhoria preventiva.

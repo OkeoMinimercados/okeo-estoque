@@ -1,0 +1,7 @@
+OKEO 5.2 Stable
+Auditoria estrutural: 88/88 PASS
+Browser bridge: status/login PASS
+Browser bridge concorrência: 50/50 PASS
+Browser bridge erro propagado: PASS
+Browser bridge timeout/reset/recovery: PASS
+State stress: 100000 cenários, 0 violações
