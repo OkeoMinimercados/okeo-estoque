@@ -1,3 +1,9 @@
-# OKEO Gestão 5.2 Stable
+# OKEO Gestão 5.3 Stable
 
-Release candidata final. Mantém GitHub/IndexedDB e usa bridge persistente Apps Script + google.script.run para toda comunicação com a Base Central.
+Release de estabilização do transporte GitHub Pages ↔ Google Apps Script.
+
+O frontend preserva o IndexedDB existente no domínio GitHub. A comunicação com o
+Apps Script não depende de iframe nem de CORS tradicional: leituras usam JSONP e
+escritas/login usam POST no-cors + retorno assíncrono por requestId.
+
+Ver OKEO_5_3_0_RELATORIO_FINAL.md.

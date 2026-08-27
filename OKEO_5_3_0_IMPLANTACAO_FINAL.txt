@@ -1,0 +1,29 @@
+OKEO 5.3 STABLE — PUBLICAÇÃO FINAL
+
+1. No Apps Script da implantação que termina em IJQBAutw:
+   - substituir todo o código por OKEO_5_3_0_STABLE_BACKEND.gs;
+   - salvar;
+   - Implantar > Gerenciar implantações > editar a MESMA implantação;
+   - selecionar Nova versão;
+   - Implantar.
+
+2. Abrir a URL /exec diretamente.
+   Deve responder version 5.3.0.
+
+3. Publicar o conteúdo de OKEO_5_3_0_STABLE_GITHUB.zip no GitHub Pages.
+
+4. Fazer Ctrl+F5 uma única vez.
+
+5. PRIMEIRO TESTE:
+   - a tela deve sair de “Verificando conexão”;
+   - deve mostrar Base Central online / backend 5.3.0;
+   - fazer login manual;
+   - o login pode levar alguns segundos em cold start, mas não deve ficar preso.
+
+6. Somente depois do login:
+   - abrir Saúde;
+   - confirmar backend 5.3.0 e implantação IJQBAutw;
+   - confirmar a base local antes de preparar Produção.
+
+7. Não executar snapshot, sincronização corretiva ou download da Central antes de
+   os passos 5 e 6 estarem aprovados.
